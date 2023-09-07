@@ -1,8 +1,7 @@
 const { Server } = require("./server/server.js");
+const {uploadFileHandler} = require("./server/fileHandler.js")
 
-const path = require("path");
-const multiparty = require("multiparty");
-const fs = require("fs");
+
 
 const app = new Server();
 
@@ -13,51 +12,5 @@ app.get("/", (req, res) => {
   res.end("Hello!");
 });
 
-app.post("/upload", (req, res) => {
-  const uploadDir = "./uploads";
-
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
-  }
-
-  const form = new multiparty.Form();
-
-  form.parse(req, (err, fields, files) => {
-    if (err) {
-      console.error(err);
-      console.log("error");
-      res.writeHead(500, { "Content-Type": "text/plain" });
-      res.end("Internal Server Error");
-      return;
-    }
-
-    // Obtener la información del archivo
-
-    const file = files.file[0];
-    console.log(files);
-
-    files.file.forEach((file) => {
-      const fileName = file.originalFilename;
-      const filePath = path.join(__dirname, uploadDir, fileName);
-      fs.readFile(file.path, (readErr, data) => {
-        if (readErr) {
-          console.error(readErr);
-          res.writeHead(500, { "Content-Type": "text/plain" });
-          res.end("Internal Server Error");
-        } else {
-          fs.writeFile(filePath, data, (writeErr) => {
-            if (writeErr) {
-              console.error(writeErr);
-              res.writeHead(500, { "Content-Type": "text/plain" });
-              res.end("Internal Server Error");
-            }
-          });
-        }
-      });
-    });
-    res.writeHead(200, { "Content-Type": "text/json" });
-    res.end(JSON.stringify({ message: "ok" }));
-    return;
-  });
-});
+app.post("/upload", uploadFileHandler);
 app.start(port);
