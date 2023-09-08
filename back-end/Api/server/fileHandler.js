@@ -25,10 +25,9 @@ function uploadFileHandler(requestData, responseCallback){
 
                 const currentDir = __dirname;
                 const parentDir = path.resolve(currentDir, '..'); //voy una carpeta antes de server
-
                 const filePath = path.join(parentDir, uploadDir, fileName);
-                const fileCurrentPath = file.path;
-                controller.uploadFile(fileCurrentPath,filePath);
+                
+                controller.uploadFile(file.path,filePath);
             });
             
             // responseCallback(200, "ok");

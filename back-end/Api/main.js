@@ -1,8 +1,6 @@
 const { Server } = require("./server/server.js");
 const {uploadFileHandler} = require("./server/fileHandler.js")
 
-
-
 const app = new Server();
 
 const port = process.env.PORT || 3000;
