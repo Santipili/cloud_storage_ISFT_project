@@ -5,9 +5,20 @@ class FileUploaderController {
   }
 
   enable() {
-    this.view.BtnSendFile.addEventListener("click", (e) => {
+    this.view.BtnSendFile.addEventListener("click", async (e) => {
       e.preventDefault();
-      this.onButtonBtnSendFile();
+
+      // Deshabilita el botón mientras se realiza la operación
+      this.view.BtnSendFile.disabled = true;
+
+      try {
+        await this.onButtonBtnSendFile();
+      } catch (error) {
+        // Maneja errores si es necesario
+      } finally {
+        // Habilita el botón nuevamente cuando la operación ha finalizado (éxito o error)
+        this.view.BtnSendFile.disabled = false;
+      }
     });
   }
 
@@ -15,27 +26,26 @@ class FileUploaderController {
     this.view.btnSignUp = null;
     this.view.btnForgotPassw = null;
   }
+
   async onButtonBtnSendFile() {
     let fileInput = this.view.fileInput.files;
-    console.log(Object.keys(fileInput));
+    let progressBar = this.view.progressBar;
+
     const formData = new FormData();
 
     Object.keys(fileInput).forEach((k) => {
       formData.append("file", fileInput[k]);
     });
 
-    try {
-      let requestMetadata = {
-        method: "POST",
-        body: formData,
-      };
+    const url = "http://localhost:3000/upload";
 
-      let res = await fetch("http://localhost:3000/upload", requestMetadata);
-      let jsonBody = await res.json();
-      alert(jsonBody.message);
-      return res;
+    try {
+      const response = await axios.post(url, formData);
+      const result = response.data;
+      progressBar.value = 100;
+      return result;
     } catch (error) {
-      alert(error.message);
+      console.log(error.message);
     }
   }
 }

@@ -30,9 +30,14 @@ class FileUploaderView extends HTMLElement {
     this.fileInput.multiple = true;
 
     this.BtnSendFile = document.createElement("button");
-    this.BtnSendFile.type = "submit";
+    this.BtnSendFile.setAttribute("role", "button");
+    this.BtnSendFile.classList.add("button-name");
+    this.BtnSendFile.textContent = "Upload";
 
-    // Agrega los elementos al formulario y al Shadow DOM
+    this.progressBar = document.createElement("progress");
+    this.progressBar.setAttribute("max", "100");
+    this.progressBar.setAttribute("value", "0");
+
     this.label.appendChild(this.dropTitle);
     this.label.appendChild(this.fileInput);
 
@@ -40,6 +45,7 @@ class FileUploaderView extends HTMLElement {
     this.form.appendChild(this.paragraph);
     this.form.appendChild(this.label);
     this.form.appendChild(this.BtnSendFile);
+    this.form.appendChild(this.progressBar);
 
     this.appendChild(this.form);
 
