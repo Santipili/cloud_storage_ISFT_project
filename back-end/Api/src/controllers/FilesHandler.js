@@ -5,7 +5,7 @@ const path = require("path");
 class FilesHandler {
   constructor() {}
 
-  uploadFiles(req, res, uploadDir) {
+  uploadFiles(req, uploadDir) {
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir);
       console.log(`se creo ${uploadDir}`);

@@ -28,10 +28,7 @@ class Server {
     const handler = this.routes[method][pathname] || this.routes[method]["*"];
 
     if (handler) {
-      handler(req, function(statusCode,responseData){
-        res.writeHeader(statusCode);
-        res.end(JSON.stringify(responseData));
-      });
+      handler(req, res);
     } else {
       res.statusCode = 404;
       res.end("Not Found");
@@ -40,7 +37,7 @@ class Server {
 
   start(port) {
     const server = http.createServer((req, res) => {
-      this.handleRequest(req, res) ;
+      this.handleRequest(req, res);
     });
 
     server.listen(port, () => {
