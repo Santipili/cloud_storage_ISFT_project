@@ -15,7 +15,7 @@ function uploadFileHandler(requestData, responseCallback){
             if (err) {
             console.error(err);
             console.log("error");
-            // responseCallback(500, "Internal Server Error");
+            responseCallback(500, "Internal Server Error");
             }
 
         // Obtener la información del archivo
@@ -30,8 +30,7 @@ function uploadFileHandler(requestData, responseCallback){
                 controller.uploadFile(file.path,filePath);
             });
             
-            // responseCallback(200, "ok");
-        // res.end(JSON.stringify({ message: "ok" }));
+            responseCallback(200, {message:"ok"});
 
         });
 }
