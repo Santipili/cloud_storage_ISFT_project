@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require('path');
 
 class fileController{
     constructor(dirReference)    {
@@ -11,20 +12,30 @@ class fileController{
 
     uploadFile(currentPath,uploadedPath){
         
-        fs.readFile(currentPath, (readErr, data) => {
-            if (readErr) {
-            console.error(readErr);
-            console.log("no se pude abrir archivo");
+        if(fs.existsSync(currentPath)){
 
-            } else {
-            fs.writeFile(uploadedPath, data, (writeErr) => {
-                if (writeErr) {
-                    console.log("error al escribir archvo")
-                console.error(writeErr);
+            fs.readFile(currentPath, (readErr, data) => {
+                if (readErr) {
+                console.error(readErr);
+                console.log("no se pude abrir archivo");
+    
+                } else {
+                    const uploadedDir = path.dirname(uploadedPath);
+                    if (!fs.existsSync(uploadedDir)) {
+                        fs.mkdirSync(uploadedDir, { recursive: true });
+                      }
+
+                fs.writeFile(uploadedPath, data, (writeErr) => {
+                    if (writeErr) {
+                        console.log("error al escribir archvo")
+                    console.error(writeErr);
+                    }
+                });
                 }
             });
-            }
-        });
+        }else {
+            console.log("El archivo en currentPath no existe");
+        }
     }
 }
 
