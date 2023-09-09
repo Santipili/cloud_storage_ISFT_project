@@ -24,6 +24,16 @@ class Server {
 
     const { pathname } = url.parse(req.url, true);
     const method = req.method;
+    console.log("METHOD");
+    console.log(method);
+    if (method.toLowerCase() == "options") {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+      res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+      res.statusCode = 200;
+      res.end();
+      return;
+    }
 
     const handler = this.routes[method][pathname] || this.routes[method]["*"];
 

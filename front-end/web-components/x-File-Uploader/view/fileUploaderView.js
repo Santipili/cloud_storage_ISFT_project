@@ -38,6 +38,10 @@ class FileUploaderView extends HTMLElement {
     this.progressBar.setAttribute("max", "100");
     this.progressBar.setAttribute("value", "0");
 
+    this.progressSpan = document.createElement("span");
+    this.progressSpan.className = "progress-span";
+    this.progressSpan.textContent = "0%";
+
     this.label.appendChild(this.dropTitle);
     this.label.appendChild(this.fileInput);
 
@@ -46,6 +50,7 @@ class FileUploaderView extends HTMLElement {
     this.form.appendChild(this.label);
     this.form.appendChild(this.BtnSendFile);
     this.form.appendChild(this.progressBar);
+    this.form.appendChild(this.progressSpan);
 
     this.appendChild(this.form);
 

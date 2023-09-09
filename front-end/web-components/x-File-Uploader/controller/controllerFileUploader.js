@@ -30,6 +30,7 @@ class FileUploaderController {
   async onButtonBtnSendFile() {
     let fileInput = this.view.fileInput.files;
     let progressBar = this.view.progressBar;
+    let progressSpan = this.view.progressBar;
 
     const formData = new FormData();
 
@@ -40,10 +41,18 @@ class FileUploaderController {
     const url = "http://localhost:3000/upload";
 
     try {
-      const response = await axios.post(url, formData);
-      const result = response.data;
-      progressBar.value = 100;
-      return result;
+      const response = await axios.post(url, formData, {
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent) {
+            let percentCompleted =
+              (progressEvent.loaded / progressEvent.total) * 100;
+            progressBar.value = percentCompleted;
+            progressSpan.innerText = `${Math.round(percentCompleted)}%`;
+          }
+        },
+      });
+
+      console.log(response);
     } catch (error) {
       console.log(error.message);
     }
