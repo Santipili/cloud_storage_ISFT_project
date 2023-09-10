@@ -7,6 +7,13 @@ class Server {
       GET: {},
       POST: {},
     };
+
+    this.headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+      "Access-Control-Allow-Headers": "content-type, custom-token, id",
+      "Content-Type": "application/json",
+    };
   }
 
   get(path, handler) {
@@ -18,19 +25,12 @@ class Server {
   }
 
   handleRequest(req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
+    res.writeHead(200, this.headers);
     const { pathname } = url.parse(req.url, true);
     const method = req.method;
-    console.log("METHOD");
-    console.log(method);
-    if (method.toLowerCase() == "options") {
-      res.setHeader("Access-Control-Allow-Origin", "*");
-      res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-      res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-      res.statusCode = 200;
+
+    if (method === "OPTIONS") {
+      res.writeHead(204, this.headers);
       res.end();
       return;
     }

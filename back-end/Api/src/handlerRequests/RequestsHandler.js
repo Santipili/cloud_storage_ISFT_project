@@ -11,7 +11,7 @@ class RequestsHandler {
       return res.end(JSON.stringify({ status: true, message: response }));
     } catch (e) {
       res.statusCode = 500;
-      return res.end(JSON.stringify({ status: false, message: "FAIL" }));
+      return res.end(JSON.stringify({ status: false, message: e.message }));
     }
   }
 }

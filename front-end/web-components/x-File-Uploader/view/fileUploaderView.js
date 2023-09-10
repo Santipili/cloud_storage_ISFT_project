@@ -10,10 +10,6 @@ class FileUploaderView extends HTMLElement {
     this.Title.className = "form-title";
     this.Title.textContent = "Upload your file";
 
-    this.paragraph = document.createElement("p");
-    this.paragraph.className = "form-paragraph";
-    this.paragraph.textContent = "File should be an image";
-
     this.label = document.createElement("label");
     this.label.htmlFor = "file-input";
     this.label.className = "drop-container";
@@ -29,10 +25,16 @@ class FileUploaderView extends HTMLElement {
     this.fileInput.id = "file-input";
     this.fileInput.multiple = true;
 
+    this.DivBtn = document.createElement("div");
+    this.DivBtn.classList.add("btnDiv");
+
     this.BtnSendFile = document.createElement("button");
     this.BtnSendFile.setAttribute("role", "button");
     this.BtnSendFile.classList.add("button-name");
     this.BtnSendFile.textContent = "Upload";
+
+    this.DivProgressBar = document.createElement("div");
+    this.DivProgressBar.classList.add("Div");
 
     this.progressBar = document.createElement("progress");
     this.progressBar.setAttribute("max", "100");
@@ -42,15 +44,16 @@ class FileUploaderView extends HTMLElement {
     this.progressSpan.className = "progress-span";
     this.progressSpan.textContent = "0%";
 
+    this.DivBtn.appendChild(this.BtnSendFile);
+    this.DivProgressBar.appendChild(this.progressSpan);
+    this.DivProgressBar.appendChild(this.progressBar);
+
     this.label.appendChild(this.dropTitle);
     this.label.appendChild(this.fileInput);
-
     this.form.appendChild(this.Title);
-    this.form.appendChild(this.paragraph);
     this.form.appendChild(this.label);
-    this.form.appendChild(this.BtnSendFile);
-    this.form.appendChild(this.progressBar);
-    this.form.appendChild(this.progressSpan);
+    this.form.appendChild(this.DivBtn);
+    this.form.appendChild(this.DivProgressBar);
 
     this.appendChild(this.form);
 
