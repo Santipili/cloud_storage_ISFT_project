@@ -30,7 +30,7 @@ class FileUploaderController {
   async onButtonBtnSendFile() {
     let fileInput = this.view.fileInput.files;
     let progressBar = this.view.progressBar;
-    let progressSpan = this.view.progressBar;
+    let progressSpan = this.view.progressSpan;
 
     const formData = new FormData();
 
@@ -47,7 +47,7 @@ class FileUploaderController {
             let percentCompleted =
               (progressEvent.loaded / progressEvent.total) * 100;
             progressBar.value = percentCompleted;
-            progressSpan.innerText = `${Math.round(percentCompleted)}%`;
+            progressSpan.textContent = `${Math.round(percentCompleted)}%`;
           }
         },
       });
