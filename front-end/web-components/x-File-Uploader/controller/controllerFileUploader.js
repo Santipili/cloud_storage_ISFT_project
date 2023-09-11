@@ -2,6 +2,8 @@ class FileUploaderController {
   constructor(viewReference, modelReference) {
     this.view = viewReference;
     this.model = modelReference;
+    this.progressBar = this.view.progressBar;
+    this.progressSpan = this.view.progressSpan;
   }
 
   enable() {
@@ -23,34 +25,32 @@ class FileUploaderController {
   }
   
   disable() {
-    this.view.btnSignUp = null;
-    this.view.btnForgotPassw = null;
+    this.view.BtnSendFile = null;
   }
 
   async onButtonBtnSendFile() {
-    
     let fileInput = this.view.fileInput.files;
-    let progressBar = this.view.progressBar;
-    let progressSpan = this.view.progressSpan;
-
     const formData = new FormData();
   
-  Object.keys(fileInput).forEach((k) => {
-    formData.append("file", fileInput[k]);
-});
+    Object.keys(fileInput).forEach((k) => {
+      formData.append("file", fileInput[k]);
+    });
 
-    this.model.FileUploaderToServer(formData) .then((result) => {
-      for (let key in result) {
-    
-        progressBar.value = result[key]; 
-        progressSpan.innerText = `${Math.round(result[key])}%`;
-        
-      }
+    this.model.FileUploaderToServer(formData, (percentCompleted) => {
+      this.updateProgressBar(percentCompleted);
     })
-    
+    .then(() => {
+      console.log('Carga completa');
+    })
     .catch((error) => {
       console.error(error.error);
     });  
+  }
+
+  updateProgressBar(percentCompleted) {
+    
+    this.progressBar.value = percentCompleted;
+    this.progressSpan.innerText = `${Math.round(percentCompleted)}%`;
   }
 }
 

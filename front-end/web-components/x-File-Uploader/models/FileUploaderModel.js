@@ -1,27 +1,26 @@
 class FileUploaderModel {
   constructor() {}
 
-  async FileUploaderToServer(formData) {
+  async FileUploaderToServer(formData, progressCallback) {
     const url = "http://localhost:3000/upload";
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      const progressValues = []; 
 
       xhr.open('POST', url, true);
 
       xhr.upload.addEventListener('progress', (event) => {
         if (event.lengthComputable) {
           const percentCompleted = (event.loaded / event.total) * 100;
-          progressValues.push(percentCompleted); 
+        
+          progressCallback(percentCompleted);
         }
       });
 
       xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
-          
-            resolve(progressValues);
+            resolve('Carga completa');
           } else {
             reject({ error: 'Error en la carga' }); 
           }
