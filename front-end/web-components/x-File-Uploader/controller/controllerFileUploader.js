@@ -7,7 +7,7 @@ class FileUploaderController {
   enable() {
     this.view.BtnSendFile.addEventListener("click", async (e) => {
       e.preventDefault();
-
+      
       // Deshabilita el botón mientras se realiza la operación
       this.view.BtnSendFile.disabled = true;
 
@@ -21,41 +21,36 @@ class FileUploaderController {
       }
     });
   }
-
+  
   disable() {
     this.view.btnSignUp = null;
     this.view.btnForgotPassw = null;
   }
 
   async onButtonBtnSendFile() {
+    
     let fileInput = this.view.fileInput.files;
     let progressBar = this.view.progressBar;
-    let progressSpan = this.view.progressBar;
+    let progressSpan = this.view.progressSpan;
 
     const formData = new FormData();
+  
+  Object.keys(fileInput).forEach((k) => {
+    formData.append("file", fileInput[k]);
+});
 
-    Object.keys(fileInput).forEach((k) => {
-      formData.append("file", fileInput[k]);
-    });
-
-    const url = "http://localhost:3000/upload";
-
-    try {
-      const response = await axios.post(url, formData, {
-        onUploadProgress: (progressEvent) => {
-          if (progressEvent) {
-            let percentCompleted =
-              (progressEvent.loaded / progressEvent.total) * 100;
-            progressBar.value = percentCompleted;
-            progressSpan.innerText = `${Math.round(percentCompleted)}%`;
-          }
-        },
-      });
-
-      console.log(response);
-    } catch (error) {
-      console.log(error.message);
-    }
+    this.model.FileUploaderToServer(formData) .then((result) => {
+      for (let key in result) {
+    
+        progressBar.value = result[key]; 
+        progressSpan.innerText = `${Math.round(result[key])}%`;
+        
+      }
+    })
+    
+    .catch((error) => {
+      console.error(error.error);
+    });  
   }
 }
 
