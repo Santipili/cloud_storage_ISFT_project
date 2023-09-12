@@ -25,7 +25,7 @@ class FileUploaderView extends HTMLElement {
     this.fileInput = document.createElement("input");
     this.fileInput.type = "file";
     this.fileInput.accept = "*/*";
-    this.fileInput.required = true;
+    //this.fileInput.required = true;
     this.fileInput.id = "file-input";
     this.fileInput.multiple = true;
 

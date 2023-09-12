@@ -1,24 +1,26 @@
-class FileUploaderController {
-  constructor(viewReference, modelReference) {
+class FileUploaderController 
+{
+  constructor(viewReference, modelReference, validFile) 
+  {
     this.view = viewReference;
     this.model = modelReference;
+    this.validFile = validFile; 
     this.progressBar = this.view.progressBar;
     this.progressSpan = this.view.progressSpan;
   }
 
-  enable() {
+  enable() 
+  {
     this.view.BtnSendFile.addEventListener("click", async (e) => {
       e.preventDefault();
-      
-      // Deshabilita el botón mientras se realiza la operación
+    
       this.view.BtnSendFile.disabled = true;
 
       try {
         await this.onButtonBtnSendFile();
       } catch (error) {
-        // Maneja errores si es necesario
+   
       } finally {
-        // Habilita el botón nuevamente cuando la operación ha finalizado (éxito o error)
         this.view.BtnSendFile.disabled = false;
       }
     });
@@ -30,23 +32,29 @@ class FileUploaderController {
 
   async onButtonBtnSendFile() {
     let fileInput = this.view.fileInput.files;
-    const formData = new FormData();
-  
-    Object.keys(fileInput).forEach((k) => {
-      formData.append("file", fileInput[k]);
-    });
+    const file = this.validFile.filterFiles(fileInput); 
 
-    this.model.FileUploaderToServer(formData, (percentCompleted) => {
-      this.updateProgressBar(percentCompleted);
-    })
-    .then(() => {
-      console.log('Carga completa');
-    })
-    .catch((error) => {
-      console.error(error.error);
-    });  
-  }
+    if (fileInput.length != 0) 
+    {
+        if (file != 0)
+        {
+            const formData = new FormData();
+            Object.keys(file).forEach((k) => {
+            formData.append("file", file[k]);
+            });
 
+            this.model.FileUploaderToServer(formData, (percentCompleted) => {
+            this.updateProgressBar(percentCompleted);
+            })
+        }else{
+
+            alert("Elija un archivos no se pueden cargar carpetas"); 
+        }
+    }else
+        {
+            alert("Tiene que elegir un archivo antes de presionar boton Upload!")
+        }
+    }    
   updateProgressBar(percentCompleted) {
     
     this.progressBar.value = percentCompleted;
