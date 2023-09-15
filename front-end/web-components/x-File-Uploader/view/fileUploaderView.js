@@ -54,8 +54,15 @@ class FileUploaderView extends HTMLElement {
 
     this.appendChild(this.form);
 
-    /*  this.form.action = "http://localhost:3000/upload";
-    this.form.method = "post"; */
+  }
+  connectedCallback()
+  {
+      
+  }
+
+  disconnectedCallback()
+  {
+
   }
 }
 
