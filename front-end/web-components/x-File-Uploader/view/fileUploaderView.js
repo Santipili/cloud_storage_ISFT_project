@@ -37,10 +37,12 @@ class FileUploaderView extends HTMLElement {
     this.progressBar = document.createElement("progress");
     this.progressBar.setAttribute("max", "100");
     this.progressBar.setAttribute("value", "0");
+    this.progressBar.setAttribute("style","display: none;")
 
     this.progressSpan = document.createElement("span");
     this.progressSpan.className = "progress-span";
     this.progressSpan.textContent = "0%";
+    this.progressSpan.setAttribute("style","display: none;")
 
     this.label.appendChild(this.dropTitle);
     this.label.appendChild(this.fileInput);
@@ -63,6 +65,20 @@ class FileUploaderView extends HTMLElement {
   disconnectedCallback()
   {
 
+  }
+
+  enableProgressBar()
+  {
+    this.progressBar.setAttribute("style","display: block;")
+    this.progressSpan.setAttribute("style","display: block;")
+    
+  }
+
+  disableProgressBar()
+  {
+    this.progressBar.setAttribute("style","display: none;")
+    this.progressSpan.setAttribute("style","display: none;")
+    
   }
 }
 

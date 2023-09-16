@@ -13,6 +13,7 @@ class FileUploaderController
   {
     this.view.BtnSendFile.addEventListener("click", async (e) => {
       e.preventDefault();
+      this.view.enableProgressBar();
     
       this.view.BtnSendFile.disabled = true;
 
@@ -39,6 +40,7 @@ class FileUploaderController
         if (file != 0)
         {
             const formData = new FormData();
+    
             Object.keys(file).forEach((k) => {
             formData.append("file", file[k]);
             });
@@ -59,6 +61,11 @@ class FileUploaderController
     
     this.progressBar.value = percentCompleted;
     this.progressSpan.innerText = `${Math.round(percentCompleted)}%`;
+    if (Math.round(percentCompleted) === 100)
+    {
+      this.view.disableProgressBar(); 
+    }
+     
   }
 }
 
