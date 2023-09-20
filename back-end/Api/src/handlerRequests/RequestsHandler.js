@@ -14,6 +14,15 @@ class RequestsHandler {
       return res.end(JSON.stringify({ status: false, message: e.message }));
     }
   }
+  deleteFile(uploadDir, fileName) {
+    const filesHandler = new FilesHandler();
+    filesHandler.deleteFile(uploadDir, fileName);
+  }
+
+  uploadFileName(currentName, newName) {
+    const filesHandler = new FilesHandler();
+    filesHandler.uploadFileName(currentName, newName);
+  }
 }
 
 module.exports = { RequestsHandler };

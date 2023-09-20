@@ -51,6 +51,25 @@ class FilesHandler {
       }
     });
   }
+
+  deleteFile(fileName) {
+    fs.unlink("./uploads/" + fileName, (error) => {
+      if (error) {
+        console.error("Error al eliminar el archivo:", error);
+      } else {
+        console.log("Archivo eliminado con exito", fileName);
+      }
+    });
+  }
+  uploadFileName(currentName, newName) {
+    fs.rename("./uploads/" + currentName, "./uploads/" + newName, (error) => {
+      if (error) {
+        console.error("Error al renombrar el archivo:", error);
+      } else {
+        console.log("Archivo renombrado con exito", newName);
+      }
+    });
+  }
 }
 
 module.exports = { FilesHandler };
