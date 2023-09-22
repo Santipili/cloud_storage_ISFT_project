@@ -1,13 +1,12 @@
 import { FileUploader } from "./web-components/x-File-Uploader/FileUploader.js";
+import { BackTest } from "./web-components/backTest.js";
 
-import { FileUploaderView } from "./web-components/x-File-Uploader/view/fileUploaderView.js";
 
 function main() {
-  let fileUploader = new FileUploader();
+  // let fileUploader = new FileUploader();
 
-  /* let fileUploaderView = new FileUploaderView(); */
-
-  document.body.appendChild(fileUploader);
+  let Test = new BackTest(); 
+  document.body.appendChild(Test);
 }
 
 window.addEventListener("load", main);
