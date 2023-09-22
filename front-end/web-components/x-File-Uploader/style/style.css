@@ -1,4 +1,6 @@
 .form {
+  display: flex;
+  flex-direction: column;
   background-color: #fff;
   box-shadow: 0 10px 60px rgb(218, 229, 255);
   border: 1px solid rgb(159, 159, 160);
@@ -81,6 +83,12 @@
   background: #0d45a5;
 }
 
+.Div {
+  margin-top: 1rem;
+  align-items: center;
+  justify-content: center;
+
+}
 
 
 
@@ -97,6 +105,7 @@
   display: inline-flex;
   font-family: inherit;
   height: 38px;
+  width: 76px;
   justify-content: center;
   line-height: 1;
   list-style: none;

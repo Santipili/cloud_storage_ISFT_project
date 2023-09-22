@@ -9,26 +9,27 @@ class FilesHandler {
     return new Promise((resolve, reject) => {
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir);
-        console.log(`se creo ${uploadDir}`);
       }
       const form = new multiparty.Form();
       form.parse(req, (err, fields, files) => {
         if (err) {
           console.error(err);
-          console.log("error");
           reject({ status: false });
         }
 
-        files.file.forEach((file) => {
-          const fileName = file.originalFilename;
-          const currentDir = __dirname;
-          const parentDir = path.resolve(currentDir, "../..");
-          const filePath = path.join(parentDir, uploadDir, fileName);
-          const fileCurrentPath = file.path;
-          this.writePath(fileCurrentPath, filePath);
-        });
+        if (JSON.stringify(files) !== "{}") {
+          files.file.forEach((file) => {
+            const fileName = file.originalFilename;
+            const currentDir = __dirname;
+            const parentDir = path.resolve(currentDir, "../..");
+            const filePath = path.join(parentDir, uploadDir, fileName);
+            const fileCurrentPath = file.path;
+            this.writePath(fileCurrentPath, filePath);
+          });
+          resolve({ status: true, message: "File upload" });
+        }
 
-        resolve({ status: true, message: "File upload" });
+        reject({ status: false, message: "empty data files" });
       });
     });
   }
@@ -47,6 +48,25 @@ class FilesHandler {
             console.log("Archivo escrito con éxito:", uploadedPath);
           }
         });
+      }
+    });
+  }
+
+  deleteFile(fileName) {
+    fs.unlink("./uploads/" + fileName, (error) => {
+      if (error) {
+        console.error("Error al eliminar el archivo:", error);
+      } else {
+        console.log("Archivo eliminado con exito", fileName);
+      }
+    });
+  }
+  uploadFileName(currentName, newName) {
+    fs.rename("./uploads/" + currentName, "./uploads/" + newName, (error) => {
+      if (error) {
+        console.error("Error al renombrar el archivo:", error);
+      } else {
+        console.log("Archivo renombrado con exito", newName);
       }
     });
   }

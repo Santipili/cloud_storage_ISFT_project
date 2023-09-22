@@ -14,3 +14,10 @@ app.get("/", (req, res) => {
 
 app.post("/upload", requestHandler.uploadFiles);
 app.start(port);
+
+requestHandler.deleteFile("certificadoInglesProgresar.pdf");
+
+/* requestHandler.uploadFileName(
+  "./uploads/certificadoInglesProgresar.pdf",
+  "nuevoNombre.pdf"
+); */
