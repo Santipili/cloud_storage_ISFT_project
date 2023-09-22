@@ -7,12 +7,12 @@ class FileUploaderModel {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
 
-      xhr.open('POST', url, true);
+      xhr.open("POST", url, true);
 
-      xhr.upload.addEventListener('progress', (event) => {
+      xhr.upload.addEventListener("progress", (event) => {
         if (event.lengthComputable) {
           const percentCompleted = (event.loaded / event.total) * 100;
-        
+
           progressCallback(percentCompleted);
         }
       });
@@ -20,9 +20,9 @@ class FileUploaderModel {
       xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
-            resolve('Carga completa');
+            resolve({ status: true, message: "Success ,Loading complete" });
           } else {
-            reject({ error: 'Error en la carga' }); 
+            reject({ status: false, message: "Loading error" });
           }
         }
       };
@@ -30,10 +30,6 @@ class FileUploaderModel {
       xhr.send(formData);
     });
   }
-
-  logIn() {}
-
-  async signIn(data) {}
 }
 
 export { FileUploaderModel };
