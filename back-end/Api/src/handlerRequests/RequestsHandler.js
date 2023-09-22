@@ -1,13 +1,14 @@
 const { FilesHandler } = require("../controllers/FilesHandler.js");
-const { PathHandler } = require("../controllers/PathHandler.js");
+const { DirectoryHandler } = require("../controllers/DirectoryHandler.js");
 
 
 class RequestsHandler {
   constructor(uploadDirReference) {
     this.uploadDir = uploadDirReference;
+
   }
 
-  async uploadFiles(req, res) {
+   uploadFiles=async (req, res) =>{
     // const uploadDir = "./uploads";
     const filesHandler = new FilesHandler();
     try {
@@ -19,25 +20,22 @@ class RequestsHandler {
     }
   }
 
-  async createDirectorie(req, res) {
-    const pathHandler = new PathHandler();
+   createDirectory=async (req, res)=> {
+   
+    const pathHandler = new DirectoryHandler();
     let body = '';
-    req.on('data', (chunk) => {
+    req.on('data', async (chunk) => {
         body += chunk.toString();
-    });
-    const requestData = body ? JSON.parse(body) : {};
+        const requestData = body ? JSON.parse(body) : {};
     
-    console.log(req.body);
-    console.log("BODY: "+body);
-
-
-    try{
-      const response = await pathHandler.createDirectory(requestData, "/descargas");
-      return res.end(JSON.stringify({ status: true, message: response }));
-    } catch(e) {
-      res.statusCode = 500;
-      return res.end(JSON.stringify({ status: false, message: e.message }));
-    }
+        try{
+          const response = await pathHandler.create(requestData, this.uploadDir);
+          return res.end(JSON.stringify({ status: true, message: response }));
+        } catch(e) {
+          res.statusCode = 500;
+          return res.end(JSON.stringify({ status: false, message: e.message }));
+        }
+    });
   }
 
 
