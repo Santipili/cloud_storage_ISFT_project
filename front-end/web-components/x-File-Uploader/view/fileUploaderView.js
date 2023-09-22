@@ -21,7 +21,7 @@ class FileUploaderView extends HTMLElement {
     this.fileInput = document.createElement("input");
     this.fileInput.type = "file";
     this.fileInput.accept = "*/*";
-    this.fileInput.required = true;
+    //this.fileInput.required = true;
     this.fileInput.id = "file-input";
     this.fileInput.multiple = true;
 
@@ -39,10 +39,12 @@ class FileUploaderView extends HTMLElement {
     this.progressBar = document.createElement("progress");
     this.progressBar.setAttribute("max", "100");
     this.progressBar.setAttribute("value", "0");
+    this.progressBar.setAttribute("style","display: none;")
 
     this.progressSpan = document.createElement("span");
     this.progressSpan.className = "progress-span";
     this.progressSpan.textContent = "0%";
+    this.progressSpan.setAttribute("style","display: none;")
 
     this.DivBtn.appendChild(this.BtnSendFile);
     this.DivProgressBar.appendChild(this.progressSpan);
@@ -57,8 +59,29 @@ class FileUploaderView extends HTMLElement {
 
     this.appendChild(this.form);
 
-    /*  this.form.action = "http://localhost:3000/upload";
-    this.form.method = "post"; */
+  }
+  connectedCallback()
+  {
+      
+  }
+
+  disconnectedCallback()
+  {
+
+  }
+
+  enableProgressBar()
+  {
+    this.progressBar.setAttribute("style","display: block;")
+    this.progressSpan.setAttribute("style","display: block;")
+    
+  }
+
+  disableProgressBar()
+  {
+    this.progressBar.setAttribute("style","display: none;")
+    this.progressSpan.setAttribute("style","display: none;")
+    
   }
 }
 
