@@ -1,11 +1,14 @@
 const { Server } = require("./server/server.js");
 
 const { RequestsHandler } = require("./src/handlerRequests/RequestsHandler.js");
+const { FilesHandler } = require("./src/controllers/FilesHandler.js");
 
 const app = new Server();
 
 const port = process.env.PORT || 3000;
-const requestHandler = new RequestsHandler();
+const fileHandler = new FilesHandler();
+
+const requestHandler = new RequestsHandler(fileHandler);
 
 app.get("/", (req, res) => {
   res.setHeader("Content-Type", "text/plain");
