@@ -12,6 +12,8 @@ app.get("/", (req, res) => {
   res.end("Hello!");
 });
 
+//Create FileHandler object
+//Create FileHandlerProxy( fileHandlerObject );
 app.post("/upload", requestHandler.uploadFiles);
 app.start(port);
 

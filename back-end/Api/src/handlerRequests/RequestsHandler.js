@@ -7,7 +7,7 @@ class RequestsHandler {
     const uploadDir = "./uploads";
     const filesHandler = new FilesHandler();
     try {
-      const response = await filesHandler.uploadFiles(req, uploadDir);
+      const response = await filesHandler.upload(req, uploadDir);
       return res.end(JSON.stringify({ status: true, message: response }));
     } catch (e) {
       res.statusCode = 500;
@@ -16,12 +16,12 @@ class RequestsHandler {
   }
   deleteFile(uploadDir, fileName) {
     const filesHandler = new FilesHandler();
-    filesHandler.deleteFile(uploadDir, fileName);
+    filesHandler.delete(uploadDir, fileName);
   }
 
   uploadFileName(currentName, newName) {
     const filesHandler = new FilesHandler();
-    filesHandler.uploadFileName(currentName, newName);
+    filesHandler.rename(currentName, newName);
   }
 }
 
