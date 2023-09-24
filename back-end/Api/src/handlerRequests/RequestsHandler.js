@@ -1,28 +1,27 @@
-const { FilesHandler } = require("../controllers/FilesHandler.js");
-
 class RequestsHandler {
-  constructor() {}
+  constructor(fileHandler) {
+    this.fileHandler = fileHandler;
+  }
 
-  async uploadFiles(req, res) {
+  uploadFiles = async (req, res) => {
     const uploadDir = "./uploads";
-    const filesHandler = new FilesHandler();
+
     try {
-      const response = await filesHandler.uploadFiles(req, uploadDir);
+      const response = await this.fileHandler.uploadFiles(req, uploadDir);
       return res.end(JSON.stringify({ status: true, message: response }));
     } catch (e) {
+      console.log(e);
       res.statusCode = 500;
       return res.end(JSON.stringify({ status: false, message: e.message }));
     }
-  }
-  deleteFile(uploadDir, fileName) {
-    const filesHandler = new FilesHandler();
-    filesHandler.deleteFile(uploadDir, fileName);
-  }
+  };
+  deleteFile = (uploadDir, fileName) => {
+    this.filesHandler.deleteFile(uploadDir, fileName);
+  };
 
-  uploadFileName(currentName, newName) {
-    const filesHandler = new FilesHandler();
-    filesHandler.uploadFileName(currentName, newName);
-  }
+  uploadFileName = (currentName, newName) => {
+    this.filesHandler.uploadFileName(currentName, newName);
+  };
 }
 
 module.exports = { RequestsHandler };
