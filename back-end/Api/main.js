@@ -1,11 +1,9 @@
 const { Server } = require("./server/server.js");
-
 const { RequestsHandler } = require("./src/handlerRequests/RequestsHandler.js");
 
 const app = new Server();
-
 const port = process.env.PORT || 3000;
-const requestHandler = new RequestsHandler();
+const requestHandler = new RequestsHandler("/uploads");
 
 app.get("/", (req, res) => {
   res.setHeader("Content-Type", "text/plain");
@@ -13,6 +11,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/upload", requestHandler.uploadFiles);
+app.post("/upload/newfolder", requestHandler.createDirectory)
 app.start(port);
 
 //TESTs

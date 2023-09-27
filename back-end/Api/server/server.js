@@ -24,7 +24,7 @@ class Server {
     this.routes.POST[path] = handler;
   }
 
-  handleRequest(req, res) {
+  async handleRequest(req, res) {
     res.writeHead(200, this.headers);
     const { pathname } = url.parse(req.url, true);
     const method = req.method;
@@ -38,7 +38,7 @@ class Server {
     const handler = this.routes[method][pathname] || this.routes[method]["*"];
 
     if (handler) {
-      handler(req, res);
+     await  handler(req, res);
     } else {
       res.statusCode = 404;
       res.end("Not Found");
