@@ -9,7 +9,6 @@ class RequestsHandler {
   }
 
    uploadFiles=async (req, res) =>{
-    // const uploadDir = "./uploads";
     const filesHandler = new FilesHandler();
     try {
       const response = await filesHandler.uploadFiles(req, this.uploadDir);
@@ -30,6 +29,7 @@ class RequestsHandler {
     
         try{
           const response = await pathHandler.create(requestData, this.uploadDir);
+          console.log(response);
           return res.end(JSON.stringify({ status: true, message: response }));
         } catch(e) {
           res.statusCode = 500;

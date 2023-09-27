@@ -11,43 +11,40 @@ class DirectoryHandler {
       const newDir = requestData.newDir;
       const currentDir = path.resolve(__dirname, "../..");
       const newDirPath = path.join(currentDir, uploadDir, userDir, newDir);
+      console.log(newDirPath);
     
       return new Promise((resolve, reject) => {
         if (!fs.existsSync(newDirPath)) {
-          fs.mkdirSync(newDirPath, { recursive: true }, (error) => {
-            if (error) {
-              reject({ status: false, message: "No se pudo crear el directorio" });
-            } else {
-              resolve({ status: true, message: "Directorio creado exitosamente" });
-            }
-          });
+          fs.mkdirSync(newDirPath, { recursive: true });
+          resolve({ status: true, message: "Directorio creado exitosamente" });
+
         } else {
           reject({ status: false, message: "El directorio ya existe" });
         }
       });
     }
 
-    delete(){
+    delete(requestData){
 
     }
 
-    rename(){
+    rename(requestData){
 
     }
     
-    move(){
+    move(requestData){
 
     }
 
-    getContent(){
+    getContent(requestData){
 
     }
 
-    copy(){
+    copy(requestData){
 
     }
 
-    getProperties(){
+    getProperties(requestData){
 
     }
 }

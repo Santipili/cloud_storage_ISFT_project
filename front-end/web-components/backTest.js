@@ -26,7 +26,7 @@ class BackTest extends HTMLElement {
         
         let data = {
             userDir : "/" + "userNameSanti",
-            newDir : "/fotos/2010"
+            newDir : "/0012assa0"
         }
 
         try {      
@@ -47,7 +47,8 @@ class BackTest extends HTMLElement {
            
         } catch (error) {
             console.log("error");
-            alert(error.message);
+alert(error)          
+  alert(error.message);
         }
 
     }
