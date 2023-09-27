@@ -2,33 +2,26 @@ import {createElement} from '../src/createHTMLElement.js';
 
 class BackTest extends HTMLElement {
     constructor() {
-      super();
-  
-     this.container = document.createElement('div');
-     this.input = createElement('input');
-     this.button = createElement('button', 'ENVIAR');
-
-
-      this.appendChild(this.container);
-
-
+        super();
+        this.container = document.createElement('div');
+        this.appendChild(this.container);
+        this.button = createElement('button', 'ENVIAR');
     }
     connectedCallback() {
         this.container.appendChild(this.button); 
-        
-        
         this.button.addEventListener('click', ()=> {
             this.newDirectorie();
         })
     }
+    disconnectedCallback() {    
+
+    }
 
     async newDirectorie(){
-        
         let data = {
             userDir : "/" + "userNameSanti",
             newDir : "/0012assa0"
         }
-
         try {      
             let requestMetadata = {
                 method: "POST",
@@ -37,30 +30,17 @@ class BackTest extends HTMLElement {
                 },
                 body:JSON.stringify(data),
               };
-    
             let result = await fetch ("http://localhost:3000/upload/newfolder", requestMetadata);    
             let jsonResult = await result.json();
-
             alert(jsonResult.message); 
-            console.log(jsonResult);
-
-           
+            console.log(jsonResult);           
         } catch (error) {
-            console.log("error");
-alert(error)          
-  alert(error.message);
+            console.log("error");         
+            alert(error);
         }
-
     }
-  
-    disconnectedCallback() {
-      
-    }
-
-
 }
   
 customElements.define("x-back-test", BackTest);
-
 export { BackTest };
   
