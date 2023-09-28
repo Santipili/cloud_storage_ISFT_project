@@ -1,78 +1,54 @@
 class FileUploaderController {
-  constructor(viewReference, modelReference, validFile) {
+  constructor(viewReference, modelReference) {
     this.view = viewReference;
     this.model = modelReference;
-    this.validFile = validFile;
-    this.progressBar = this.view.progressBar;
-    this.progressSpan = this.view.progressSpan;
-  }
 
-  enable() {
-    this.view.BtnSendFile.addEventListener("click", async (e) => {
-      e.preventDefault();
-      this.view.enableProgressBar();
-      try {
-        const res = await this.onButtonBtnSendFile();
-
-        if (res.status == true) {
-          console.log(res.message);
-        } else {
-          this.view.disableProgressBar();
-          console.log(res.message);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+    /* ---------------- */
+    this.model.addEventListener("progressbar", (event) => {
+      this.onUploadProgress(event);
     });
   }
 
+  enable() {
+    this.view.BtnSendFile.onclick = (event) => this.onButtonSendFile(event);
+  }
+
   disable() {
-    this.view.BtnSendFile = null;
+    this.view.BtnSendFile.onclick = null;
   }
 
-  async onButtonBtnSendFile() {
-    let fileInput = this.view.fileInput.files;
-    const file = this.validFile.filterFiles(fileInput);
+  onUploadProgress(event) {
+    this.view.updateProgressBar(event.detail);
+  }
 
-    if (fileInput.length != 0) {
-      if (file != 0) {
-        const formData = new FormData();
+  async onButtonSendFile(e) {
+    e.preventDefault();
 
-        Object.keys(file).forEach((k) => {
-          formData.append("file", file[k]);
-        });
+    let responseView = this.view.getFormData();
 
-        let res = await this.model.FileUploaderToServer(
-          formData,
-          (percentCompleted) => {
-            this.updateProgressBar(percentCompleted);
-          }
-        );
+    if (responseView.status == true) {
+      this.view.enableProgressBar();
 
-        return res;
-      } else {
-        const res = {
-          status: false,
-          message: "Elija un archivos no se pueden cargar carpetas",
-        };
+      // const cleanfiles = this.__cleanFiles(responseView.data);  Tira un error en el servidor del back.
 
-        return res;
+      let res = await this.model.FileUploaderToServer(responseView.data);
+
+      if (res.status) {
+        this.view.disableProgressBar();
+        location.reload(); //refresca la pagina
       }
+      console.log(res);
     } else {
-      const res = {
-        status: false,
-        message: "Tiene que elegir un archivo antes de presionar boton Upload!",
-      };
-
-      return res;
+      console.log(responseView);
     }
   }
-  updateProgressBar(percentCompleted) {
-    this.progressBar.value = percentCompleted;
-    this.progressSpan.innerText = `${Math.round(percentCompleted)}%`;
-    if (Math.round(percentCompleted) === 100) {
-      this.view.disableProgressBar();
-    }
+
+  __cleanFiles(formData) {
+    const fileInput = formData.getAll("file");
+
+    return [...fileInput].filter((file) => {
+      return file instanceof File && file.type !== "";
+    });
   }
 }
 

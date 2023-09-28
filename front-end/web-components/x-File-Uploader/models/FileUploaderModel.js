@@ -1,7 +1,9 @@
-class FileUploaderModel {
-  constructor() {}
+class FileUploaderModel extends EventTarget {
+  constructor() {
+    super();
+  }
 
-  async FileUploaderToServer(formData, progressCallback) {
+  async FileUploaderToServer(formData) {
     const url = "http://localhost:3000/upload";
 
     return new Promise((resolve, reject) => {
@@ -13,7 +15,9 @@ class FileUploaderModel {
         if (event.lengthComputable) {
           const percentCompleted = (event.loaded / event.total) * 100;
 
-          progressCallback(percentCompleted);
+          this.dispatchEvent(
+            new CustomEvent("progressbar", { detail: percentCompleted })
+          );
         }
       });
 

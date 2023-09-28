@@ -21,7 +21,7 @@ class FileUploaderView extends HTMLElement {
     this.fileInput = document.createElement("input");
     this.fileInput.type = "file";
     this.fileInput.accept = "*/*";
-    //this.fileInput.required = true;
+
     this.fileInput.id = "file-input";
     this.fileInput.multiple = true;
 
@@ -32,6 +32,8 @@ class FileUploaderView extends HTMLElement {
     this.BtnSendFile.setAttribute("role", "button");
     this.BtnSendFile.classList.add("button-name");
     this.BtnSendFile.textContent = "Upload";
+    this.BtnSendFile.setAttribute("style", "display: none;");
+    this.BtnSendFile.disabled = true;
 
     this.DivProgressBar = document.createElement("div");
     this.DivProgressBar.classList.add("Div");
@@ -39,12 +41,12 @@ class FileUploaderView extends HTMLElement {
     this.progressBar = document.createElement("progress");
     this.progressBar.setAttribute("max", "100");
     this.progressBar.setAttribute("value", "0");
-    this.progressBar.setAttribute("style","display: none;")
+    this.progressBar.setAttribute("style", "display: none;");
 
     this.progressSpan = document.createElement("span");
     this.progressSpan.className = "progress-span";
     this.progressSpan.textContent = "0%";
-    this.progressSpan.setAttribute("style","display: none;")
+    this.progressSpan.setAttribute("style", "display: none;");
 
     this.DivBtn.appendChild(this.BtnSendFile);
     this.DivProgressBar.appendChild(this.progressSpan);
@@ -59,29 +61,53 @@ class FileUploaderView extends HTMLElement {
 
     this.appendChild(this.form);
 
+    this.fileInput.addEventListener("change", () => {
+      this.BtnSendFile.disabled = false;
+      this.BtnSendFile.setAttribute("style", "display: inline-flex;");
+    });
   }
-  connectedCallback()
-  {
-      
-  }
+  connectedCallback() {}
 
-  disconnectedCallback()
-  {
+  disconnectedCallback() {}
 
-  }
-
-  enableProgressBar()
-  {
-    this.progressBar.setAttribute("style","display: block;")
-    this.progressSpan.setAttribute("style","display: block;")
-    
+  enableProgressBar() {
+    this.progressBar.setAttribute("style", "display: block;");
+    this.progressSpan.setAttribute("style", "display: block;");
   }
 
-  disableProgressBar()
-  {
-    this.progressBar.setAttribute("style","display: none;")
-    this.progressSpan.setAttribute("style","display: none;")
-    
+  disableProgressBar() {
+    this.progressBar.setAttribute("style", "display: none;");
+    this.progressSpan.setAttribute("style", "display: none;");
+  }
+
+  getFormData() {
+    const fileInput = this.fileInput.files;
+
+    if (fileInput != null && fileInput.length !== 0) {
+      const formData = new FormData();
+
+      Object.keys(fileInput).forEach((k) => {
+        formData.append("file", fileInput[k]);
+      });
+
+      const res = {
+        data: formData,
+        status: true,
+      };
+
+      return res;
+    } else {
+      const res = {
+        status: false,
+        message: "Error: no files selected",
+      };
+      return res;
+    }
+  }
+
+  updateProgressBar(percentCompleted) {
+    this.progressBar.value = percentCompleted;
+    this.progressSpan.innerText = `${Math.round(percentCompleted)}%`;
   }
 }
 

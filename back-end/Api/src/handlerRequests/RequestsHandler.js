@@ -1,31 +1,32 @@
+
 const { FilesHandler } = require("../controllers/FilesHandler.js");
 const { DirectoryHandler } = require("../controllers/DirectoryHandler.js");
 
 
 class RequestsHandler {
-  constructor(uploadDirReference) {
+  constructor(fileHandler, uploadDirReference) {
+    this.fileHandler = fileHandler;
     this.uploadDir = uploadDirReference;
-
   }
 
-   uploadFiles=async (req, res) =>{
-    const filesHandler = new FilesHandler();
+  uploadFiles = async (req, res) => {
     try {
-      const response = await filesHandler.uploadFiles(req, this.uploadDir);
+      const response = await filesHandler.upload(req, this.uploadDir);
       return res.end(JSON.stringify({ status: true, message: response }));
     } catch (e) {
+      console.log(e);
       res.statusCode = 500;
       return res.end(JSON.stringify({ status: false, message: e.message }));
     }
-  }
+  };
   deleteFile(uploadDir, fileName) {
     const filesHandler = new FilesHandler();
-    filesHandler.deleteFile(uploadDir, fileName);
+    filesHandler.delete(uploadDir, fileName);
   }
 
   uploadFileName(currentName, newName) {
     const filesHandler = new FilesHandler();
-    filesHandler.uploadFileName(currentName, newName);
+    filesHandler.rename(currentName, newName);
   }
 
    createDirectory=async (req, res)=> {

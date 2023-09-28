@@ -5,7 +5,7 @@ const path = require("path");
 class FilesHandler {
   constructor() {}
 
-  uploadFiles(req, uploadDir) {
+  upload(req, uploadDir) {
     return new Promise((resolve, reject) => {
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir);
@@ -24,7 +24,7 @@ class FilesHandler {
             const parentDir = path.resolve(currentDir, "../..");
             const filePath = path.join(parentDir, uploadDir, fileName);
             const fileCurrentPath = file.path;
-            this.writePath(fileCurrentPath, filePath);
+            this.__writeFilePath(fileCurrentPath, filePath);
           });
           resolve({ status: true, message: "File upload" });
         }
@@ -34,7 +34,7 @@ class FilesHandler {
     });
   }
 
-  writePath(currentPath, uploadedPath) {
+  __writeFilePath(currentPath, uploadedPath) {
     fs.readFile(currentPath, (readErr, data) => {
       if (readErr) {
         console.error("Error al leer el archivo:", readErr);
@@ -52,7 +52,7 @@ class FilesHandler {
     });
   }
 
-  deleteFile(fileName) {
+  delete(fileName) {
     fs.unlink("./uploads/" + fileName, (error) => {
       if (error) {
         console.error("Error al eliminar el archivo:", error);
@@ -61,7 +61,7 @@ class FilesHandler {
       }
     });
   }
-  uploadFileName(currentName, newName) {
+  rename(currentName, newName) {
     fs.rename("./uploads/" + currentName, "./uploads/" + newName, (error) => {
       if (error) {
         console.error("Error al renombrar el archivo:", error);
@@ -70,6 +70,9 @@ class FilesHandler {
       }
     });
   }
+  move() {}
+  copy() {}
+  getProperties() {}
 }
 
 module.exports = { FilesHandler };
