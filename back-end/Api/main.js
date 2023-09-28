@@ -11,16 +11,21 @@ app.get("/", (req, res) => {
 });
 
 app.post("/upload", requestHandler.uploadFiles);
-app.post("/upload/newfolder", requestHandler.createDirectory)
+app.post("/upload/newfolder", requestHandler.createDirectory);
+
 app.start(port);
 
-//TESTs
+/* TESTs
 
-/* requestHandler.deleteFile("certificadoInglesProgresar.pdf"); */
+ requestHandler.deleteFile("certificadoInglesProgresar.pdf"); 
 
-/* requestHandler.uploadFileName(
+ requestHandler.uploadFileName(
   "./uploads/certificadoInglesProgresar.pdf",
   "nuevoNombre.pdf"
-); */
+); 
 
-// END OF TESTs
+
+app.post("/upload/deletefolder", requestHandler.deleteDirectory);
+
+
+ END OF TESTs */
