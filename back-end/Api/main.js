@@ -1,14 +1,13 @@
 const { Server } = require("./server/server.js");
 const { RequestsHandler } = require("./src/handlerRequests/RequestsHandler.js");
-const { FilesHandler } = require("./src/controllers/FilesHandler.js");
+const { FilesHandler } = require("./src/FilesHandler/FilesHandler.js");
 
 const app = new Server();
 const port = process.env.PORT || 3000;
 
 const fileHandler = new FilesHandler();
 
-const requestHandler = new RequestsHandler(fileHandler,"/uploads");
-
+const requestHandler = new RequestsHandler(fileHandler);
 
 app.get("/", (req, res) => {
   res.setHeader("Content-Type", "text/plain");
@@ -24,12 +23,9 @@ app.start(port);
 
 /* TESTs
 
- requestHandler.deleteFile("certificadoInglesProgresar.pdf"); 
 
- requestHandler.uploadFileName(
-  "./uploads/certificadoInglesProgresar.pdf",
-  "nuevoNombre.pdf"
-); 
+
+
 
 
 app.post("/upload/deletefolder", requestHandler.deleteDirectory);

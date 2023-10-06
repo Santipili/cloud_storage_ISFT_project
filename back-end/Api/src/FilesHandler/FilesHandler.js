@@ -3,7 +3,9 @@ const multiparty = require("multiparty");
 const path = require("path");
 
 class FilesHandler {
-  constructor() {}
+  constructor() {
+    console.log("constructor");
+  }
 
   upload(req, uploadDir) {
     return new Promise((resolve, reject) => {
@@ -21,9 +23,11 @@ class FilesHandler {
           files.file.forEach((file) => {
             const fileName = file.originalFilename;
             const currentDir = __dirname;
+
             const parentDir = path.resolve(currentDir, "../..");
             const filePath = path.join(parentDir, uploadDir, fileName);
             const fileCurrentPath = file.path;
+
             this.__writeFilePath(fileCurrentPath, filePath);
           });
           resolve({ status: true, message: "File upload" });
@@ -41,6 +45,7 @@ class FilesHandler {
         throw new Error("Erro al leer el arhivo");
       } else {
         fs.writeFile(uploadedPath, data, (writeErr) => {
+          console.log(uploadedPath);
           if (writeErr) {
             console.error("Error al escribir el archivo:", writeErr);
             throw new Error("Erro al leer el arhivo");
@@ -70,9 +75,35 @@ class FilesHandler {
       }
     });
   }
-  move() {}
-  copy() {}
-  getProperties() {}
+  move(srcPath, destPath) {
+    fs.rename(srcPath, destPath, (error) => {
+      if (error) {
+        console.error("Error al mover el archivo:", error);
+      } else {
+        console.log("Archivo movido con éxito a", destPath);
+      }
+    });
+  }
+
+  copy(srcPath, destPath) {
+    fs.copyFile(srcPath, destPath, (error) => {
+      if (error) {
+        console.error("Error al copiar el archivo:", error);
+      } else {
+        console.log("Archivo copiado con éxito a", destPath);
+      }
+    });
+  }
+
+  getProperties(filePath) {
+    fs.stat(filePath, (error, stats) => {
+      if (error) {
+        console.error("Error al obtener propiedades del archivo:", error);
+      } else {
+        console.log("Propiedades del archivo:", stats);
+      }
+    });
+  }
 }
 
 module.exports = { FilesHandler };

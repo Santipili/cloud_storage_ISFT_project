@@ -35,7 +35,6 @@ class FileUploaderController {
 
       if (res.status) {
         this.view.disableProgressBar();
-        location.reload(); //refresca la pagina
       }
       console.log(res);
     } else {
