@@ -7,8 +7,7 @@ const port = process.env.PORT || 3000;
 
 const fileHandler = new FilesHandler();
 
-const requestHandler = new RequestsHandler(fileHandler,"/uploads");
-
+const requestHandler = new RequestsHandler(fileHandler, "/uploads");
 
 app.get("/", (req, res) => {
   res.setHeader("Content-Type", "text/plain");
@@ -19,6 +18,7 @@ app.get("/", (req, res) => {
 //Create FileHandlerProxy( fileHandlerObject );
 app.post("/upload", requestHandler.uploadFiles);
 app.post("/upload/newfolder", requestHandler.createDirectory);
+app.post("/upload/rename", requestHandler.renameDirectory);
 
 app.start(port);
 

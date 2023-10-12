@@ -1,4 +1,8 @@
 {
+  "scripts": {
+
+    "start":"node main.js"
+  },
   "dependencies": {
     "i": "^0.3.7",
     "multiparty": "^4.2.3"
