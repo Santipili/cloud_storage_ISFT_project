@@ -1,8 +1,8 @@
+
 const path = require("path");
 
 const { FilesHandler } = require("../controllers/FilesHandler.js");
 // const { FilesHandler } = require("../controllers/ValidateSession.js");
-
 
 class RequestsHandler {
   constructor( uploadDirReference, fileHandler, directoryHandler) {
@@ -31,6 +31,26 @@ class RequestsHandler {
     const filesHandler = new FilesHandler();
     filesHandler.rename(currentName, newName);
   }
+
+
+ 
+  renameDirectory = async (req, res) => {
+    const pathHandler = new DirectoryHandler();
+    let body = "";
+    req.on("data", async (chunk) => {
+      body += chunk.toString();
+      const requestData = body ? JSON.parse(body) : {};
+
+      try {
+        const response = await pathHandler.rename(requestData, this.uploadDir);
+        console.log(response);
+        return res.end(JSON.stringify({ status: true, message: response }));
+      } catch (e) {
+        res.statusCode = 500;
+        return res.end(JSON.stringify({ status: false, message: e.message }));
+      }
+    });
+  };
 
   createDirectory=async (req, res)=> {
     // const sessionToken = req.header('x-session-token');
@@ -95,6 +115,7 @@ class RequestsHandler {
         }
     });
   }
+
 }
 
 module.exports = { RequestsHandler };

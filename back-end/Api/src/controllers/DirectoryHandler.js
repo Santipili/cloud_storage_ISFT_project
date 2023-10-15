@@ -1,21 +1,22 @@
 const fs = require("fs");
 
 class DirectoryHandler {
-  constructor() {
+  constructor() {}
 
-  }
 
   create(newDir){
     console.log(newDir);
     return new Promise((resolve, reject) => {
       if (!fs.existsSync(newDir)) {
         fs.mkdirSync(newDir, { recursive: true });
+
         resolve({ status: true, message: "Directorio creado exitosamente" });
       } else {
         reject({ status: false, message: "El directorio ya existe" });
       }
     });
   }
+
   
   delete(toDeleteDir){
     console.log(toDeleteDir);
@@ -23,16 +24,35 @@ class DirectoryHandler {
       if (fs.existsSync(toDeleteDir)) {
         fs.rmdirSync(toDeleteDir, { recursive: true });
         resolve({ status: true, message: "Directorio eliminado correctamente" });
+
       } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }
     });
   }
-    
-    
-  rename(requestData){
-      
+
+
+  rename(requestData, uploadDir) {
+    const userDir = requestData.userDir;
+    const newName = requestData.newName;
+    const currentDir = path.resolve(__dirname, "../..");
+    const renamePath = path.join(currentDir, uploadDir, userDir);
+    const newPath = path.join(currentDir, uploadDir, newName);
+    console.log(renamePath);
+
+    return new Promise((resolve, reject) => {
+      if (fs.existsSync(renamePath)) {
+        fs.renameSync(renamePath, newPath);
+        resolve({
+          status: true,
+          message: "Directorio renombrado correctamente ",
+              });
+      } else {
+        reject({ status: false, message: "La ruta del directorio no existe!" });
+      }
+    });
   }
+
   move(requestData){
       
   }
@@ -47,12 +67,14 @@ class DirectoryHandler {
             reject({ status: false, message: "Error al leer el directorio" });
           }           
           resolve(archivos);
+
         });
       } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }
     });
   }
+
 
   copy(requestData){
 
@@ -61,6 +83,7 @@ class DirectoryHandler {
   getProperties(requestData){
 
   }
+
 }
 
 module.exports = { DirectoryHandler };
