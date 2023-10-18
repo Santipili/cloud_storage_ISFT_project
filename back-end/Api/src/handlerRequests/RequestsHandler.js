@@ -2,7 +2,7 @@
 const path = require("path");
 
 const { FilesHandler } = require("../controllers/FilesHandler.js");
-// const { FilesHandler } = require("../controllers/ValidateSession.js");
+// const { ValidateSession } = require("../controllers/ValidateSession.js");
 
 class RequestsHandler {
   constructor( uploadDirReference, fileHandler, directoryHandler) {
@@ -31,27 +31,8 @@ class RequestsHandler {
     const filesHandler = new FilesHandler();
     filesHandler.rename(currentName, newName);
   }
-
-
  
-  renameDirectory = async (req, res) => {
-    const pathHandler = new DirectoryHandler();
-    let body = "";
-    req.on("data", async (chunk) => {
-      body += chunk.toString();
-      const requestData = body ? JSON.parse(body) : {};
-
-      try {
-        const response = await pathHandler.rename(requestData, this.uploadDir);
-        console.log(response);
-        return res.end(JSON.stringify({ status: true, message: response }));
-      } catch (e) {
-        res.statusCode = 500;
-        return res.end(JSON.stringify({ status: false, message: e.message }));
-      }
-    });
-  };
-
+  
   createDirectory=async (req, res)=> {
     // const sessionToken = req.header('x-session-token');
     const sessionUserId = req.headers['x-session-user-id'];
@@ -73,7 +54,7 @@ class RequestsHandler {
         }
     });
   }
-
+  
   deleteDirectory = async (req,res) => {
     const sessionUserId = req.headers['x-session-user-id'];
     const startPath = path.resolve(__dirname, "../..");
@@ -81,19 +62,41 @@ class RequestsHandler {
     
     let body = '';
     req.on('data', async (chunk) => {
-        body += chunk.toString();
-        const requestData = body ? JSON.parse(body) : {};
-        const toDeleteDirPath = path.join(userDirPath,requestData.toDeleteDir);
-        try{
-          const response = await this.directoryHandler.delete(toDeleteDirPath);
-          console.log(response);
-          return res.end(JSON.stringify({ status: true, message: response }));
-        } catch(e) {
-          res.statusCode = 500;
-          return res.end(JSON.stringify({ status: false, message: e.message }));
-        }
+      body += chunk.toString();
+      const requestData = body ? JSON.parse(body) : {};
+      const toDeleteDirPath = path.join(userDirPath,requestData.toDeleteDir);
+      try{
+        const response = await this.directoryHandler.delete(toDeleteDirPath);
+        console.log(response);
+        return res.end(JSON.stringify({ status: true, message: response }));
+      } catch(e) {
+        res.statusCode = 500;
+        return res.end(JSON.stringify({ status: false, message: e.message }));
+      }
     });
   }
+  
+  renameDirectory = async (req, res) => {
+    const sessionUserId = req.headers['x-session-user-id'];
+    const startPath = path.resolve(__dirname, "../..");
+    const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
+
+    let body = "";
+    req.on("data", async (chunk) => {
+      body += chunk.toString();
+      const requestData = body ? JSON.parse(body) : {};
+      const renamePath = path.join(userDirPath,requestData.renameDir);
+      const newNamePath = path.join(userDirPath,requestData.newNameDir);
+      try {
+        const response = await this.directoryHandler.rename(renamePath, newNamePath);
+        console.log(response);
+        return res.end(JSON.stringify({ status: true, message: response }));
+      } catch (e) {
+        res.statusCode = 500;
+        return res.end(JSON.stringify({ status: false, message: e.message }));
+      }
+    });
+  };
 
   listDirectory = async (req,res) => {
     const sessionUserId = req.headers['x-session-user-id'];
@@ -109,6 +112,27 @@ class RequestsHandler {
           const response = await this.directoryHandler.listContent(toListDirPath);
           console.log(response);
           return res.end(JSON.stringify({ status: true, files: response }));
+        } catch(e) {
+          res.statusCode = 500;
+          return res.end(JSON.stringify({ status: false, message: e.message }));
+        }
+    });
+  }
+
+  getProperties = async (req,res) => {
+    const sessionUserId = req.headers['x-session-user-id'];
+    const startPath = path.resolve(__dirname, "../..");
+    const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
+
+    let body = '';
+    req.on('data', async (chunk) => {
+        body += chunk.toString();
+        const requestData = body ? JSON.parse(body) : {};
+        const propertiesDirPath = path.join(userDirPath,requestData.propertiesDir);
+        try{
+          const response = await this.directoryHandler.getProperties(propertiesDirPath);
+          console.log(response);
+          return res.end(JSON.stringify({ status: true, properties: response }));
         } catch(e) {
           res.statusCode = 500;
           return res.end(JSON.stringify({ status: false, message: e.message }));

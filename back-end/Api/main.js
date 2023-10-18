@@ -21,10 +21,12 @@ app.get("/", (req, res) => {
 //Create FileHandlerProxy( fileHandlerObject );
 app.post("/upload", requestHandler.uploadFiles);
 
-app.post("/upload/rename", requestHandler.renameDirectory);
 app.post("/directoryHandler/create", requestHandler.createDirectory);
 app.post("/directoryHandler/delete", requestHandler.deleteDirectory);
+app.post("/directoryHandler/rename", requestHandler.renameDirectory);
 app.post("/directoryHandler/list", requestHandler.listDirectory);
+app.post("/directoryHandler/properties", requestHandler.getProperties);
+
 
 
 
