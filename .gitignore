@@ -4,6 +4,6 @@ node_modules/
 uploads/
 
 /back-end/Api/node_modules
-
 /back-end/Api/uploads
-
+# /back-end/Api/package-lock.json
+# /back-end/Api/package.json
