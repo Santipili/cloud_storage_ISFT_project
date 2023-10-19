@@ -1,34 +1,11 @@
-const { FilesHandler } = require("../FilesHandler/FilesHandler.js");
-const { DirectoryHandler } = require("../DirectoryHandler/DirectoryHandler.js");
+const {
+  DirectoryHandler,
+} = require("../../Handlers/DirectoryHandler/DirectoryHandler.js");
 
-class RequestsHandler {
-  constructor(fileHandler) {
-    this.fileHandler = fileHandler;
-  }
+class DirectoryHandlerProxy {
+  constructor() {}
 
-  uploadFiles = async (req, res) => {
-    try {
-      const response = await this.fileHandler.upload(req, "uploads");
-      return res.end(
-        JSON.stringify({ status: true, message: response.message })
-      );
-    } catch (e) {
-      console.log(e);
-      res.statusCode = 500;
-      return res.end(JSON.stringify({ status: false, message: e.message }));
-    }
-  };
-  deleteFile(uploadDir, fileName) {
-    const filesHandler = new FilesHandler();
-    filesHandler.delete(uploadDir, fileName);
-  }
-
-  uploadFileName(currentName, newName) {
-    const filesHandler = new FilesHandler();
-    filesHandler.rename(currentName, newName);
-  }
-
-  createDirectory = async (req, res) => {
+  create = async (req, res) => {
     const directoryHandler = new DirectoryHandler();
     let body = "";
     req.on("data", async (chunk) => {
@@ -49,7 +26,7 @@ class RequestsHandler {
     });
   };
 
-  deleteDirectory = async (req, res) => {
+  delete = async (req, res) => {
     const pathHandler = new DirectoryHandler();
     let body = "";
     req.on("data", async (chunk) => {
@@ -68,4 +45,4 @@ class RequestsHandler {
   };
 }
 
-module.exports = { RequestsHandler };
+module.exports = { DirectoryHandlerProxy };

@@ -3,9 +3,7 @@ const multiparty = require("multiparty");
 const path = require("path");
 
 class FilesHandler {
-  constructor() {
-    console.log("constructor");
-  }
+  constructor() {}
 
   upload(req, uploadDir) {
     return new Promise((resolve, reject) => {
@@ -24,7 +22,8 @@ class FilesHandler {
             const fileName = file.originalFilename;
             const currentDir = __dirname;
 
-            const parentDir = path.resolve(currentDir, "../..");
+            const parentDir = path.resolve(currentDir, "../../..");
+
             const filePath = path.join(parentDir, uploadDir, fileName);
             const fileCurrentPath = file.path;
 
@@ -57,26 +56,38 @@ class FilesHandler {
     });
   }
 
-  delete(fileName) {
-    fs.unlink("./uploads/" + fileName, (error) => {
+  delete(filePath) {
+    fs.unlink(filePath, (error) => {
       if (error) {
         console.error("Error al eliminar el archivo:", error);
       } else {
-        console.log("Archivo eliminado con exito", fileName);
+        console.log("Archivo eliminado con éxito:", filePath);
       }
     });
   }
-  rename(currentName, newName) {
-    fs.rename("./uploads/" + currentName, "./uploads/" + newName, (error) => {
+
+  rename(currentPath, newPath) {
+    const basePath = "uploads";
+
+    const absoluteCurrentPath = path.join(basePath, currentPath);
+    const absoluteNewPath = path.join(basePath, newPath);
+
+    fs.rename(absoluteCurrentPath, absoluteNewPath, (error) => {
       if (error) {
         console.error("Error al renombrar el archivo:", error);
       } else {
-        console.log("Archivo renombrado con exito", newName);
+        console.log("Archivo renombrado con éxito a", newPath);
       }
     });
   }
+
   move(srcPath, destPath) {
-    fs.rename(srcPath, destPath, (error) => {
+    const basePath = "uploads";
+
+    const absoluteSrcPath = path.join(basePath, srcPath);
+    const absoluteDestPath = path.join(basePath, destPath);
+
+    fs.rename(absoluteSrcPath, absoluteDestPath, (error) => {
       if (error) {
         console.error("Error al mover el archivo:", error);
       } else {
@@ -84,9 +95,13 @@ class FilesHandler {
       }
     });
   }
-
   copy(srcPath, destPath) {
-    fs.copyFile(srcPath, destPath, (error) => {
+    const basePath = "uploads";
+
+    const absoluteSrcPath = path.join(basePath, srcPath);
+    const absoluteDestPath = path.join(basePath, destPath);
+
+    fs.copyFile(absoluteSrcPath, absoluteDestPath, (error) => {
       if (error) {
         console.error("Error al copiar el archivo:", error);
       } else {
@@ -96,7 +111,11 @@ class FilesHandler {
   }
 
   getProperties(filePath) {
-    fs.stat(filePath, (error, stats) => {
+    const basePath = "uploads";
+
+    const absoluteFilePath = path.join(basePath, filePath);
+
+    fs.stat(absoluteFilePath, (error, stats) => {
       if (error) {
         console.error("Error al obtener propiedades del archivo:", error);
       } else {
