@@ -5,7 +5,7 @@ const path = require("path");
 class FilesHandler {
   constructor() {}
 
-  upload(req, uploadDir) {
+  upload = (req, uploadDir) => {
     return new Promise((resolve, reject) => {
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir);
@@ -18,6 +18,7 @@ class FilesHandler {
         }
 
         if (JSON.stringify(files) !== "{}") {
+          console.log(files);
           files.file.forEach((file) => {
             const fileName = file.originalFilename;
             const currentDir = __dirname;
@@ -32,7 +33,7 @@ class FilesHandler {
         reject({ status: false, message: "empty data files" });
       });
     });
-  }
+  };
 
   __writeFilePath(currentPath, uploadedPath) {
     fs.readFile(currentPath, (readErr, data) => {
