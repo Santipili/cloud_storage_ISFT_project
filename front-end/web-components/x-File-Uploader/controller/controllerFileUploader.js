@@ -1,10 +1,8 @@
 class FileUploaderController {
-
   constructor(viewReference, modelReference, modalReference) {
-
     this.view = viewReference;
     this.model = modelReference;
-    this.modalView = modalReference; 
+    this.modalView = modalReference;
 
     /* ---------------- */
     this.model.addEventListener("progressbar", (event) => {
@@ -38,7 +36,6 @@ class FileUploaderController {
 
       if (res.status) {
         this.modalView.hide();
-        location.reload(); //refresca la pagina
       }
       console.log(res);
     } else {
