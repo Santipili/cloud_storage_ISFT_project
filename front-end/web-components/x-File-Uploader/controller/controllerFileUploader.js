@@ -36,6 +36,8 @@ class FileUploaderController {
 
       if (res.status) {
         this.modalView.hide();
+
+        //TODO: check after merge
       }
       console.log(res);
     } else {
