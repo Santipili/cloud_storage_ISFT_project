@@ -8,7 +8,7 @@ class FileUploaderView extends HTMLElement {
 
     this.Title = document.createElement("span");
     this.Title.className = "form-title";
-    this.Title.textContent = "Upload your file";
+    this.Title.textContent = "Upload your files";
 
     this.label = document.createElement("label");
     this.label.htmlFor = "file-input";
@@ -31,21 +31,31 @@ class FileUploaderView extends HTMLElement {
     this.BtnSendFile = document.createElement("button");
     this.BtnSendFile.setAttribute("role", "button");
     this.BtnSendFile.classList.add("button-name");
-    this.BtnSendFile.textContent = "Upload";
+    this.BtnSendFile.textContent = "Upload All";
     this.BtnSendFile.setAttribute("style", "display: none;");
     this.BtnSendFile.disabled = true;
     this.DivBtn.appendChild(this.BtnSendFile);
-
 
     this.label.appendChild(this.dropTitle);
     this.label.appendChild(this.fileInput);
     this.form.appendChild(this.Title);
     this.form.appendChild(this.label);
     this.form.appendChild(this.DivBtn);
-
     this.appendChild(this.form);
 
+    this.fileListContainer = document.createElement("div");
+    this.fileListContainer.className = "file-list";
+    this.form.appendChild(this.fileListContainer);
+
+    this.selectedFiles = new Set();
+
+    this.BtnSendFile.addEventListener("click", () => {
+      this.uploadAllFiles();
+    });
+
     this.fileInput.addEventListener("change", () => {
+      this.updateSelectedFiles(); 
+      this.updateFileList();
       this.BtnSendFile.disabled = false;
       this.BtnSendFile.setAttribute("style", "display: inline-flex;");
     });
@@ -56,31 +66,73 @@ class FileUploaderView extends HTMLElement {
         this.label.classList.add("drag-over");
       }
     });
-    
+
     this.label.addEventListener("dragleave", (event) => {
       event.preventDefault();
       this.label.classList.remove("drag-over");
-  ;
     });
-  
+
     this.label.addEventListener("drop", (event) => {
       this.label.classList.remove("drag-over");
     });
-    
   }
-  connectedCallback() {}
 
-  disconnectedCallback() {}
+  updateFileList() {
+    this.fileListContainer.innerHTML = '';
+  
+    for (const file of this.selectedFiles) {
+      const fileItem = document.createElement("div");
+      fileItem.className = "file-item";
+  
+      const fileName = document.createElement("span");
+      fileName.textContent = file.name;
+  
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Delete";
+      deleteButton.onclick = () => {
+        this.removeFile(file);
+      };
+  
+      fileItem.appendChild(fileName);
+      fileItem.appendChild(deleteButton);
+      this.fileListContainer.appendChild(fileItem);
+    }
+  
+    if (this.selectedFiles.size === 0) {
+      this.BtnSendFile.style.display = "none";
+  
+      this.fileInput.value = "";
+    } else {
+      this.BtnSendFile.style.display = "inline-flex";
+    }
+  }
+  
+  removeFile(file) {
+    this.selectedFiles.delete(file);
+    this.updateFileList();
+  }
 
+  updateSelectedFiles() {
+    this.selectedFiles = new Set(Array.from(this.fileInput.files));
+  }
+
+  uploadAllFiles() {
+    const formData = new FormData();
+
+    for (const file of this.selectedFiles) {
+      formData.append("file", file);
+    }
+  }
+  
   getFormData() {
     const fileInput = this.fileInput.files;
 
     if (fileInput != null && fileInput.length !== 0) {
       const formData = new FormData();
 
-      Object.keys(fileInput).forEach((k) => {
-        formData.append("file", fileInput[k]);
-      });
+      for (let i = 0; i < fileInput.length; i++) {
+        formData.append("file", fileInput[i]);
+      }
 
       const res = {
         data: formData,
@@ -100,4 +152,4 @@ class FileUploaderView extends HTMLElement {
 
 customElements.define("file-uploader-view", FileUploaderView);
 
-export { FileUploaderView };
+export { FileUploaderView }; 

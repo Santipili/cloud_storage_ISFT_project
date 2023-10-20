@@ -195,3 +195,7 @@ progress::-webkit-progress-value {
   text-align: center;
 
 }
+
+.file-item {
+  margin-bottom: 10px; 
+}
