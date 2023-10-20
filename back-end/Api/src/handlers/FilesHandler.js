@@ -17,7 +17,8 @@ class FilesHandler {
           reject({ status: false });
         }
 
-        if (JSON.stringify(files) !== "{}") {
+        if (JSON.stringify(files) !== "{}" && files != undefined) {
+          console.log(files);
           console.log(files);
           files.file.forEach((file) => {
             const fileName = file.originalFilename;

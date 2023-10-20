@@ -3,9 +3,7 @@ const fs = require("fs");
 class DirectoryHandler {
   constructor() {}
 
-
-  create(newDir){
-    console.log(newDir);
+  create(newDir) {
     return new Promise((resolve, reject) => {
       if (!fs.existsSync(newDir)) {
         fs.mkdirSync(newDir, { recursive: true });
@@ -17,20 +15,20 @@ class DirectoryHandler {
     });
   }
 
-  
-  delete(toDeleteDir){
+  delete(toDeleteDir) {
     console.log(toDeleteDir);
     return new Promise((resolve, reject) => {
       if (fs.existsSync(toDeleteDir)) {
         fs.rmdirSync(toDeleteDir, { recursive: true });
-        resolve({ status: true, message: "Directorio eliminado correctamente" });
-
+        resolve({
+          status: true,
+          message: "Directorio eliminado correctamente",
+        });
       } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }
     });
   }
-
 
   rename(requestData, uploadDir) {
     const userDir = requestData.userDir;
@@ -46,28 +44,6 @@ class DirectoryHandler {
         resolve({
           status: true,
           message: "Directorio renombrado correctamente ",
-              });
-      } else {
-        reject({ status: false, message: "La ruta del directorio no existe!" });
-      }
-    });
-  }
-
-  move(requestData){
-      
-  }
-    
-  listContent(toListDir){
-    console.log(toListDir);
-    return new Promise((resolve, reject) => {
-      if (fs.existsSync(toListDir)) {
-        fs.readdir(toListDir, (error, archivos) => {
-          if (error) {
-            console.error('Error al leer el directorio:', error);
-            reject({ status: false, message: "Error al leer el directorio" });
-          }           
-          resolve(archivos);
-
         });
       } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
@@ -75,15 +51,28 @@ class DirectoryHandler {
     });
   }
 
+  move(requestData) {}
 
-  copy(requestData){
-
+  listContent(toListDir) {
+    console.log(toListDir);
+    return new Promise((resolve, reject) => {
+      if (fs.existsSync(toListDir)) {
+        fs.readdir(toListDir, (error, archivos) => {
+          if (error) {
+            console.error("Error al leer el directorio:", error);
+            reject({ status: false, message: "Error al leer el directorio" });
+          }
+          resolve(archivos);
+        });
+      } else {
+        reject({ status: false, message: "La ruta del directorio no existe!" });
+      }
+    });
   }
 
-  getProperties(requestData){
+  copy(requestData) {}
 
-  }
-
+  getProperties(requestData) {}
 }
 
 module.exports = { DirectoryHandler };
