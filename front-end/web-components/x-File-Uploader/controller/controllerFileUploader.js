@@ -2,7 +2,6 @@ class FileUploaderController {
   constructor(viewReference, modelReference, modalReference) {
     this.view = viewReference;
     this.model = modelReference;
-    this.modalView = modalReference;
 
     /* ---------------- */
     this.model.addEventListener("progressbar", (event) => {
@@ -18,8 +17,8 @@ class FileUploaderController {
     this.view.BtnSendFile.onclick = null;
   }
 
-  onUploadProgress(event) {
-    this.modalView.updateProgressBar(event.detail);
+  onUploadProgress(event) { 
+    this.view.updateProgressBar(event.detail);
   }
 
   async onButtonSendFile(e) {
@@ -28,14 +27,15 @@ class FileUploaderController {
     let responseView = this.view.getFormData();
 
     if (responseView.status == true) {
-      this.modalView.show();
+      this.view.progreesBar();
+      this.view.show();
 
       // const cleanfiles = this.__cleanFiles(responseView.data);  Tira un error en el servidor del back.
 
       let res = await this.model.FileUploaderToServer(responseView.data);
 
       if (res.status) {
-        this.modalView.hide();
+        this.view.hide();
 
         //TODO: check after merge
       }
