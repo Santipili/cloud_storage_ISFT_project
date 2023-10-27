@@ -1,46 +1,46 @@
 import { FileUploader } from "./web-components/x-File-Uploader/FileUploader.js";
 
-import { HTMLDataTable } from "./web-components/x-dataTable/controller/HTMLDataTable.js";
-import { HTMLTextCell } from "./web-components/x-dataTable/view/HTMLTextCell.js";
-import { HTMLEmailCell } from "./web-components/x-dataTable/view/HTMLEmailCell.js";
+import { ConstrollerDataTable } from "./web-components/x-dataTable/controller/controllerDataTable.js";
+import { HTMLTextCellView } from "./web-components/x-dataTable/view/HTMLTextCellView.js";
+import { HTMLEmailCellView } from "./web-components/x-dataTable/view/HTMLEmailCell.js";
 
 function main() {
   let fileUploader = new FileUploader();
 
-  let dt = new HTMLDataTable();
+  let dt = new ConstrollerDataTable();
 
   dt.appendColumn({
     name: "name",
     sortable: true,
-    type: HTMLTextCell,
+    type: HTMLTextCellView,
     title: "Name",
     reader: (x) => x.name,
   });
   dt.appendColumn({
     name: "email",
     sortable: true,
-    type: HTMLEmailCell,
+    type: HTMLEmailCellView,
     title: "Email",
     reader: (x) => x.email.toString().toLowerCase(),
   });
   dt.appendColumn({
     name: "birthday",
     sortable: true,
-    type: HTMLTextCell,
+    type: HTMLTextCellView,
     title: "Birthday",
     reader: (x) => x.birthday,
   });
   dt.appendColumn({
     name: "salary",
     sortable: true,
-    type: HTMLTextCell,
+    type: HTMLTextCellView,
     title: "Salary",
     reader: (x) => x.salary,
   });
   dt.appendColumn({
     name: "discount",
     sortable: true,
-    type: HTMLTextCell,
+    type: HTMLTextCellView,
     title: "Discount",
     reader: (x) => "???",
   });

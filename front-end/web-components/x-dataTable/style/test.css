@@ -1,5 +1,4 @@
-:root
-{
+:root {
 	/*General customization*/
 
 	--column-highlight-color: #1A73E8;
@@ -13,56 +12,53 @@
 }
 
 @font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Roboto'), local('Roboto-Regular'),
-      url(roboto-regular.woff2) format('woff2');
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Roboto'), local('Roboto-Regular'),
+		url(roboto-regular.woff2) format('woff2');
 }
 
 @font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 500;
-  src: local('Roboto Medium'), local('Roboto-Medium'),
-      url(roboto-medium.woff2) format('woff2');
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 500;
+	src: local('Roboto Medium'), local('Roboto-Medium'),
+		url(roboto-medium.woff2) format('woff2');
 }
 
 @font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Roboto Bold'), local('Roboto-Bold'),
-      url(roboto-bold.woff2) format('woff2');
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Roboto Bold'), local('Roboto-Bold'),
+		url(roboto-bold.woff2) format('woff2');
 }
 
 
-*
-{
+* {
 	box-sizing: border-box;
 	font-family: 'Roboto', sans-serif;
 }
 
-.divt
-{
+.divt {
 	border: 0px solid #FFFFFF;
-	box-shadow: 0px 0px 4px -1px rgba(156,156,156,1);
+	box-shadow: 0px 0px 4px -1px rgba(156, 156, 156, 1);
 	width: 80%;
 	margin: 10%;
 	padding: 0px;
 }
 
-table 
-{
+table {
 	background-color: #FFFFFF;
-    font-family: Segoe UI;
-    font-size: 13px;
-    border-collapse: collapse;
-    width: 100%; 
-    border: 1px solid #CDCDCD;
-	//box-shadow: 0px 0px 4px -1px rgba(156,156,156,1);
+	font-family: Segoe UI;
+	font-size: 13px;
+	border-collapse: collapse;
+	width: 100%;
+	border: 1px solid #CDCDCD;
+	box-shadow: 0px 0px 4px -1px rgba(156, 156, 156, 1);
 
-	
+
 }
 
 /*.ripple 
@@ -97,10 +93,9 @@ table
   transition: 0s;
 }*/
 
-caption
-{
+caption {
 	height: 52px;
-	background-color: rgb(51,103,214);
+	background-color: rgb(51, 103, 214);
 	color: #FFFFFF;
 	font-family: 'Roboto';
 	font-size: 15px;
@@ -116,21 +111,18 @@ caption
   height: 32px;
 }*/
 
-.flexleft
-{
+.flexleft {
 	text-align: left;
 }
 
-.flexright
-{
-	display: flex; 
+.flexright {
+	display: flex;
 	justify-content: flex-end;
 }
 
-.flexright > input
-{
-	border: 2px solid rgb(145,152,214);
-	height: calc( var(--column-row-heigth)*0.70);
+.flexright>input {
+	border: 2px solid rgb(145, 152, 214);
+	height: calc(var(--column-row-heigth)*0.70);
 	margin: 8px;
 	width: 20%;
 	background-color: transparent;
@@ -141,83 +133,81 @@ caption
 	min-width: 280px;
 }
 
-.flexright > input::placeholder 
-{
-  color: rgb(220,223,250);
+.flexright>input::placeholder {
+	color: rgb(220, 223, 250);
 }
 
 
-table > tbody > td
-{
+table>tbody>td {
 	//border-bottom: 1px solid #DADADA;
 	border: 1px solid #F0F0F0;
-    border-collapse: collapse;
+	border-collapse: collapse;
 }
 
-table > tbody > tr
-{
+table>tbody>tr {
 	height: var(--data-row-heigth);
 	border-bottom: 1px solid #F0F0F0;
 }
 
-table > tbody > tr:hover
-{
+table>tbody>tr:hover {
 	color: #000000;
 	background-color: #E7F1FF;
 	transition: var(--transition-time);
 }
 
 
-th
-{
+th {
 	border: 1px solid #CDCDCD;
-	
-	padding: calc( var(--column-row-heigth)*0.25);
+
+	padding: calc(var(--column-row-heigth)*0.25);
 	background-color: #F3F3F3;
 
 	height: var(--column-row-heigth);
 
-	background-image: var(--ascending-arrow);	
+	background-image: var(--ascending-arrow);
 	background-repeat: no-repeat;
 	background-position: 99% 50%;
 	background-size: 24px, 24px;
-  
-  	padding-right: 5%;  
 
-  	text-align: var(--column-text-align);
+	padding-right: 5%;
+
+	text-align: var(--column-text-align);
 
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
 
-	-webkit-touch-callout: none; /* iOS Safari */
-	-webkit-user-select: none; /* Safari */
-	-khtml-user-select: none; /* Konqueror HTML */
-	-moz-user-select: none; /* Firefox */
-	-ms-user-select: none; /* Internet Explorer/Edge */
+	-webkit-touch-callout: none;
+	/* iOS Safari */
+	-webkit-user-select: none;
+	/* Safari */
+	-khtml-user-select: none;
+	/* Konqueror HTML */
+	-moz-user-select: none;
+	/* Firefox */
+	-ms-user-select: none;
+	/* Internet Explorer/Edge */
 }
 
-th:hover
-{
+th:hover {
 	box-shadow: 0px -2px 0px var(--column-highlight-color) inset;
 	background-color: #E6E6E6;
-    transition: var(--transition-time);
+	transition: var(--transition-time);
 }
 
-.paginator
-{
+.paginator {
 	//margin-top: 10px;
 	padding: 5px;
 	display: block;
-	
-	
-	
+
+
+
 	background-color: #F3F3F3;
 
 	font-family: Segoe UI;
-    font-size: 13px;
-   
-    border: 1px solid #CDCDCD;
+	font-size: 13px;
+
+	border: 1px solid #CDCDCD;
 	//box-shadow: 0px 0px 4px -1px rgba(156,156,156,1);
 }
 
@@ -229,91 +219,76 @@ th:hover
 	height: calc(var(--column-row-heigth)*0.70);
 }*/
 
-.unsortable
-{
+.unsortable {
 	cursor: default;
 }
 
-.sortable
-{
+.sortable {
 	cursor: pointer;
 }
 
 
-.undefined
-{
+.undefined {
 	background-image: var(--undefined-arrow);
 }
 
-.ascending
-{
+.ascending {
 	background-image: var(--ascendent-arrow);
 }
 
-.descending
-{
+.descending {
 	background-image: var(--descendent-arrow);
 }
 
-.column:hover
-{
+.column:hover {
 	box-shadow: 0px -2px 0px var(--column-highlight-color) inset;
 	background-color: #E6E6E6;
-    transition: var(--transition-time);
+	transition: var(--transition-time);
 }
 
 
-.td-email
-{
+.td-email {
 	display: table-cell;
 	vertical-align: inherit;
 
 	/*text length > max-width is reduced with "..."*/
-	max-width: 75px !important; 
-    text-overflow: ellipsis;
+	max-width: 75px !important;
+	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
 
 	font-style: italic;
 
-	
+
 	padding: 3px;
 	padding-left: 5px;
 
-	
+
 }
 
-.td-text
-{
+.td-text {
 	display: table-cell;
 	vertical-align: inherit;
 
 	/*text length > max-width is reduced with "..."*/
-	max-width: 75px !important; 
-    text-overflow: ellipsis;
+	max-width: 75px !important;
+	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
 
-	
+
 	padding: 3px;
 
 	padding-left: 10px;
-	
-}
-
-.unsorted-column
-{
 
 }
 
-.sorted-column
-{
+.unsorted-column {}
+
+.sorted-column {
 	background-color: #F1F6FD;
 }
 
-body
-{
+body {
 	background-color: #F8F8F8;
 }
-
-

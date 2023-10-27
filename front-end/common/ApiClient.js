@@ -11,8 +11,8 @@ class ApiClient {
 
     // Agregar headers de token si se proporciona token y Id
     if (token !== null && id !== null) {
-      headers["custom-token"] = token;
-      headers["id"] = id;
+      headers["session-token"] = token;
+      headers["user-id"] = id;
     }
 
     const request = {

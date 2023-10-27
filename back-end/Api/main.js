@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 const directoryHandler = new DirectoryHandler();
 const fileHandler = new FilesHandler();
 
-const requestHandler = new ProxiApi("uploads", fileHandler, directoryHandler);
+const proxiApi = new ProxiApi("uploads", fileHandler, directoryHandler);
 
 app.get("/", (req, res) => {
   res.setHeader("Content-Type", "text/plain");
@@ -18,11 +18,11 @@ app.get("/", (req, res) => {
 });
 
 // TODO : CHECK AFTER MERGE
-app.post("/filesHandler/upload", requestHandler.uploadFiles);
+app.post("/filesHandler/upload", proxiApi.uploadFiles);
 
-app.post("/upload/rename", requestHandler.renameDirectory); //raro el nombre de la ruta
-app.post("/directoryHandler/create", requestHandler.createDirectory);
-app.post("/directoryHandler/delete", requestHandler.deleteDirectory);
-app.post("/directoryHandler/list", requestHandler.listDirectory);
+app.post("/directoryHandler/rename", proxiApi.renameDirectory);
+app.post("/directoryHandler/create", proxiApi.createDirectory);
+app.post("/directoryHandler/delete", proxiApi.deleteDirectory);
+app.post("/directoryHandler/list", proxiApi.listDirectory);
 
 app.start(port);

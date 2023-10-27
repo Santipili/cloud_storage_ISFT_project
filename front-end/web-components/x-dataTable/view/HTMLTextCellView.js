@@ -18,30 +18,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-class HTMLTextCell extends HTMLTableCellElement
-{
-	constructor()
-	{
-		super();
-		this._p = document.createElement('span');
-		this.classList.add('td-text');
-		this.appendChild(this._p);
-	}
+class HTMLTextCellView extends HTMLTableCellElement {
+  constructor() {
+    super();
+    this._p = document.createElement("span");
+    this.classList.add("td-text");
+    this.appendChild(this._p);
+  }
 
-	set value( value )
-	{
-		this._p.innerText = value;
-	}
+  set value(value) {
+    this._p.innerText = value;
+  }
 
-	get value()
-	{
-		return this._p.innerText;
-	}
-
+  get value() {
+    return this._p.innerText;
+  }
 }
 
-
-customElements.define('x-datatable-text-cell', HTMLTextCell, { extends:'td'});
+customElements.define("x-datatable-text-cell", HTMLTextCellView, {
+  extends: "td",
+});
 
 //export module
-export { HTMLTextCell };
+export { HTMLTextCellView };

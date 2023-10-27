@@ -11,8 +11,7 @@ class Server {
     this.headers = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
-      "Access-Control-Allow-Headers":
-        "content-type, x-session-token, x-session-user-id",
+      "Access-Control-Allow-Headers": "content-type, session-token, user-id",
       "Content-Type": "application/json",
     };
   }

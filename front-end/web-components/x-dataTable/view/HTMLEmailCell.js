@@ -18,34 +18,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-class HTMLEmailCell extends HTMLTableCellElement
-{
-	constructor()
-	{
-		super();
+class HTMLEmailCellView extends HTMLTableCellElement {
+  constructor() {
+    super();
 
-		this._email = document.createElement('a');
-		this.classList.add('td-email');
+    this._email = document.createElement("a");
+    this.classList.add("td-email");
 
-		this.appendChild(this._email);
-	}
+    this.appendChild(this._email);
+  }
 
-	set value( value )
-	{
-		this._email.href = 'mailto:'+value.toString();
-		this._email.innerText = value.toString();
-	}
+  set value(value) {
+    this._email.href = "mailto:" + value.toString();
+    this._email.innerText = value.toString();
+  }
 
-	get value()
-	{
-		return this._email.innerText;
-	}
-
+  get value() {
+    return this._email.innerText;
+  }
 }
 
-
 //registration requeriment
-customElements.define('x-datatable-email-cell', HTMLEmailCell, { extends:'td'});
+customElements.define("x-datatable-email-cell", HTMLEmailCellView, {
+  extends: "td",
+});
 
 //export module
-export { HTMLEmailCell };
+export { HTMLEmailCellView };

@@ -18,25 +18,51 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-import { ApiClient } from "../../../common/ApiClient";
+import { ApiClient } from "../../../common/ApiClient.js";
+import { LocalStorageHandler } from "../../../common/LocalStorageHandler.js";
 
 class HTMLDataTableServerModel extends EventTarget {
   constructor() {
     super();
     this.apiClient = new ApiClient("http://localhost:3000/");
+    this.localStorageH = new LocalStorageHandler();
   }
 
-  //server side
-  submit(args) {
-    //This is the place to use the args to build the request.
-    //You can serialize in any way that you want, make a formdata or similar.
-    //Also you can use a xhr ajax request. The required thing is to return a promise.
-    //If you don't need to make a http request, you need to return a resolved promise instead.
+  async getServerDirectoris() {
+    const userId = this.localStorageH.getOfLocalStorage("userId");
+    const token = this.localStorageH.getOfLocalStorage("Token");
+    try {
+      let response = await this.apiClient.makeApiCall(
+        "directoryHandler/list",
+        "POST",
+        userId, //deberia responder en base a su id , la ruta de usuario armada en el servidor
+        token,
+        userId
+      );
 
-    return fetch("./backend/test.php", {
-      method: "post",
-      body: JSON.stringify(args),
-    }).then((response) => response.json());
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getUserData() {
+    try {
+      const userId = this.localStorageH.getOfLocalStorage("userId");
+      const token = this.localStorageH.getOfLocalStorage("Token");
+
+      let response = await this.apiClient.makeApiCall(
+        "groupHandler/getgroupsdata",
+        "GET",
+        null,
+        token,
+        userId
+      );
+
+      return response.groups;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 

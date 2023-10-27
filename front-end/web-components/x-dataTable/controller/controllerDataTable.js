@@ -22,7 +22,7 @@ import { HTMLDataTableServerModel } from "../model/HTMLDataTableServerModel.js";
 
 import { HTMLDataTableView } from "../view/HTMLDataTableView.js";
 
-class HTMLDataTable extends HTMLElement {
+class ConstrollerDataTable extends HTMLElement {
   constructor() {
     super();
 
@@ -206,6 +206,6 @@ function populate(datatable, data) {
   }
 }
 
-customElements.define("x-dtable", HTMLDataTable);
+customElements.define("x-dtablecontroller", ConstrollerDataTable);
 //export module
-export { HTMLDataTable };
+export { ConstrollerDataTable };
