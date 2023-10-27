@@ -29,14 +29,13 @@ class ProxiApi {
   }
 
   renameDirectory = async (req, res) => {
-    const pathHandler = this.directoryHandler;
     let body = "";
     req.on("data", async (chunk) => {
       body += chunk.toString();
       const requestData = body ? JSON.parse(body) : {};
 
       try {
-        const response = await pathHandler.rename(requestData, this.uploadDir);
+        const response = await this.directoryHandler.rename(requestData, this.uploadDir);
         console.log(response);
         return res.end(JSON.stringify({ status: true, message: response }));
       } catch (e) {
