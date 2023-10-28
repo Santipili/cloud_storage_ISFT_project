@@ -46,10 +46,6 @@ class DirectoryHandler {
     });
   }
 
-  move(requestData){
-      
-  }
-    
   listContent(toListDir){
     console.log(toListDir);
     return new Promise((resolve, reject) => {
@@ -66,12 +62,6 @@ class DirectoryHandler {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }
     });
-  }
-
-  copy(requestData){
-
-
-
   }
 
   getProperties(Dir){
@@ -107,9 +97,19 @@ class DirectoryHandler {
         resolve(propertiesDir);
       }
       else {
-       reject({ status: false, message: "La ruta del directorio no existe!" });
+        reject({ status: false, message: "La ruta del directorio no existe!" });
       }
     });
+  }
+
+  move(requestData){
+    
+    
+  }
+  copy(requestData){
+    
+
+
   }
 }
               

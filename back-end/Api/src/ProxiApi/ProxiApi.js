@@ -32,7 +32,7 @@ class ProxiApi {
   
   createDirectory=async (req, res)=> {
     // const sessionToken = req.header('x-session-token');
-    const sessionUserId = req.headers['x-session-user-id'];
+    const sessionUserId = req.headers['x-user-id'];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
     
@@ -53,7 +53,7 @@ class ProxiApi {
   }
   
   deleteDirectory = async (req,res) => {
-    const sessionUserId = req.headers['x-session-user-id'];
+    const sessionUserId = req.headers['x-user-id'];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
     
@@ -74,7 +74,7 @@ class ProxiApi {
   }
   
   renameDirectory = async (req, res) => {
-    const sessionUserId = req.headers['x-session-user-id'];
+    const sessionUserId = req.headers['x-user-id'];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
 
@@ -96,7 +96,7 @@ class ProxiApi {
   };
 
   listDirectory = async (req,res) => {
-    const sessionUserId = req.headers['x-session-user-id'];
+    const sessionUserId = req.headers['x-user-id'];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
 
@@ -117,7 +117,7 @@ class ProxiApi {
   }
 
   getProperties = async (req,res) => {
-    const sessionUserId = req.headers['x-session-user-id'];
+    const sessionUserId = req.headers['x-user-id'];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
 
