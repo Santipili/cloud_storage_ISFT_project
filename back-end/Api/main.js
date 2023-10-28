@@ -18,9 +18,11 @@ app.get("/", (req, res) => {
 // TODO : CHECK AFTER MERGE
 app.post("/filesHandler/upload", requestHandler.uploadFiles);
 
-app.post("/directoryHandler/rename", requestHandler.renameDirectory); //raro el nombre de la ruta
 app.post("/directoryHandler/create", requestHandler.createDirectory);
 app.post("/directoryHandler/delete", requestHandler.deleteDirectory);
+app.post("/directoryHandler/rename", requestHandler.renameDirectory);
 app.post("/directoryHandler/list", requestHandler.listDirectory);
+app.post("/directoryHandler/properties", requestHandler.getDirProperties);
+
 
 app.start(port);
