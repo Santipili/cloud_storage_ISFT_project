@@ -3,9 +3,7 @@ const path = require("path");
 
 class DirectoryHandler {
   constructor() {}
-
-  create(newDir){
-    console.log(newDir);
+  create(newDir) {
     return new Promise((resolve, reject) => {
       if (!fs.existsSync(newDir)) {
         fs.mkdirSync(newDir, { recursive: true });
@@ -16,14 +14,15 @@ class DirectoryHandler {
       }
     });
   }
-  
-  delete(toDeleteDir){
+  delete(toDeleteDir) {
     console.log(toDeleteDir);
     return new Promise((resolve, reject) => {
       if (fs.existsSync(toDeleteDir)) {
         fs.rmdirSync(toDeleteDir, { recursive: true });
-        resolve({ status: true, message: "Directorio eliminado correctamente" });
-
+        resolve({
+          status: true,
+          message: "Directorio eliminado correctamente",
+        });
       } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }

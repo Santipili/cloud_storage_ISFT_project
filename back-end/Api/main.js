@@ -5,20 +5,17 @@ const { DirectoryHandler } = require("./src/Handlers/DirectoryHandler/DirectoryH
 
 const app = new Server();
 const port = process.env.PORT || 3000;
-
-const fileHandler = new FilesHandler();
 const directoryHandler = new DirectoryHandler();
+const fileHandler = new FilesHandler();
 
-
-const requestHandler = new ProxiApi("/uploads",fileHandler,directoryHandler);
+const requestHandler = new ProxiApi("uploads", fileHandler, directoryHandler);
 
 app.get("/", (req, res) => {
   res.setHeader("Content-Type", "text/plain");
   res.end("Hello!");
 });
 
-//Create FileHandler object
-//Create FileHandlerProxy( fileHandlerObject );
+// TODO : CHECK AFTER MERGE
 app.post("/filesHandler/upload", requestHandler.uploadFiles);
 
 app.post("/directoryHandler/create", requestHandler.createDirectory);
@@ -28,10 +25,4 @@ app.post("/directoryHandler/list", requestHandler.listDirectory);
 app.post("/directoryHandler/properties", requestHandler.getDirProperties);
 
 
-
-
 app.start(port);
-
-
-
-

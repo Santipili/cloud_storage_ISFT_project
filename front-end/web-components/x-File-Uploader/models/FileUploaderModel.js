@@ -4,7 +4,7 @@ class FileUploaderModel extends EventTarget {
   }
 
   async FileUploaderToServer(formData) {
-    const url = "http://localhost:3000/upload";
+    const url = "http://localhost:3000/filesHandler/upload";
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();

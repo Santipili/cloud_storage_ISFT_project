@@ -11,7 +11,8 @@ class Server {
     this.headers = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
-      "Access-Control-Allow-Headers": "content-type, x-session-token, x-user-id",
+      "Access-Control-Allow-Headers":
+        "content-type, x-session-token, x-session-user-id",
       "Content-Type": "application/json",
     };
   }
@@ -36,9 +37,9 @@ class Server {
     }
 
     const handler = this.routes[method][pathname] || this.routes[method]["*"];
-
+    console.log(this.routes);
     if (handler) {
-     await  handler(req, res);
+      await handler(req, res);
     } else {
       res.statusCode = 404;
       res.end("Not Found");
