@@ -100,42 +100,71 @@ class FileUploaderView extends HTMLElement {
   
     if (this.selectedFiles.size === 0) {
       this.BtnSendFile.style.display = "none";
-  
       this.fileInput.value = "";
+
     } else {
       this.BtnSendFile.style.display = "inline-flex";
     }
   }
   
   removeFile(file) {
-    this.selectedFiles.delete(file);
-    this.updateFileList();
+   
+    this.selectedFiles.delete(file)
+    this.filesArray = Array.from(this.fileInput.files);
+     
+    const index = this.filesArray.filter((f)=>{
+      return f.name!=file.name
+    });
+    
+    if (index !== -1) {
+      let list = new DataTransfer();
+      index.forEach(f=>{
+        const file = new File(["content"],f.name,{lastModified:f.lastModified,type:f.type});
+        list.items.add(file)
+      })
+      this.filesArray.splice(index, 1);
+      let myFileList = list.files;
+      
+    /*   console.log()
+      let file = new File(["content"],"hola.jpg");
+      list.items.add(file);
+       file = new File(["content"],"hola21.jpg");
+      list.items.add(file);
+      let myFileList = list.files; */
+      for(let i = 0; i < this.filesArray.length; i++)
+      {
+          this.fileInput.files = myFileList 
+      }
+      console.log(this.fileInput.files); 
+  }
+  this.updateFileList();
   }
 
   updateSelectedFiles() {
+    
     this.selectedFiles = new Set(Array.from(this.fileInput.files));
   }
-
+  
   uploadAllFiles() {
-    const formData = new FormData();
+    this.formData = new FormData();
 
     for (const file of this.selectedFiles) {
-      formData.append("file", file);
+      this.formData.append("file", file);
     }
   }
   
   getFormData() {
+
     const fileInput = this.fileInput.files;
 
     if (fileInput != null && fileInput.length !== 0) {
-      const formData = new FormData();
 
       for (let i = 0; i < fileInput.length; i++) {
-        formData.append("file", fileInput[i]);
+        this.formData.append("file", fileInput[i]);
       }
 
       const res = {
-        data: formData,
+        data: this.formData,
         status: true,
       };
 
@@ -180,6 +209,7 @@ class FileUploaderView extends HTMLElement {
 
   hide() {
     this.fileListContainer.setAttribute("style", "display: none;"); 
+    this.BtnSendFile.style.display = "none";
     this.fileInput.value = "";
     this.form.setAttribute("style", "display: none;"); 
     this.DivProgressBar.setAttribute("style", "display: none;");
