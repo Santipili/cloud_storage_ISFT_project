@@ -1,10 +1,7 @@
 
 const path = require("path");
 
-const { FilesHandler } = require("../controllers/FilesHandler.js");
-// const { ValidateSession } = require("../controllers/ValidateSession.js");
-
-class RequestsHandler {
+class ProxiApi {
   constructor( uploadDirReference, fileHandler, directoryHandler) {
     this.uploadDir = uploadDirReference;
     this.fileHandler = fileHandler;
