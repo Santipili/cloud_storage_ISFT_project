@@ -46,7 +46,7 @@ function main() {
   });
 
   document.body.appendChild(fileUploader);
-  document.body.appendChild(dt);
+  /* document.body.appendChild(dt); */
 }
 
 window.addEventListener("load", main);

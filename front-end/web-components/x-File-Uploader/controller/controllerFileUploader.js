@@ -31,7 +31,7 @@ class FileUploaderController {
       this.view.show();
 
       // const cleanfiles = this.__cleanFiles(responseView.data);  Tira un error en el servidor del back.
-
+    
       let res = await this.model.FileUploaderToServer(responseView.data);
 
       if (res.status) {
@@ -39,9 +39,8 @@ class FileUploaderController {
 
         //TODO: check after merge
       }
-      console.log(res);
     } else {
-      console.log(responseView);
+
     }
   }
 
