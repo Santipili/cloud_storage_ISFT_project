@@ -54,7 +54,7 @@ class FileUploaderView extends HTMLElement {
     });
 
     this.fileInput.addEventListener("change", () => {
-      this.updateSelectedFiles(); 
+      this.updateSelectedFiles();
       this.updateFileList();
       this.BtnSendFile.disabled = false;
       this.BtnSendFile.setAttribute("style", "display: inline-flex;");
@@ -78,37 +78,58 @@ class FileUploaderView extends HTMLElement {
   }
 
   updateFileList() {
-    this.fileListContainer.innerHTML = '';
-  
+    this.fileListContainer.innerHTML = "";
+
     for (const file of this.selectedFiles) {
       const fileItem = document.createElement("div");
       fileItem.className = "file-item";
-  
+
       const fileName = document.createElement("span");
       fileName.textContent = file.name;
-  
+
       const deleteButton = document.createElement("button");
       deleteButton.textContent = "Delete";
       deleteButton.onclick = () => {
         this.removeFile(file);
       };
-  
+
       fileItem.appendChild(fileName);
       fileItem.appendChild(deleteButton);
       this.fileListContainer.appendChild(fileItem);
     }
-  
+
     if (this.selectedFiles.size === 0) {
       this.BtnSendFile.style.display = "none";
-  
       this.fileInput.value = "";
     } else {
       this.BtnSendFile.style.display = "inline-flex";
     }
   }
-  
+
   removeFile(file) {
     this.selectedFiles.delete(file);
+    this.filesArray = Array.from(this.fileInput.files);
+
+    const index = this.filesArray.filter((f) => {
+      return f.name != file.name;
+    });
+
+    if (index !== -1) {
+      let list = new DataTransfer();
+      index.forEach((f) => {
+        const file = new File(["content"], f.name, {
+          lastModified: f.lastModified,
+          type: f.type,
+        });
+        list.items.add(file);
+      });
+      this.filesArray.splice(index, 1);
+      let myFileList = list.files;
+
+      for (let i = 0; i < this.filesArray.length; i++) {
+        this.fileInput.files = myFileList;
+      }
+    }
     this.updateFileList();
   }
 
@@ -117,25 +138,23 @@ class FileUploaderView extends HTMLElement {
   }
 
   uploadAllFiles() {
-    const formData = new FormData();
+    this.formData = new FormData();
 
     for (const file of this.selectedFiles) {
-      formData.append("file", file);
+      this.formData.append("file", file);
     }
   }
-  
+
   getFormData() {
     const fileInput = this.fileInput.files;
 
     if (fileInput != null && fileInput.length !== 0) {
-      const formData = new FormData();
-
       for (let i = 0; i < fileInput.length; i++) {
-        formData.append("file", fileInput[i]);
+        this.formData.append("file", fileInput[i]);
       }
 
       const res = {
-        data: formData,
+        data: this.formData,
         status: true,
       };
 
@@ -148,8 +167,52 @@ class FileUploaderView extends HTMLElement {
       return res;
     }
   }
+  progreesBar() {
+    this.form = document.createElement("form");
+    this.form.className = "form";
+    this.form.enctype = "multipart/form-data";
+
+    this.DivProgressBar = document.createElement("div");
+    this.DivProgressBar.classList.add("Div");
+
+    this.progressBar = document.createElement("progress");
+    this.progressBar.setAttribute("max", "100");
+    this.progressBar.setAttribute("value", "0");
+    this.progressBar.setAttribute("style", "display: none;");
+
+    this.progressSpan = document.createElement("span");
+    this.progressSpan.className = "progress-span";
+    this.progressSpan.textContent = "0%";
+    this.progressSpan.setAttribute("style", "display: none;");
+
+    this.DivProgressBar.appendChild(this.progressSpan);
+    this.DivProgressBar.appendChild(this.progressBar);
+    this.form.appendChild(this.DivProgressBar);
+  }
+
+  show() {
+    this.DivProgressBar.setAttribute("style", "display: block;");
+    this.progressBar.setAttribute("style", "display: block;");
+    this.progressSpan.setAttribute("style", "display: block;");
+  }
+
+  hide() {
+    this.fileListContainer.setAttribute("style", "display: none;");
+    this.BtnSendFile.style.display = "none";
+    this.fileInput.value = "";
+    this.form.setAttribute("style", "display: none;");
+    this.DivProgressBar.setAttribute("style", "display: none;");
+    this.progressBar.setAttribute("style", "display: none;");
+    this.progressSpan.setAttribute("style", "display: none;");
+  }
+
+  updateProgressBar(percentCompleted) {
+    this.progressBar.value = percentCompleted;
+    this.progressSpan.innerText = `${Math.round(percentCompleted)}%`;
+    this.appendChild(this.form);
+  }
 }
 
 customElements.define("file-uploader-view", FileUploaderView);
 
-export { FileUploaderView }; 
+export { FileUploaderView };
