@@ -9,7 +9,7 @@ class ProxiApi {
 
   uploadFiles = async (req, res) => {
     try {
-      const response = await this.filesHandler.upload(req, this.uploadDir);
+      const response = await this.fileHandler.upload(req, this.uploadDir);
       return res.end(JSON.stringify({ status: true, message: response }));
     } catch (e) {
       console.log(e);

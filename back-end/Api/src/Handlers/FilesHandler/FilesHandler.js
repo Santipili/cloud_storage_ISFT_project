@@ -18,8 +18,6 @@ class FilesHandler {
         }
 
         if (JSON.stringify(files) !== "{}" && files != undefined) {
-          console.log(files);
-          console.log(files);
           files.file.forEach((file) => {
             const fileName = file.originalFilename;
             const currentDir = __dirname;
