@@ -12,7 +12,7 @@ class Server {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
       "Access-Control-Allow-Headers":
-        "content-type, x-session-token, x-session-user-id",
+        "content-type, x-session-token, x-user-id",
       "Content-Type": "application/json",
     };
   }

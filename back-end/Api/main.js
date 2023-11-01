@@ -23,6 +23,9 @@ app.post("/directoryHandler/delete", requestHandler.deleteDirectory);
 app.post("/directoryHandler/rename", requestHandler.renameDirectory);
 app.post("/directoryHandler/list", requestHandler.listDirectory);
 app.post("/directoryHandler/properties", requestHandler.getDirProperties);
+app.post("/directoryHandler/copy", requestHandler.copyDirectory);
+app.post("/directoryHandler/move", requestHandler.moveDirectory);
+
 
 
 app.start(port);

@@ -116,7 +116,7 @@ class ProxiApi {
     });
   }
 
-  getProperties = async (req,res) => {
+  getDirProperties = async (req,res) => {
     const sessionUserId = req.headers['x-user-id'];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
@@ -137,6 +137,51 @@ class ProxiApi {
     });
   }
 
+  copyDirectory = async (req,res) => {
+    const userId = req.headers['x-user-id'];
+    const startPath = path.resolve(__dirname, "../..");
+    const userDirPath = path.join(startPath, this.uploadDir, userId);
+
+    let body = '';
+    req.on('data', async (chunk) => {
+        body += chunk.toString();
+        const requestData = body ? JSON.parse(body) : {};
+        const originDirPath = path.join(userDirPath,requestData.originDir);
+        const newDirPath = path.join(userDirPath,requestData.newDir);
+        try{
+          const response = await this.directoryHandler.copy(originDirPath, newDirPath);
+          console.log(response);
+          return res.end(JSON.stringify({ status: true, message: response.message }));
+        } catch(e) {
+          res.statusCode = 500;
+          return res.end(JSON.stringify({ status: false, message: e.message }));
+        }
+    });
+  }
+
+  moveDirectory = async (req,res) => {
+    const userId = req.headers['x-user-id'];
+    const startPath = path.resolve(__dirname, "../..");
+    const userDirPath = path.join(startPath, this.uploadDir, userId);
+
+    let body = '';
+    req.on('data', async (chunk) => {
+        body += chunk.toString();
+        const requestData = body ? JSON.parse(body) : {};
+        const originDirPath = path.join(userDirPath,requestData.originDir);
+        const newDirPath = path.join(userDirPath,requestData.newDir);
+
+        try{
+          const response = await this.directoryHandler.move(originDirPath, newDirPath);
+          console.log(response);
+          return res.end(JSON.stringify({ status: true, message: response.message }));
+        } catch(e) {
+          res.statusCode = 500;
+          return res.end(JSON.stringify({ status: false, message: e.message }));
+        }
+    });
+  }
+
 }
 
-module.exports = { RequestsHandler };
+module.exports = { ProxiApi };
