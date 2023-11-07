@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-// const fsx = require("fs-extra");
+const fsx = require("fs-extra");
 
 class DirectoryHandler {
   constructor() {}
@@ -65,10 +65,10 @@ class DirectoryHandler {
   }
 
   getProperties(dirPath){
-    console.log(dirPath);
+    
     return new Promise((resolve, reject) => {
       if (fs.existsSync(dirPath)) {
-        let propertiesdirPath = {};
+        let propertiesDir = {};
         let foldersCount = -1;
         let filesCount = 0;
         let totalSize = 0;
@@ -105,7 +105,7 @@ class DirectoryHandler {
   move(pathOrigin, pathDestiny){
     return new Promise((resolve, reject) => {
       if (fs.existsSync(pathOrigin)) {
-        fs.move(pathOrigin, pathDestiny, { overwrite: true }, (err) => {
+        fsx.move(pathOrigin, pathDestiny, { overwrite: true }, (err) => {
           if (err) {
             console.error('Error al mover la carpeta:', err);
             reject({ status: false, message: "Error al mover el directorio" });
@@ -123,7 +123,7 @@ class DirectoryHandler {
   copy(pathOrigin, pathDestiny){
     return new Promise((resolve, reject) => {
       if (fs.existsSync(pathOrigin)) {
-        fs.copy(pathOrigin, pathDestiny, (err) => {
+        fsx.copy(pathOrigin, pathDestiny, (err) => {
           if (err) {
             console.error('Error al copiar la carpeta:', err);
             reject({ status: false, message: "Error al copiar el directorio" });

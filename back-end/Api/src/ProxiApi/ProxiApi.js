@@ -1,4 +1,5 @@
 
+const { Console } = require("console");
 const path = require("path");
 
 class ProxiApi {
@@ -120,7 +121,7 @@ class ProxiApi {
     const sessionUserId = req.headers['x-user-id'];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
-
+   
     let body = '';
     req.on('data', async (chunk) => {
         body += chunk.toString();
