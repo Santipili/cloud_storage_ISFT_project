@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const fsx = require("fs-extra");
 
 class DirectoryHandler {
   constructor() {}
@@ -61,16 +62,15 @@ class DirectoryHandler {
     });
   }
 
-  getProperties(Dir) {
-    console.log(Dir);
+  getProperties(dirPath) {
     return new Promise((resolve, reject) => {
-      if (fs.existsSync(Dir)) {
+      if (fs.existsSync(dirPath)) {
         let propertiesDir = {};
         let foldersCount = -1;
         let filesCount = 0;
         let totalSize = 0;
 
-        const stack = [Dir];
+        const stack = [dirPath];
         while (stack.length > 0) {
           const currentPath = stack.pop();
           let stats = fs.statSync(currentPath);
@@ -87,7 +87,7 @@ class DirectoryHandler {
           }
         }
 
-        propertiesDir["lastTimeMod"] = fs.statSync(Dir).mtime;
+        propertiesDir["lastTimeMod"] = fs.statSync(dirPath).mtime;
         propertiesDir["totalfiles"] = filesCount;
         propertiesDir["totalfolders"] = foldersCount;
         propertiesDir["totalSize"] = totalSize;
@@ -98,8 +98,47 @@ class DirectoryHandler {
     });
   }
 
-  move(requestData) {}
-  copy(requestData) {}
+  move(pathOrigin, pathDestiny) {
+    return new Promise((resolve, reject) => {
+      if (fs.existsSync(pathOrigin)) {
+        fsx.move(pathOrigin, pathDestiny, { overwrite: true }, (err) => {
+          if (err) {
+            console.error("Error al mover la carpeta:", err);
+            reject({ status: false, message: "Error al mover el directorio" });
+          } else {
+            console.log("Carpeta movida con éxito");
+            resolve({
+              status: true,
+              message: "Directorio creado correctamente",
+            });
+          }
+        });
+      } else {
+        reject({ status: false, message: "La ruta del directorio no existe!" });
+      }
+    });
+  }
+
+  copy(pathOrigin, pathDestiny) {
+    return new Promise((resolve, reject) => {
+      if (fs.existsSync(pathOrigin)) {
+        fsx.copy(pathOrigin, pathDestiny, (err) => {
+          if (err) {
+            console.error("Error al copiar la carpeta:", err);
+            reject({ status: false, message: "Error al copiar el directorio" });
+          } else {
+            console.log("Carpeta copiada con éxito");
+            resolve({
+              status: true,
+              message: "Directorio copiado correctamente",
+            });
+          }
+        });
+      } else {
+        reject({ status: false, message: "La ruta del directorio no existe!" });
+      }
+    });
+  }
 }
 
 module.exports = { DirectoryHandler };
