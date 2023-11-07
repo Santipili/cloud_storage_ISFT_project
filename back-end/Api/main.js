@@ -29,3 +29,16 @@ app.post("/directoryHandler/copy", proxiApi.copyDirectory);
 app.post("/directoryHandler/move", proxiApi.moveDirectory);
 
 app.start(port);
+
+/* async function main() {
+  try {
+    const response = await directoryHandler.listContent(
+      "../../../../../../REDES-Y-COMUNICACIONES"
+    );
+    console.log(response);
+  } catch (error) {
+    console.error("Ocurrió un error al listar el contenido:", error);
+  }
+}
+
+main(); */

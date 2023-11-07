@@ -37,7 +37,7 @@ class Server {
     }
 
     const handler = this.routes[method][pathname] || this.routes[method]["*"];
-    console.log(this.routes);
+
     if (handler) {
       await handler(req, res);
     } else {
