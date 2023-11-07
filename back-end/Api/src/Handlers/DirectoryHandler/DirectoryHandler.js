@@ -38,24 +38,6 @@ class DirectoryHandler {
         resolve({
           status: true,
           message: "Directorio renombrado correctamente ",
-              });
-      } else {
-        reject({ status: false, message: "La ruta del directorio no existe!" });
-      }
-    });
-  }
-
-  listContent(toListDir){
-    console.log(toListDir);
-    return new Promise((resolve, reject) => {
-      if (fs.existsSync(toListDir)) {
-        fs.readdir(toListDir, (error, filesList) => {
-          if (error) {
-            console.error('Error al leer el directorio:', error);
-            reject({ status: false, message: "Error al leer el directorio" });
-          }           
-          resolve(filesList);
-
         });
       } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
@@ -63,7 +45,23 @@ class DirectoryHandler {
     });
   }
 
-  getProperties(Dir){
+  listContent(toListDir) {
+    return new Promise((resolve, reject) => {
+      if (fs.existsSync(toListDir)) {
+        fs.readdir(toListDir, (error, filesList) => {
+          if (error) {
+            console.error("Error al leer el directorio:", error);
+            reject({ status: false, message: "Error al leer el directorio" });
+          }
+          resolve(filesList);
+        });
+      } else {
+        reject({ status: false, message: "La ruta del directorio no existe!" });
+      }
+    });
+  }
+
+  getProperties(Dir) {
     console.log(Dir);
     return new Promise((resolve, reject) => {
       if (fs.existsSync(Dir)) {
@@ -71,7 +69,7 @@ class DirectoryHandler {
         let foldersCount = -1;
         let filesCount = 0;
         let totalSize = 0;
-        
+
         const stack = [Dir];
         while (stack.length > 0) {
           const currentPath = stack.pop();
@@ -85,31 +83,23 @@ class DirectoryHandler {
             subFiles.forEach((subFile) => {
               let subFilePath = path.join(currentPath, subFile);
               stack.push(subFilePath);
-            })
+            });
           }
         }
-        
-        propertiesDir['lastTimeMod'] = fs.statSync(Dir).mtime;
-        propertiesDir['totalfiles'] = filesCount;
-        propertiesDir['totalfolders'] = foldersCount;
-        propertiesDir['totalSize'] = totalSize;
+
+        propertiesDir["lastTimeMod"] = fs.statSync(Dir).mtime;
+        propertiesDir["totalfiles"] = filesCount;
+        propertiesDir["totalfolders"] = foldersCount;
+        propertiesDir["totalSize"] = totalSize;
         resolve(propertiesDir);
-      }
-      else {
+      } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }
     });
   }
 
-  move(requestData){
-    
-    
-  }
-  copy(requestData){
-    
-
-
-  }
+  move(requestData) {}
+  copy(requestData) {}
 }
-              
+
 module.exports = { DirectoryHandler };

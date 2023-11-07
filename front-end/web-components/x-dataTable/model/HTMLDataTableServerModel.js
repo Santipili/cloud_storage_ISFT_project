@@ -45,25 +45,6 @@ class HTMLDataTableServerModel extends EventTarget {
       console.log(error);
     }
   }
-
-  async getUserData() {
-    try {
-      const userId = this.localStorageH.getOfLocalStorage("userId");
-      const token = this.localStorageH.getOfLocalStorage("Token");
-
-      let response = await this.apiClient.makeApiCall(
-        "groupHandler/getgroupsdata",
-        "GET",
-        null,
-        token,
-        userId
-      );
-
-      return response.groups;
-    } catch (error) {
-      console.log(error);
-    }
-  }
 }
 
 //export module
