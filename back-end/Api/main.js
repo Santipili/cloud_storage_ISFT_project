@@ -24,5 +24,8 @@ app.post("/directoryHandler/rename", proxiApi.renameDirectory);
 app.post("/directoryHandler/create", proxiApi.createDirectory);
 app.post("/directoryHandler/delete", proxiApi.deleteDirectory);
 app.post("/directoryHandler/list", proxiApi.listDirectory);
+app.post("/directoryHandler/properties", proxiApi.getDirProperties);
+app.post("/directoryHandler/copy", proxiApi.copyDirectory);
+app.post("/directoryHandler/move", proxiApi.moveDirectory);
 
 app.start(port);
