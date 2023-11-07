@@ -29,7 +29,7 @@ class ProxiApi {
   }
 
   createDirectory = async (req, res) => {
-    const sessionUserId = req.headers["x-user-id"];
+    const sessionUserId = req.headers["user-id"];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
 
@@ -50,7 +50,7 @@ class ProxiApi {
   };
 
   deleteDirectory = async (req, res) => {
-    const sessionUserId = req.headers["x-user-id"];
+    const sessionUserId = req.headers["user-id"];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
 
@@ -71,7 +71,7 @@ class ProxiApi {
   };
 
   renameDirectory = async (req, res) => {
-    const sessionUserId = req.headers["x-user-id"];
+    const sessionUserId = req.headers["user-id"];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
 
@@ -96,7 +96,7 @@ class ProxiApi {
   };
   
   listDirectory = async (req, res) => {
-    const sessionUserId = req.headers["x-user-id"];
+    const sessionUserId = req.headers["user-id"];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
 
@@ -117,7 +117,7 @@ class ProxiApi {
   };
 
   getDirProperties = async (req, res) => {
-    const sessionUserId = req.headers["x-user-id"];
+    const sessionUserId = req.headers["user-id"];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
 
@@ -143,7 +143,7 @@ class ProxiApi {
   };
   
   copyDirectory = async (req,res) => {
-    const userId = req.headers['x-user-id'];
+    const userId = req.headers['user-id'];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, userId);
   
@@ -165,7 +165,7 @@ class ProxiApi {
   }
   
   moveDirectory = async (req,res) => {
-    const userId = req.headers['x-user-id'];
+    const userId = req.headers['user-id'];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, userId);
   
@@ -186,7 +186,7 @@ class ProxiApi {
         }
     });
   }
-  
+
 }
 
 module.exports = { ProxiApi };
