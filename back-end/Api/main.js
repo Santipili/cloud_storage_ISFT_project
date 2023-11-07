@@ -1,7 +1,7 @@
 const { Server } = require("./server/server.js");
 const { ProxiApi } = require("./src/ProxiApi/ProxiApi.js");
 const { FilesHandler } = require("./src/Handlers/FilesHandler/FilesHandler.js");
-const { 
+const {
   DirectoryHandler,
 } = require("./src/Handlers/DirectoryHandler/DirectoryHandler.js");
 
@@ -27,7 +27,5 @@ app.post("/directoryHandler/list", proxiApi.listDirectory);
 app.post("/directoryHandler/properties", proxiApi.getDirProperties);
 app.post("/directoryHandler/copy", proxiApi.copyDirectory);
 app.post("/directoryHandler/move", proxiApi.moveDirectory);
-
-
 
 app.start(port);
