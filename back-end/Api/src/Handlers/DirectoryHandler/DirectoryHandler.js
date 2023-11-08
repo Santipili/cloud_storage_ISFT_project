@@ -67,15 +67,14 @@ class DirectoryHandler {
     });
   }
 
-  getProperties(dirPath){
-    
+  getProperties(dirPath) {
     return new Promise((resolve, reject) => {
       if (fs.existsSync(dirPath)) {
         let propertiesDir = {};
         let foldersCount = -1;
         let filesCount = 0;
         let totalSize = 0;
-        
+
         const stack = [dirPath];
         while (stack.length > 0) {
           const currentPath = stack.pop();
@@ -89,7 +88,7 @@ class DirectoryHandler {
             subFiles.forEach((subFile) => {
               let subFilePath = path.join(currentPath, subFile);
               stack.push(subFilePath);
-            })
+            });
           }
         }
         
@@ -98,47 +97,52 @@ class DirectoryHandler {
         propertiesDir['totalfolders'] = foldersCount;
         propertiesDir['totalSize'] = totalSize;
         resolve(propertiesDir);
-      }
-      else {
+      } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }
     });
   }
 
-  move(pathOrigin, pathDestiny){
+  move(pathOrigin, pathDestiny) {
     return new Promise((resolve, reject) => {
       if (fs.existsSync(pathOrigin)) {
         fsx.move(pathOrigin, pathDestiny, { overwrite: true }, (err) => {
           if (err) {
-            console.error('Error al mover la carpeta:', err);
+            console.error("Error al mover la carpeta:", err);
             reject({ status: false, message: "Error al mover el directorio" });
           } else {
-            console.log('Carpeta movida con éxito');
-            resolve({status: true, message: "Directorio creado correctamente" });
+            console.log("Carpeta movida con éxito");
+            resolve({
+              status: true,
+              message: "Directorio creado correctamente",
+            });
           }
         });
       } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }
-    }); 
+    });
   }
 
-  copy(pathOrigin, pathDestiny){
+  copy(pathOrigin, pathDestiny) {
     return new Promise((resolve, reject) => {
       if (fs.existsSync(pathOrigin)) {
         fsx.copy(pathOrigin, pathDestiny, (err) => {
           if (err) {
-            console.error('Error al copiar la carpeta:', err);
+            console.error("Error al copiar la carpeta:", err);
             reject({ status: false, message: "Error al copiar el directorio" });
           } else {
-            console.log('Carpeta copiada con éxito');
-            resolve({status: true, message: "Directorio copiado correctamente" });
+            console.log("Carpeta copiada con éxito");
+            resolve({
+              status: true,
+              message: "Directorio copiado correctamente",
+            });
           }
         });
       } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }
-    }); 
+    });
   }
 
   async  __buildTree(currentPath, currentNode) {
@@ -164,5 +168,5 @@ class DirectoryHandler {
   }
 
 }
-              
+
 module.exports = { DirectoryHandler };
