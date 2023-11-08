@@ -1,6 +1,3 @@
-import { ModelFSExplorer } from "../model/modelFSExplorer.js";
-import { ViewFSExplorer } from "../view/viewFSExplorer.js";
-
 class ControllerFSExplorer {
   constructor(innerView, innerModel) {
     this.view = innerView;
@@ -14,8 +11,8 @@ class ControllerFSExplorer {
 
   async setContent() {
     const res = await this.model.getServerDirectoris("/");
-
-    this.view.addTableRow(res.files);
+    this.view.__setFileSystemTree(res.files);
+    this.view.renderFileSystem(res.files);
     console.log(res);
   }
 }

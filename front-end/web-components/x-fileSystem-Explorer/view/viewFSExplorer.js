@@ -17,7 +17,7 @@ class ViewFSExplorer extends HTMLElement {
     this.tbody = document.createElement("tbody");
 
     // Definir las columnas de la tabla
-    this.columns = ["", "Type", "Name", "Size", "Time", "Path"];
+    this.columns = ["", "Type", "Name", "Size", "Date"];
 
     // Crear la fila de encabezado de la tabla
     this.headerRow = document.createElement("tr");
@@ -104,84 +104,97 @@ class ViewFSExplorer extends HTMLElement {
       py: "./web-components/x-fileSystem-Explorer/style/icon-png/icons8-python-48.png",
       jpeg: "./web-components/x-fileSystem-Explorer/style/icon-png/icons8-jpeg-60.png",
       rtf: "./web-components/x-fileSystem-Explorer/style/icon-png/icons8-microsoft-word-48.png",
+      png: "./web-components/x-fileSystem-Explorer/style/icon-png/icons8-png-64.png",
     };
+
+    /* ------------------------------------------------------ */
+
+    this.fileSystemTree = null;
   }
 
-  connectedCallback() {
-    /* this.addTableRow(["File 1", "File 2", "File 3", "File 4", "File 5"]); */
-  }
+  connectedCallback() {}
 
-  addTableRow(files) {
-    files.forEach((file) => {
-      this.row = document.createElement("tr");
-      this.checkBox = document.createElement("td");
-      this.typeCell = document.createElement("td");
-      this.nameCell = document.createElement("td");
-      this.sizeCell = document.createElement("td");
-      this.timeCell = document.createElement("td");
-      this.Path = document.createElement("td");
+  renderFileSystem(data, basePath = "/") {
+    this.tbody.innerHTML = "";
 
-      const extension = file.split(".").pop();
+    for (const [name, fileInfo] of Object.entries(data)) {
+      if (fileInfo.type) {
+        console.log(name);
+        const row = document.createElement("tr");
+        const checkBox = document.createElement("td");
+        const typeCell = document.createElement("td");
+        const nameCell = document.createElement("td");
+        const sizeCell = document.createElement("td");
+        const timeCell = document.createElement("td");
+        const pathCell = document.createElement("td");
 
-      const icon =
-        this.extensionIcons[extension] ||
-        "./web-components/x-fileSystem-Explorer/style/icon-png/icon-folder.png";
+        const extension = name.split(".").pop();
+        const icon =
+          this.extensionIcons[extension] ||
+          "./web-components/x-fileSystem-Explorer/style/icon-png/icon-folder.png";
 
-      const iconImage = document.createElement("img");
-      iconImage.src = icon;
-      iconImage.style.width = "25px";
-      iconImage.style.height = "25px";
-      iconImage.style.marginRight = "auto";
+        const iconImage = document.createElement("img");
+        iconImage.src = icon;
+        iconImage.style.width = "25px";
+        iconImage.style.height = "25px";
+        iconImage.style.marginRight = "auto";
 
-      this.typeCell.appendChild(iconImage);
+        typeCell.appendChild(iconImage);
 
-      this.nameLink = document.createElement("a");
-      this.nameLink.textContent = file;
-      this.nameLink.href = "#";
+        const nameLink = document.createElement("a");
+        nameLink.textContent = name;
+        nameLink.href = "#";
+        nameLink.setAttribute("x-type", fileInfo.type);
+        const path = basePath + name + "/";
 
-      this.nameCell.appendChild(this.nameLink);
+        nameLink.setAttribute("x-path", path);
 
-      this.sizeCell.textContent = "10 KB";
+        nameCell.appendChild(nameLink);
+        sizeCell.textContent = fileInfo.size ? fileInfo.size + " KB" : "";
+        timeCell.textContent = fileInfo.date || "";
 
-      this.timeCell.textContent = "10/10/2022";
-      this.pathLink = document.createElement("a");
-      this.pathLink.textContent = "../";
-      this.pathLink.href = "#";
+        // ... (otros detalles como el enlace al directorio padre)
 
-      this.Path.appendChild(this.pathLink);
+        row.appendChild(checkBox);
+        row.appendChild(typeCell);
+        row.appendChild(nameCell);
+        row.appendChild(sizeCell);
+        row.appendChild(timeCell);
+        row.appendChild(pathCell);
 
-      // Crear un elemento div con la clase "cntr"
-      this.containerDiv = document.createElement("div");
-      this.containerDiv.className = "cntr";
+        this.tbody.appendChild(row);
+      }
+    }
 
-      const checkboxInput = document.createElement("input");
-      checkboxInput.setAttribute("type", "checkbox");
-
-      const labelElement = document.createElement("label");
-
-      // Agregar el checkbox y la etiqueta al contenedor
-      this.containerDiv.appendChild(checkboxInput);
-      this.containerDiv.appendChild(labelElement);
-
-      this.checkBox.appendChild(this.containerDiv);
-
-      // Agregar las celdas a la fila
-      this.row.appendChild(this.checkBox);
-      this.row.appendChild(this.typeCell);
-      this.row.appendChild(this.nameCell);
-      this.row.appendChild(this.sizeCell);
-      this.row.appendChild(this.timeCell);
-      this.row.appendChild(this.Path);
-
-      // Agregar la fila a la tabla
-      this.tbody.appendChild(this.row);
+    this.tbody.querySelectorAll("tr").forEach((row) => {
+      const name = row.querySelector("td:nth-child(3) a").textContent;
+      if (data[name] && typeof data[name] === "object") {
+        row
+          .querySelector("td:nth-child(3) a")
+          .addEventListener("click", (event) => {
+            const attribute = event.target.getAttribute("x-type");
+            if (attribute == "directory") {
+              const path = event.target.getAttribute("x-path");
+              event.preventDefault();
+              this.openFolder(name, path);
+            }
+          });
+      }
     });
   }
 
-  openFolder(name, event) {
-    event.preventDefault();
-    // Implementa la lógica para abrir la carpeta
-    alert("Abriendo carpeta: " + name);
+  openFolder(name, basePath) {
+    if (
+      this.fileSystemTree[name] &&
+      typeof this.fileSystemTree[name] === "object"
+    ) {
+      this.fileSystemTree = this.fileSystemTree[name];
+      this.renderFileSystem(this.fileSystemTree, basePath);
+    }
+  }
+
+  __setFileSystemTree(FStree) {
+    this.fileSystemTree = FStree;
   }
 
   downloadSelected() {
