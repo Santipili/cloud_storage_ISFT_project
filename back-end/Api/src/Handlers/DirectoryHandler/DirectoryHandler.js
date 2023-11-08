@@ -50,14 +50,17 @@ class DirectoryHandler {
     console.log(toListDir);
     return new Promise((resolve, reject) => {
       if (fs.existsSync(toListDir)) {
-        fs.readdir(toListDir, (error, filesList) => {
-          if (error) {
-            console.error('Error al leer el directorio:', error);
-            reject({ status: false, message: "Error al leer el directorio" });
-          }           
-          resolve(filesList);
-
-        });
+        let tree = {};
+        try {
+          this.__buildTree(toListDir, tree)
+          .then(() => {
+            resolve(tree);
+          })
+        }
+        catch (err) {
+          reject({ status: false, message: err });
+          console.error(err);
+        }
       } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }
@@ -90,7 +93,7 @@ class DirectoryHandler {
           }
         }
         
-        propertiesDir['lastTimeMod'] = fs.statSync(dirPath).mtime;
+        propertiesDir['lastTimeMod'] = fs.statSync(dirPath).mtime.toLocaleString();
         propertiesDir['totalfiles'] = filesCount;
         propertiesDir['totalfolders'] = foldersCount;
         propertiesDir['totalSize'] = totalSize;
@@ -136,6 +139,28 @@ class DirectoryHandler {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }
     }); 
+  }
+
+  async  __buildTree(currentPath, currentNode) {
+    const items = fs.readdirSync(currentPath);
+    for (const item of items) {
+      const itemPath = `${currentPath}/${item}`;
+      const stats = fs.statSync(itemPath);
+      if (stats.isDirectory()) {
+        currentNode[item] = {};
+        await this.__buildTree(itemPath, currentNode[item]);
+      } else {
+
+        const fileSize = (stats.size / 1024).toFixed(4); 
+        
+        const fileTime = new Date(stats.mtime);
+        
+        currentNode[item] = {
+          size: fileSize,
+          time: fileTime.toLocaleString(),
+        };
+      }
+    }
   }
 
 }
