@@ -107,7 +107,7 @@ class ProxiApi {
       body += chunk.toString();
       const requestData = body ? JSON.parse(body) : {};
 
-      const toListDirPath = path.join(userDirPath, requestData);
+      const toListDirPath = path.join(userDirPath, requestData.toListDir);
       try {
         const response = await this.directoryHandler.listContent(toListDirPath);
 
