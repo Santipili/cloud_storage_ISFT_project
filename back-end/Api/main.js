@@ -24,5 +24,21 @@ app.post("/directoryHandler/rename", proxiApi.renameDirectory);
 app.post("/directoryHandler/create", proxiApi.createDirectory);
 app.post("/directoryHandler/delete", proxiApi.deleteDirectory);
 app.post("/directoryHandler/list", proxiApi.listDirectory);
+app.post("/directoryHandler/properties", proxiApi.getDirProperties);
+app.post("/directoryHandler/copy", proxiApi.copyDirectory);
+app.post("/directoryHandler/move", proxiApi.moveDirectory);
 
 app.start(port);
+
+/* async function main() {
+  try {
+    const response = await directoryHandler.listContent(
+      "../../../../../../REDES-Y-COMUNICACIONES"
+    );
+    console.log(response);
+  } catch (error) {
+    console.error("Ocurrió un error al listar el contenido:", error);
+  }
+}
+
+main(); */

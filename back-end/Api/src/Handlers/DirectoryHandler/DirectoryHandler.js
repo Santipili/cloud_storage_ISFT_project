@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const fsx = require("fs-extra");
 
 class DirectoryHandler {
   constructor() {}
@@ -18,7 +19,7 @@ class DirectoryHandler {
     console.log(toDeleteDir);
     return new Promise((resolve, reject) => {
       if (fs.existsSync(toDeleteDir)) {
-        fs.rmdirSync(toDeleteDir, { recursive: true });
+        fs.rmSync(toDeleteDir, { recursive: true });
         resolve({
           status: true,
           message: "Directorio eliminado correctamente",
@@ -38,24 +39,6 @@ class DirectoryHandler {
         resolve({
           status: true,
           message: "Directorio renombrado correctamente ",
-              });
-      } else {
-        reject({ status: false, message: "La ruta del directorio no existe!" });
-      }
-    });
-  }
-
-  listContent(toListDir){
-    console.log(toListDir);
-    return new Promise((resolve, reject) => {
-      if (fs.existsSync(toListDir)) {
-        fs.readdir(toListDir, (error, filesList) => {
-          if (error) {
-            console.error('Error al leer el directorio:', error);
-            reject({ status: false, message: "Error al leer el directorio" });
-          }           
-          resolve(filesList);
-
         });
       } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
@@ -63,16 +46,34 @@ class DirectoryHandler {
     });
   }
 
-  getProperties(Dir){
-    console.log(Dir);
+  listContent(toListDir) {
+    console.log(toListDir);
     return new Promise((resolve, reject) => {
-      if (fs.existsSync(Dir)) {
+      if (fs.existsSync(toListDir)) {
+        let tree = {};
+        try {
+          this.__buildTree(toListDir, tree).then(() => {
+            resolve(tree);
+          });
+        } catch (err) {
+          reject({ status: false, message: err });
+          console.error(err);
+        }
+      } else {
+        reject({ status: false, message: "La ruta del directorio no existe!" });
+      }
+    });
+  }
+
+  getProperties(dirPath) {
+    return new Promise((resolve, reject) => {
+      if (fs.existsSync(dirPath)) {
         let propertiesDir = {};
         let foldersCount = -1;
         let filesCount = 0;
         let totalSize = 0;
-        
-        const stack = [Dir];
+
+        const stack = [dirPath];
         while (stack.length > 0) {
           const currentPath = stack.pop();
           let stats = fs.statSync(currentPath);
@@ -85,31 +86,84 @@ class DirectoryHandler {
             subFiles.forEach((subFile) => {
               let subFilePath = path.join(currentPath, subFile);
               stack.push(subFilePath);
-            })
+            });
           }
         }
-        
-        propertiesDir['lastTimeMod'] = fs.statSync(Dir).mtime;
-        propertiesDir['totalfiles'] = filesCount;
-        propertiesDir['totalfolders'] = foldersCount;
-        propertiesDir['totalSize'] = totalSize;
+
+        propertiesDir["lastTimeMod"] = fs
+          .statSync(dirPath)
+          .mtime.toLocaleString();
+        propertiesDir["totalfiles"] = filesCount;
+        propertiesDir["totalfolders"] = foldersCount;
+        propertiesDir["totalSize"] = totalSize;
         resolve(propertiesDir);
-      }
-      else {
+      } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }
     });
   }
 
-  move(requestData){
-    
-    
+  move(pathOrigin, pathDestiny) {
+    return new Promise((resolve, reject) => {
+      if (fs.existsSync(pathOrigin)) {
+        fsx.move(pathOrigin, pathDestiny, { overwrite: true }, (err) => {
+          if (err) {
+            console.error("Error al mover la carpeta:", err);
+            reject({ status: false, message: "Error al mover el directorio" });
+          } else {
+            console.log("Carpeta movida con éxito");
+            resolve({
+              status: true,
+              message: "Directorio creado correctamente",
+            });
+          }
+        });
+      } else {
+        reject({ status: false, message: "La ruta del directorio no existe!" });
+      }
+    });
   }
-  copy(requestData){
-    
 
+  copy(pathOrigin, pathDestiny) {
+    return new Promise((resolve, reject) => {
+      if (fs.existsSync(pathOrigin)) {
+        fsx.copy(pathOrigin, pathDestiny, (err) => {
+          if (err) {
+            console.error("Error al copiar la carpeta:", err);
+            reject({ status: false, message: "Error al copiar el directorio" });
+          } else {
+            console.log("Carpeta copiada con éxito");
+            resolve({
+              status: true,
+              message: "Directorio copiado correctamente",
+            });
+          }
+        });
+      } else {
+        reject({ status: false, message: "La ruta del directorio no existe!" });
+      }
+    });
+  }
 
+  async __buildTree(currentPath, currentNode) {
+    const items = fs.readdirSync(currentPath);
+    for (const item of items) {
+      const itemPath = `${currentPath}/${item}`;
+      const stats = fs.statSync(itemPath);
+      if (stats.isDirectory()) {
+        currentNode[item] = { type: "directory" };
+        await this.__buildTree(itemPath, currentNode[item]);
+      } else {
+        const fileSize = (stats.size / 1024).toFixed(4);
+        const fileTime = new Date(stats.mtime);
+        currentNode[item] = {
+          size: fileSize,
+          date: fileTime.toLocaleString(),
+          type: "file",
+        };
+      }
+    }
   }
 }
-              
+
 module.exports = { DirectoryHandler };

@@ -29,7 +29,7 @@ class ProxiApi {
   }
 
   createDirectory = async (req, res) => {
-    const sessionUserId = req.headers["x-user-id"];
+    const sessionUserId = req.headers["user-id"];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
 
@@ -50,7 +50,7 @@ class ProxiApi {
   };
 
   deleteDirectory = async (req, res) => {
-    const sessionUserId = req.headers["x-user-id"];
+    const sessionUserId = req.headers["user-id"];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
 
@@ -58,7 +58,8 @@ class ProxiApi {
     req.on("data", async (chunk) => {
       body += chunk.toString();
       const requestData = body ? JSON.parse(body) : {};
-      const toDeleteDirPath = path.join(userDirPath, requestData.toDeleteDir);
+      console.log(requestData);
+      const toDeleteDirPath = path.join(userDirPath, requestData);
       try {
         const response = await this.directoryHandler.delete(toDeleteDirPath);
         console.log(response);
@@ -71,7 +72,7 @@ class ProxiApi {
   };
 
   renameDirectory = async (req, res) => {
-    const sessionUserId = req.headers["x-user-id"];
+    const sessionUserId = req.headers["user-id"];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
 
@@ -96,18 +97,21 @@ class ProxiApi {
   };
 
   listDirectory = async (req, res) => {
-    const sessionUserId = req.headers["x-user-id"];
+    const UserId = req.headers["user-id"];
+
     const startPath = path.resolve(__dirname, "../..");
-    const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
+
+    const userDirPath = path.join(startPath, this.uploadDir, UserId);
 
     let body = "";
     req.on("data", async (chunk) => {
       body += chunk.toString();
       const requestData = body ? JSON.parse(body) : {};
-      const toListDirPath = path.join(userDirPath, requestData.toListDir);
+
+      const toListDirPath = path.join(userDirPath, requestData);
       try {
         const response = await this.directoryHandler.listContent(toListDirPath);
-        console.log(response);
+
         return res.end(JSON.stringify({ status: true, files: response }));
       } catch (e) {
         res.statusCode = 500;
@@ -117,7 +121,7 @@ class ProxiApi {
   };
 
   getDirProperties = async (req, res) => {
-    const sessionUserId = req.headers["x-user-id"];
+    const sessionUserId = req.headers["user-id"];
     const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
 
@@ -135,6 +139,61 @@ class ProxiApi {
         );
         console.log(response);
         return res.end(JSON.stringify({ status: true, properties: response }));
+      } catch (e) {
+        res.statusCode = 500;
+        return res.end(JSON.stringify({ status: false, message: e.message }));
+      }
+    });
+  };
+
+  copyDirectory = async (req, res) => {
+    const userId = req.headers["user-id"];
+    const startPath = path.resolve(__dirname, "../..");
+    const userDirPath = path.join(startPath, this.uploadDir, userId);
+
+    let body = "";
+    req.on("data", async (chunk) => {
+      body += chunk.toString();
+      const requestData = body ? JSON.parse(body) : {};
+      const originDirPath = path.join(userDirPath, requestData.originDir);
+      const newDirPath = path.join(userDirPath, requestData.newDir);
+      try {
+        const response = await this.directoryHandler.copy(
+          originDirPath,
+          newDirPath
+        );
+        console.log(response);
+        return res.end(
+          JSON.stringify({ status: true, message: response.message })
+        );
+      } catch (e) {
+        res.statusCode = 500;
+        return res.end(JSON.stringify({ status: false, message: e.message }));
+      }
+    });
+  };
+
+  moveDirectory = async (req, res) => {
+    const userId = req.headers["user-id"];
+    const startPath = path.resolve(__dirname, "../..");
+    const userDirPath = path.join(startPath, this.uploadDir, userId);
+
+    let body = "";
+    req.on("data", async (chunk) => {
+      body += chunk.toString();
+      const requestData = body ? JSON.parse(body) : {};
+      const originDirPath = path.join(userDirPath, requestData.originDir);
+      const newDirPath = path.join(userDirPath, requestData.newDir);
+
+      try {
+        const response = await this.directoryHandler.move(
+          originDirPath,
+          newDirPath
+        );
+        console.log(response);
+        return res.end(
+          JSON.stringify({ status: true, message: response.message })
+        );
       } catch (e) {
         res.statusCode = 500;
         return res.end(JSON.stringify({ status: false, message: e.message }));

@@ -11,7 +11,8 @@ class Server {
     this.headers = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
-      "Access-Control-Allow-Headers": "content-type, session-token, user-id",
+      "Access-Control-Allow-Headers": 
+       "content-type, session-token, user-id",
       "Content-Type": "application/json",
     };
   }
@@ -36,7 +37,7 @@ class Server {
     }
 
     const handler = this.routes[method][pathname] || this.routes[method]["*"];
-    console.log(this.routes);
+
     if (handler) {
       await handler(req, res);
     } else {
