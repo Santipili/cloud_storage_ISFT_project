@@ -19,7 +19,7 @@ class DirectoryHandler {
     console.log(toDeleteDir);
     return new Promise((resolve, reject) => {
       if (fs.existsSync(toDeleteDir)) {
-        fs.rmdirSync(toDeleteDir, { recursive: true });
+        fs.rmSync(toDeleteDir, { recursive: true });
         resolve({
           status: true,
           message: "Directorio eliminado correctamente",
@@ -39,25 +39,23 @@ class DirectoryHandler {
         resolve({
           status: true,
           message: "Directorio renombrado correctamente ",
-              });
+        });
       } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }
     });
   }
 
-  listContent(toListDir){
+  listContent(toListDir) {
     console.log(toListDir);
     return new Promise((resolve, reject) => {
       if (fs.existsSync(toListDir)) {
         let tree = {};
         try {
-          this.__buildTree(toListDir, tree)
-          .then(() => {
+          this.__buildTree(toListDir, tree).then(() => {
             resolve(tree);
-          })
-        }
-        catch (err) {
+          });
+        } catch (err) {
           reject({ status: false, message: err });
           console.error(err);
         }
@@ -91,11 +89,13 @@ class DirectoryHandler {
             });
           }
         }
-        
-        propertiesDir['lastTimeMod'] = fs.statSync(dirPath).mtime.toLocaleString();
-        propertiesDir['totalfiles'] = filesCount;
-        propertiesDir['totalfolders'] = foldersCount;
-        propertiesDir['totalSize'] = totalSize;
+
+        propertiesDir["lastTimeMod"] = fs
+          .statSync(dirPath)
+          .mtime.toLocaleString();
+        propertiesDir["totalfiles"] = filesCount;
+        propertiesDir["totalfolders"] = foldersCount;
+        propertiesDir["totalSize"] = totalSize;
         resolve(propertiesDir);
       } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
@@ -145,28 +145,25 @@ class DirectoryHandler {
     });
   }
 
-  async  __buildTree(currentPath, currentNode) {
+  async __buildTree(currentPath, currentNode) {
     const items = fs.readdirSync(currentPath);
     for (const item of items) {
       const itemPath = `${currentPath}/${item}`;
       const stats = fs.statSync(itemPath);
       if (stats.isDirectory()) {
-        currentNode[item] = {};
+        currentNode[item] = { type: "directory" };
         await this.__buildTree(itemPath, currentNode[item]);
       } else {
-
-        const fileSize = (stats.size / 1024).toFixed(4); 
-        
+        const fileSize = (stats.size / 1024).toFixed(4);
         const fileTime = new Date(stats.mtime);
-        
         currentNode[item] = {
           size: fileSize,
-          time: fileTime.toLocaleString(),
+          date: fileTime.toLocaleString(),
+          type: "file",
         };
       }
     }
   }
-
 }
 
 module.exports = { DirectoryHandler };

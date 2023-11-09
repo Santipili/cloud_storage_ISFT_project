@@ -58,7 +58,8 @@ class ProxiApi {
     req.on("data", async (chunk) => {
       body += chunk.toString();
       const requestData = body ? JSON.parse(body) : {};
-      const toDeleteDirPath = path.join(userDirPath, requestData.toDeleteDir);
+      console.log(requestData);
+      const toDeleteDirPath = path.join(userDirPath, requestData);
       try {
         const response = await this.directoryHandler.delete(toDeleteDirPath);
         console.log(response);
@@ -107,11 +108,9 @@ class ProxiApi {
       body += chunk.toString();
       const requestData = body ? JSON.parse(body) : {};
 
-      const toListDirPath = path.join(userDirPath, requestData.toListDir);
+      const toListDirPath = path.join(userDirPath, requestData);
       try {
         const response = await this.directoryHandler.listContent(toListDirPath);
-
-        console.log(response);
 
         return res.end(JSON.stringify({ status: true, files: response }));
       } catch (e) {

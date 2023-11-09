@@ -2,6 +2,9 @@ class ControllerFSExplorer {
   constructor(innerView, innerModel) {
     this.view = innerView;
     this.model = innerModel;
+    this.view.addEventListener("click-delete-button", async (d) => {
+      await this.deleteFile(d.detail);
+    });
   }
 
   enable() {
@@ -14,6 +17,9 @@ class ControllerFSExplorer {
     this.view.__setFileSystemTree(res.files);
     this.view.renderFileSystem(res.files);
     console.log(res);
+  }
+  async deleteFile(path) {
+    this.model.deleteFile(path);
   }
 }
 

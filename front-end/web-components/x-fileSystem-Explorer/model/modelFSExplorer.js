@@ -19,6 +19,22 @@ class ModelFSExplorer {
       console.log(error);
     }
   }
+  async deleteFile(path) {
+    const [pathToDelte] = path;
+    console.log(pathToDelte);
+    try {
+      let response = await this.apiClient.makeApiCall(
+        "directoryHandler/delete",
+        "POST",
+        pathToDelte,
+        "hsavhavdhavdha",
+        "1"
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 export { ModelFSExplorer };

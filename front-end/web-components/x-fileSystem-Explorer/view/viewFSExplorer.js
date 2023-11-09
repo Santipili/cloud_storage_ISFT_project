@@ -56,11 +56,6 @@ class ViewFSExplorer extends HTMLElement {
     this.deleteBtn.id = "deleteBtn";
     this.deleteBtn.addEventListener("click", () => this.deleteSelected());
 
-    this.showFilesBtn = document.createElement("button");
-    this.showFilesBtn.textContent = "Show files";
-    this.showFilesBtn.id = "showFilesBtn";
-    this.showFilesBtn.addEventListener("click", () => this.showFiles());
-
     this.newFolderBtn = document.createElement("button");
     this.newFolderBtn.textContent = "New Folder";
     this.newFolderBtn.id = "newFolderBtn";
@@ -75,7 +70,6 @@ class ViewFSExplorer extends HTMLElement {
     this.actionButtons.appendChild(this.moveBtn);
     this.actionButtons.appendChild(this.renameBtn);
     this.actionButtons.appendChild(this.deleteBtn);
-    this.actionButtons.appendChild(this.showFilesBtn);
     this.actionButtons.appendChild(this.newFolderBtn);
     this.actionButtons.appendChild(this.uploadBtn);
 
@@ -109,7 +103,9 @@ class ViewFSExplorer extends HTMLElement {
 
     /* ------------------------------------------------------ */
 
-    this.fileSystemTree = null;
+    this.fileSystemTree;
+
+    this.selectPath = [];
   }
 
   connectedCallback() {}
@@ -119,9 +115,12 @@ class ViewFSExplorer extends HTMLElement {
 
     for (const [name, fileInfo] of Object.entries(data)) {
       if (fileInfo.type) {
-        console.log(name);
         const row = document.createElement("tr");
         const checkBox = document.createElement("td");
+        const inputCheckbox = document.createElement("input");
+        inputCheckbox.setAttribute("type", "checkbox");
+        checkBox.appendChild(inputCheckbox);
+
         const typeCell = document.createElement("td");
         const nameCell = document.createElement("td");
         const sizeCell = document.createElement("td");
@@ -143,11 +142,20 @@ class ViewFSExplorer extends HTMLElement {
 
         const nameLink = document.createElement("a");
         nameLink.textContent = name;
-        nameLink.href = "#";
         nameLink.setAttribute("x-type", fileInfo.type);
+        nameLink.href = "#";
+
+        inputCheckbox.setAttribute("x-type", fileInfo.type);
+
         const path = basePath + name + "/";
 
-        nameLink.setAttribute("x-path", path);
+        inputCheckbox.setAttribute("x-path", path);
+
+        inputCheckbox.addEventListener("change", (event) => {
+          const path = event.target.getAttribute("x-path");
+          this.selectPath.push(path);
+          console.log(this.selectPath);
+        });
 
         nameCell.appendChild(nameLink);
         sizeCell.textContent = fileInfo.size ? fileInfo.size + " KB" : "";
@@ -173,9 +181,11 @@ class ViewFSExplorer extends HTMLElement {
           .querySelector("td:nth-child(3) a")
           .addEventListener("click", (event) => {
             const attribute = event.target.getAttribute("x-type");
+
             if (attribute == "directory") {
               const path = event.target.getAttribute("x-path");
               event.preventDefault();
+
               this.openFolder(name, path);
             }
           });
@@ -213,6 +223,10 @@ class ViewFSExplorer extends HTMLElement {
   }
 
   deleteSelected() {
+    console.log(this.selectPath);
+    this.dispatchEvent(
+      new CustomEvent("click-delete-button", { detail: this.selectPath })
+    );
     // Implementa la lógica para borrar los elementos seleccionados
     alert("Borrando elementos seleccionados");
   }
