@@ -1,25 +1,39 @@
+import { FileUploader } from "../WCs/x-File-Uploader/FileUploader.js";
+
 class ControllerFSExplorer {
   constructor(innerView, innerModel) {
     this.view = innerView;
     this.model = innerModel;
-    this.view.addEventListener("click-delete-button", async (d) => {
-      await this.deleteFile(d.detail);
-    });
+    this.fileUploader = new FileUploader();
   }
 
   enable() {
     this.setContent();
+
+    this.view.addEventListener("click-delete-button", async (d) => {
+      await this.deleteFile(d.detail);
+    });
+    this.view.addEventListener("click-folder", async (d) => {
+      const res = await this.model.getServerDirectoris(d.detail);
+      this.view.renderFileSystem(res.files);
+    });
+
+    this.view.addEventListener("click-upload-button", async (d) => {
+      document.body.appendChild(this.fileUploader);
+    });
   }
+
   disable() {}
 
   async setContent() {
     const res = await this.model.getServerDirectoris("/");
-    this.view.__setFileSystemTree(res.files);
+
     this.view.renderFileSystem(res.files);
-    console.log(res);
   }
-  async deleteFile(path) {
-    this.model.deleteFile(path);
+  async deleteFile(paths) {
+    paths.forEach((Element) => {
+      this.model.deleteFile(Element);
+    });
   }
 }
 

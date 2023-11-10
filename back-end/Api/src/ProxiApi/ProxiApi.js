@@ -111,6 +111,30 @@ class ProxiApi {
       const toListDirPath = path.join(userDirPath, requestData);
       try {
         const response = await this.directoryHandler.listContent(toListDirPath);
+        console.log(response);
+        return res.end(JSON.stringify({ status: true, files: response }));
+      } catch (e) {
+        res.statusCode = 500;
+        return res.end(JSON.stringify({ status: false, message: e.message }));
+      }
+    });
+  };
+
+  listContentTree = async (req, res) => {
+    const sessionUserId = req.headers["user-id"];
+    const startPath = path.resolve(__dirname, "../..");
+    const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
+
+    let body = "";
+    req.on("data", async (chunk) => {
+      body += chunk.toString();
+      const requestData = body ? JSON.parse(body) : {};
+
+      const toListDirPath = path.join(userDirPath, requestData);
+      try {
+        const response = await this.directoryHandler.listContentTree(
+          toListDirPath
+        );
 
         return res.end(JSON.stringify({ status: true, files: response }));
       } catch (e) {
