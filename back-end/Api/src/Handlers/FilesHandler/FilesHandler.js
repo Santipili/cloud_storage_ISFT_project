@@ -37,10 +37,10 @@ class FilesHandler {
     });
   };
 
-  download = (res, downloadFilePath) => {
-    const basePath = "uploads";
-    const fileToDownload = path.join(basePath, downloadFilePath)
-    fs.readFile(fileToDownload, (readErr, data) => {
+  download = (res, filePath, downloadFilePath) => {
+    // const basePath = "uploads";
+    // const fileToDownload = path.join(basePath, downloadFilePath)
+    fs.readFile(filePath, (readErr, data) => {
       if (readErr) {
         console.error("Error al encontrar el archivo", readErr);
         res.status(500).send("Error al descargar el archivo");
