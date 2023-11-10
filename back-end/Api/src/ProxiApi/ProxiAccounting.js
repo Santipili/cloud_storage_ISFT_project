@@ -8,10 +8,10 @@ class ProxiAccounting {
   }
 
   login = async (req, res) => {
-    try {
-      let body = "";
-      req.on("data", async (chunk) => {
-        body += chunk.toString();
+    let body = "";
+    req.on("data", async (chunk) => {
+      body += chunk.toString();
+      try {
         const requestData = body ? JSON.parse(body) : {};
 
         const response = await this.sessionHandler.login(
@@ -19,27 +19,17 @@ class ProxiAccounting {
           requestData.password
         );
 
-        if (response.status == true) {
-          return res.end(JSON.stringify(response));
-        } else {
-          res.statusCode = 500;
-          return res.end(
-            JSON.stringify({
-              status: false,
-              message: "Error al iniciar sesión",
-            })
-          );
-        }
-      });
-    } catch (error) {
-      res.statusCode = 500;
-      return res.end(
-        JSON.stringify({
-          status: false,
-          message: "Error al procesar la solicitud",
-        })
-      );
-    }
+        return res.end(JSON.stringify(response));
+      } catch (error) {
+        res.statusCode = 500;
+        return res.end(
+          JSON.stringify({
+            status: false,
+            message: "Error username or password ",
+          })
+        );
+      }
+    });
   };
 
   logout = async (req, res) => {
@@ -48,7 +38,7 @@ class ProxiAccounting {
     try {
       const response = await this.sessionHandler.logout(sessionUserId);
       console.log(response);
-      return res.end(JSON.stringify({ status: true, message: response }));
+      return res.end(JSON.stringify(response));
     } catch (e) {
       res.statusCode = 500;
       return res.end(

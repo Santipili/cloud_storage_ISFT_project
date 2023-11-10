@@ -7,14 +7,16 @@ class ModalWindowView extends HTMLElement {
 
   #_innerContent = undefined;
 
-  constructor() {
+  constructor(elements = []) {
     super();
 
     this.classList.add("mainContainer");
     const style = document.createElement("style");
     style.innerHTML = `@import 'web-components/x-fileSystem-Explorer/WCs/modalwindow/style/style.css';`;
     this.contentChild = document.createElement("div");
-
+    if (elements.length > 0) {
+      this.appendChild(elements[0]);
+    }
     this.contentChild.classList.add("constentChill");
     this.appendChild(style);
 

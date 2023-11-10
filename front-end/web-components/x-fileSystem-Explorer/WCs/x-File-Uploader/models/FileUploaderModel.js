@@ -1,16 +1,21 @@
+import { LocalStorageHandler } from "../../../../../common/LocalStorageHandler.js";
+
 class FileUploaderModel extends EventTarget {
   constructor() {
     super();
+    this.localStorageHandler = new LocalStorageHandler();
   }
 
   async FileUploaderToServer(formData) {
-    
+    const userId = this.localStorageHandler.getOfLocalStorage("userId");
+
     const url = "http://localhost:3000/filesHandler/upload";
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
 
       xhr.open("POST", url, true);
+      xhr.setRequestHeader("user-id", userId);
 
       xhr.upload.addEventListener("progress", (event) => {
         if (event.lengthComputable) {

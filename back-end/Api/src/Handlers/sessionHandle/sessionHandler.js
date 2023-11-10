@@ -16,10 +16,13 @@ class SessionHandler {
           userAndPass.has(userName) &&
           userAndPass.get(userName) === password
         ) {
-          const userId = await this.db.getuserIdByUserName(userName);
+          const userId = this.db.getuserIdByUserName(userName);
           resolve({ status: true, message: "login success", data: userId });
         } else {
-          reject({ status: false, message: "An error occurred during login" });
+          return reject({
+            status: false,
+            message: "An error occurred during login",
+          });
         }
       } catch (error) {
         console.log(error);

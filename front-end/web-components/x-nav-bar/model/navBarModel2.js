@@ -11,18 +11,16 @@ class navBarModel2 {
       const userId = this.localStorageH.getOfLocalStorage("userId");
       const token = this.localStorageH.getOfLocalStorage("Token");
 
-      if (userId && token) {
-        let response = await this.apiClient.makeApiCall(
-          "sessionhandler/logout",
-          "POST",
-          null,
-          token,
-          userId
-        );
-        this.localStorageH.cleanLocalStorage();
-        console.log(response);
-        return response;
-      }
+      let response = await this.apiClient.makeApiCall(
+        "sessionhandler/logout",
+        "POST",
+        null,
+        "hsavhavdhavdha",
+        userId
+      );
+      this.localStorageH.cleanLocalStorage();
+
+      return response;
     } catch (error) {
       console.log(error);
     }

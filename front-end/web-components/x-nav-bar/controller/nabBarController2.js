@@ -21,7 +21,7 @@ class navBarController2 {
   async onButtomLogOutClick(e) {
     let res = await this.model.logout();
     console.log(res);
-    /*  if (res) {
+    if (res) {
       window.dispatchEvent(
         new CustomEvent("trigger-alert-instance", { detail: res.message })
       );
@@ -30,7 +30,7 @@ class navBarController2 {
       window.dispatchEvent(
         new CustomEvent("trigger-alert-instance", { detail: res.message })
       );
-    } */
+    }
   }
 }
 

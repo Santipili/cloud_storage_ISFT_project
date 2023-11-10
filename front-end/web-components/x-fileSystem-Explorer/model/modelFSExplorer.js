@@ -39,6 +39,38 @@ class ModelFSExplorer {
       console.log(error);
     }
   }
+
+  async downloadFile(path) {
+    const userId = this.localStorageH.getOfLocalStorage("userId");
+    try {
+      let response = await this.apiClient.makeApiCall(
+        "filehandler/download",
+        "POST",
+        path,
+        "hsavhavdhavdha",
+        userId
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async createFolder(path) {
+    const userId = this.localStorageH.getOfLocalStorage("userId");
+    try {
+      let response = await this.apiClient.makeApiCall(
+        "directoryHandler/create",
+        "POST",
+        path,
+        "hsavhavdhavdha",
+        userId
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 export { ModelFSExplorer };
