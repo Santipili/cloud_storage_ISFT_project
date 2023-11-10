@@ -11,7 +11,7 @@ class FileUploader extends HTMLElement {
     this.controller = new FileUploaderController(this.view, this.model);
 
     let style = document.createElement("style");
-    style.innerText = `@import './web-components/x-File-Uploader/style/style.css'`;
+    style.innerText = `@import './web-components/x-fileSystem-Explorer/WCs/x-File-Uploader/style/style.css';`;
     this.appendChild(style);
     this.appendChild(this.view);
   }

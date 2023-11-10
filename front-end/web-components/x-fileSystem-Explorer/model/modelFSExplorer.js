@@ -8,7 +8,7 @@ class ModelFSExplorer {
   async getServerDirectoris(toListDir) {
     try {
       let response = await this.apiClient.makeApiCall(
-        "directoryHandler/list",
+        "directoryHandler/listcontent",
         "POST",
         toListDir,
         "hsavhavdhavdha",
@@ -20,13 +20,11 @@ class ModelFSExplorer {
     }
   }
   async deleteFile(path) {
-    const [pathToDelte] = path;
-    console.log(pathToDelte);
     try {
       let response = await this.apiClient.makeApiCall(
         "directoryHandler/delete",
         "POST",
-        pathToDelte,
+        path,
         "hsavhavdhavdha",
         "1"
       );

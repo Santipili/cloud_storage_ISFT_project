@@ -46,7 +46,7 @@ class DirectoryHandler {
     });
   }
 
-  listContent(toListDir) {
+  listContentTree(toListDir) {
     console.log(toListDir);
     return new Promise((resolve, reject) => {
       if (fs.existsSync(toListDir)) {
@@ -59,6 +59,45 @@ class DirectoryHandler {
           reject({ status: false, message: err });
           console.error(err);
         }
+      } else {
+        reject({ status: false, message: "La ruta del directorio no existe!" });
+      }
+    });
+  }
+
+  listContent(toListDir) {
+    return new Promise((resolve, reject) => {
+      if (fs.existsSync(toListDir)) {
+        fs.readdir(toListDir, (error, filesList) => {
+          if (error) {
+            console.error("Error al leer el directorio:", error);
+            reject({ status: false, message: "Error al leer el directorio" });
+          }
+          let filepath;
+          let listDocuments = [];
+
+          filesList.forEach((file) => {
+            filepath = toListDir + file;
+            console.log(filepath);
+            if (fs.lstatSync(filepath).isDirectory()) {
+              listDocuments.push({
+                name: file,
+                type: "folder",
+                path: filepath,
+              });
+            } else {
+              listDocuments.push({
+                name: file,
+                type: "file",
+                path: filepath,
+                size: fs.lstatSync(filepath).size,
+                date: fs.lstatSync(filepath).mtime.toLocaleString(),
+              });
+            }
+          });
+
+          resolve(listDocuments);
+        });
       } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }
