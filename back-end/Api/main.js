@@ -5,12 +5,15 @@ const {
   DirectoryHandler,
 } = require("./src/Handlers/DirectoryHandler/DirectoryHandler.js");
 
+const { ProxiAccounting } = require("./src/ProxiApi/ProxiAccounting.js");
+
 const app = new Server();
 const port = process.env.PORT || 3000;
 const directoryHandler = new DirectoryHandler();
 const fileHandler = new FilesHandler();
 
 const proxiApi = new ProxiApi("uploads", fileHandler, directoryHandler);
+const proxiAccounting = new ProxiAccounting();
 
 app.get("/", (req, res) => {
   res.setHeader("Content-Type", "text/plain");
@@ -18,6 +21,10 @@ app.get("/", (req, res) => {
 });
 
 // TODO : CHECK AFTER MERGE
+
+app.post("/sessionhandler/login", proxiAccounting.login);
+app.post("/sessionhandler/logout", proxiAccounting.logout);
+
 app.post("/filesHandler/upload", proxiApi.uploadFiles);
 
 app.post("/directoryHandler/rename", proxiApi.renameDirectory);
