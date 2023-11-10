@@ -27,6 +27,7 @@ app.post("/directoryHandler/list", proxiApi.listDirectory);
 app.post("/directoryHandler/properties", proxiApi.getDirProperties);
 app.post("/directoryHandler/copy", proxiApi.copyDirectory);
 app.post("/directoryHandler/move", proxiApi.moveDirectory);
+app.post("/filesHandler/download", proxiApi.downloadFile);
 
 app.start(port);
 

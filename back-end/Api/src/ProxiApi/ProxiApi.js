@@ -19,17 +19,42 @@ class ProxiApi {
   };
 
   downloadFile = async (req, res) => {
-    const fileName = req.header["file-name"];
+
     const userId = req.headers["user-id"];
-    const startPath = pat.resolve(__dirname, "../..");
+    const startPath = path.resolve(__dirname, "../..");
     const userDirPath = path.join(startPath, this.uploadDir,userId);
-    const filePath = path.join(userDirPath, fileName);
-    try {
-      this.fileHandler.download(res, filePath, fileName);
-    } catch (e) {
-      res.statusCode = 500;
-      return res.end(JSON.stringify({ status: false, message: e.message }));
-    }
+
+    let body = "";
+    req.on("data", async (chunk) => {
+      body += chunk.toString();
+      const requestData = body ? JSON.parse(body) : {};
+      const filePath = path.join(userDirPath, requestData.file);
+      try {
+        let response = await this.fileHandler.download(filePath);
+  
+        let headers = {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
+          "Access-Control-Allow-Headers": 
+           "content-type, session-token, user-id, Content-disposition",
+          "Content-Type": "application/octet-stream",
+          "Content-disposition": "attachment; filename="+response.fileName  
+        };
+  
+        if (response.status){    
+            res.writeHead(200, headers);
+            console.log(response.data);
+            res.end(JSON.stringify(response));
+        }
+  
+      } catch (e) {
+        console.log(e);
+        res.statusCode = 500;
+        return res.end(JSON.stringify({ status: false, message: e.message }));
+      }
+    })
+
+   
   }
 
   deleteFile(uploadDir, fileName) {
@@ -122,7 +147,7 @@ class ProxiApi {
       body += chunk.toString();
       const requestData = body ? JSON.parse(body) : {};
 
-      const toListDirPath = path.join(userDirPath, requestData);
+      const toListDirPath = path.join(userDirPath, requestData.toListDir);
       try {
         const response = await this.directoryHandler.listContent(toListDirPath);
 

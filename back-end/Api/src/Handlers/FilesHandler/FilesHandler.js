@@ -37,19 +37,38 @@ class FilesHandler {
     });
   };
 
-  download = (res, filePath, downloadFilePath) => {
+  download = async (filePath) => {
     // const basePath = "uploads";
-    // const fileToDownload = path.join(basePath, downloadFilePath)
-    fs.readFile(filePath, (readErr, data) => {
-      if (readErr) {
-        console.error("Error al encontrar el archivo", readErr);
-        res.status(500).send("Error al descargar el archivo");
-      } else {
-        res.setHeader('Content-disposition', 'attachment; filename=' + fileToDownload);
-        res.setHeader('Content-type', 'application/octet-stream');
-        res.write(data, 'binary');
+    // const fileToDownload = path.join(basePath, fileName)
+    
+    return new Promise((resolve, reject) => {
+      console.log(fs.existsSync(filePath))
+      if (!fs.existsSync(filePath)) {
+
+        reject({ status: false, message: "Error al encontrar el archivo" });
       }
-    });
+      else {
+
+        let FileName = path.basename(filePath);
+        
+        
+        fs.readFile(filePath, (readErr, Data) => {
+          if (readErr) {
+            
+            reject({ status: false, message: "File not found" });
+
+          } else {
+            
+            resolve({ status: true, data: Data, fileName: FileName });
+          }
+        });
+      }
+    }) 
+      
+
+    
+
+
   }
 
   __writeFilePath(currentPath, uploadedPath) {
