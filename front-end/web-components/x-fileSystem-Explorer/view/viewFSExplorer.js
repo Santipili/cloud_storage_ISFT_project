@@ -1,14 +1,13 @@
 import { ModalWindowView } from "../WCs/modalwindow/x-modalWindow.js";
 import { QuestionDialog } from "../WCs/questionDialog/x-questionDialog.js";
+import { FileUploader } from "../WCs/x-File-Uploader/FileUploader.js";
 
 class ViewFSExplorer extends HTMLElement {
   constructor() {
     super();
 
+    this.fileUploader = new FileUploader();
     this.modal = new ModalWindowView();
-    this.questionDialog = new QuestionDialog();
-
-    this.questionDialog.options = {};
 
     // Crear un shadow DOM
     const shadowRoot = this.attachShadow({ mode: "open" });
@@ -192,6 +191,7 @@ class ViewFSExplorer extends HTMLElement {
 
   renderFileSystem(data) {
     this.tbody.innerHTML = "";
+    this.selectPath = [];
 
     data.forEach((fileInfo) => {
       const name = fileInfo.name;
@@ -236,6 +236,10 @@ class ViewFSExplorer extends HTMLElement {
       const path = this.basePath + name;
 
       inputCheckbox.setAttribute("x-path", path);
+      if (this.selectPath.includes(path)) {
+        console.log(" fund");
+        inputCheckbox.checked = true;
+      }
       nameLink.setAttribute("x-path", path);
 
       nameCell.appendChild(nameLink);
@@ -250,16 +254,21 @@ class ViewFSExplorer extends HTMLElement {
 
       this.tbody.appendChild(row);
 
+      if (this.selectPath.length <= 0) {
+        this.__removeEventListeners();
+      }
       inputCheckbox.addEventListener("change", (event) => {
         const filename = event.target.getAttribute("x-path");
         let path = this.currentPath + filename;
-        if (event.target.checked) {
+        if (!this.selectPath.includes(path)) {
           this.selectPath.push(path);
+          console.log(this.selectPath);
         } else {
           const index = this.selectPath.indexOf(path);
           if (index !== -1) {
             this.selectPath.splice(index, 1);
           }
+          console.log(this.selectPath);
         }
 
         if (this.selectPath.length > 0) {
@@ -307,12 +316,14 @@ class ViewFSExplorer extends HTMLElement {
   }
 
   async downloadSelected() {
+    this.questionDialog = new QuestionDialog();
     this.questionDialog.options = {
       titleText: "Alert",
       questionText: "Do you want to download  files?",
       confirmText: "Confirm",
       cancelText: "Cancel",
     };
+
     this.modal.content = this.questionDialog;
 
     this.modal.open();
@@ -329,6 +340,9 @@ class ViewFSExplorer extends HTMLElement {
   }
 
   async moveSelected() {
+    let input = document.createElement("input");
+    this.questionDialog = new QuestionDialog([input]);
+
     this.questionDialog.options = {
       titleText: "Alert",
       questionText: "Do you want to move these files?",
@@ -351,12 +365,16 @@ class ViewFSExplorer extends HTMLElement {
   }
 
   async renameSelected() {
+    let input = document.createElement("input");
+    this.questionDialog = new QuestionDialog([input]);
+
     this.questionDialog.options = {
       titleText: "Alert",
       questionText: "Do you want to rename ?",
       confirmText: "Confirm",
       cancelText: "Cancel",
     };
+
     this.modal.content = this.questionDialog;
 
     this.modal.open();
@@ -373,6 +391,7 @@ class ViewFSExplorer extends HTMLElement {
   }
 
   async deleteSelected() {
+    this.questionDialog = new QuestionDialog();
     this.questionDialog.options = {
       titleText: "Alert",
       questionText: "Do you want to delete these files?",
@@ -395,12 +414,41 @@ class ViewFSExplorer extends HTMLElement {
   }
 
   async createFolder() {
+    let input = document.createElement("input");
+    this.questionDialog = new QuestionDialog([input]);
+
     this.questionDialog.options = {
-      titleText: "Alert",
-      questionText: "Do you want to crete a folder?",
+      titleText: "Create Folder",
+      questionText: "Write the name of the folder",
       confirmText: "Confirm",
       cancelText: "Cancel",
     };
+
+    this.modal.content = this.questionDialog;
+
+    this.modal.open();
+    const response = await this.questionDialog.response;
+
+    if (response == true) {
+      this.dispatchEvent(
+        new CustomEvent("click-createFolder-button", {
+          detail: this.currentPath + "/" + input.value,
+        })
+      );
+      this.modal.close();
+    } else {
+      this.modal.close();
+    }
+  }
+
+  async uploadFile() {
+    this.questionDialog = new QuestionDialog([this.fileUploader]);
+
+    this.questionDialog.options = {
+      confirmText: "Confirm",
+      cancelText: "Cancel",
+    };
+
     this.modal.content = this.questionDialog;
 
     this.modal.open();
@@ -416,10 +464,6 @@ class ViewFSExplorer extends HTMLElement {
     }
   }
 
-  async uploadFile() {
-    this.dispatchEvent(new CustomEvent("click-upload-button"));
-  }
-
   __setEventListeners() {
     this.downloadBtn.addEventListener("click", this.downloadSelectedHandler);
     this.moveBtn.addEventListener("click", this.moveSelectedHandler);
@@ -428,7 +472,6 @@ class ViewFSExplorer extends HTMLElement {
   }
 
   __removeEventListeners() {
-    console.log("removeEventListeners");
     this.downloadBtn.removeEventListener("click", this.downloadSelectedHandler);
     this.moveBtn.removeEventListener("click", this.moveSelectedHandler);
     this.renameBtn.removeEventListener("click", this.renameSelectedHandler);

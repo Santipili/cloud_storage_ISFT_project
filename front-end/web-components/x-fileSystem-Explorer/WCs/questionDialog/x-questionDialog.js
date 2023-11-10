@@ -1,5 +1,5 @@
 class QuestionDialog extends HTMLElement {
-  constructor() {
+  constructor(elements = []) {
     super();
     this.classList.add("Maincontainer");
 
@@ -33,8 +33,12 @@ class QuestionDialog extends HTMLElement {
 
     this.header.appendChild(this.dialogTitle);
     this.bodyContent.appendChild(this.question);
+
     this.footer.appendChild(this.confirmButton);
     this.footer.appendChild(this.cancelButton);
+    if (elements.length > 0) {
+      this.bodyContent.appendChild(elements[0]);
+    }
 
     this.appendChild(style);
 
@@ -44,10 +48,10 @@ class QuestionDialog extends HTMLElement {
   }
 
   set options(options) {
-    this.dialogTitle.innerText = options.titleText;
-    this.question.innerText = options.questionText;
-    this.confirmButton.innerText = options.confirmText;
-    this.cancelButton.innerText = options.cancelText;
+    this.dialogTitle.innerText = options.titleText ?? "";
+    this.question.innerText = options.questionText ?? "";
+    this.confirmButton.innerText = options.confirmText ?? "";
+    this.cancelButton.innerText = options.cancelText ?? "";
   }
 
   get response() {

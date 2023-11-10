@@ -1,10 +1,7 @@
-import { FileUploader } from "../WCs/x-File-Uploader/FileUploader.js";
-
 class ControllerFSExplorer {
   constructor(innerView, innerModel) {
     this.view = innerView;
     this.model = innerModel;
-    this.fileUploader = new FileUploader();
   }
 
   enable() {
@@ -18,8 +15,12 @@ class ControllerFSExplorer {
       this.view.renderFileSystem(res.files);
     });
 
-    this.view.addEventListener("click-upload-button", async (d) => {
-      document.body.appendChild(this.fileUploader);
+    this.view.addEventListener("click-download-button", async (d) => {
+      await this.onDownloadButonClick();
+    });
+
+    this.view.addEventListener("click-createFolder-button", async (d) => {
+      await this.model.createFolder(d.detail);
     });
   }
 
@@ -34,6 +35,10 @@ class ControllerFSExplorer {
     paths.forEach((Element) => {
       this.model.deleteFile(Element);
     });
+  }
+
+  async onDownloadButonClick() {
+    const res = await this.model.downloadFile();
   }
 }
 

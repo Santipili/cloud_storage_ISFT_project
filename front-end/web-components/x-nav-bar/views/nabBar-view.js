@@ -15,17 +15,10 @@ class navBarView extends HTMLElement {
     this.rightContainer = document.createElement("div");
     this.rightContainer.classList.add("right-container");
 
-    this.logInLink = document.createElement("a");
-    this.logInLink.classList.add("nav-link");
-    this.logInLink.textContent = "Log In";
-    this.logInLink.href = "/login";
-
     this.appendChild(this.navBar);
     this.navBar.appendChild(this.leftContainer);
     this.navBar.appendChild(this.rightContainer);
     this.leftContainer.appendChild(this.homeLink);
-
-    this.rightContainer.appendChild(this.logInLink);
   }
 }
 
