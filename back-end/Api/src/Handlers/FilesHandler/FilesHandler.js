@@ -37,6 +37,21 @@ class FilesHandler {
     });
   };
 
+  download = (res, downloadFilePath) => {
+    const basePath = "uploads";
+    const fileToDownload = path.join(basePath, downloadFilePath)
+    fs.readFile(fileToDownload, (readErr, data) => {
+      if (readErr) {
+        console.error("Error al encontrar el archivo", readErr);
+        res.status(500).send("Error al descargar el archivo");
+      } else {
+        res.setHeader('Content-disposition', 'attachment; filename=' + fileToDownload);
+        res.setHeader('Content-type', 'application/octet-stream');
+        res.write(data, 'binary');
+      }
+    });
+  }
+
   __writeFilePath(currentPath, uploadedPath) {
     fs.readFile(currentPath, (readErr, data) => {
       if (readErr) {

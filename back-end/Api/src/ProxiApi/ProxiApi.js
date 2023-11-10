@@ -18,6 +18,20 @@ class ProxiApi {
     }
   };
 
+  downloadFile = async (req, res) => {
+    const fileName = req.header["file-name"];
+    const userId = req.headers["user-id"];
+    const startPath = pat.resolve(__dirname, "../..");
+    const userDirPath = path.join(startPath, this.uploadDir,userId);
+    const filePath = path.join(userDirPath, fileName);
+    try {
+      this.fileHandler.download(res, filePath, fileName);
+    } catch (e) {
+      res.statusCode = 500;
+      return res.end(JSON.stringify({ status: false, message: e.message }));
+    }
+  }
+
   deleteFile(uploadDir, fileName) {
     const filesHandler = new FilesHandler();
     filesHandler.delete(uploadDir, fileName);
