@@ -1,6 +1,13 @@
+import { ModalWindowView } from "../WCs/modalwindow/x-modalWindow.js";
+import { QuestionDialog } from "../WCs/questionDialog/x-questionDialog.js";
+import { FileUploader } from "../WCs/x-File-Uploader/FileUploader.js";
+
 class ViewFSExplorer extends HTMLElement {
   constructor() {
     super();
+
+    this.fileUploader = new FileUploader();
+    this.modal = new ModalWindowView();
 
     // Crear un shadow DOM
     const shadowRoot = this.attachShadow({ mode: "open" });
@@ -35,37 +42,90 @@ class ViewFSExplorer extends HTMLElement {
     // Botones para realizar acciones
     this.actionButtons = document.createElement("div");
     this.actionButtons.classList.add("actionButtons");
+
+    this.backButton = document.createElement("button");
+    this.backButton.classList.add("buttonBack");
+
+    // Crea el elemento contenedor div
+    const buttonBox = document.createElement("div");
+    buttonBox.classList.add("buttonBack-box");
+
+    // Primer elemento span con el primer svg
+    const buttonElem1 = document.createElement("span");
+    buttonElem1.classList.add("buttonBack-elem");
+
+    // Crea el primer elemento `svg`
+    const svg1 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg1.setAttribute("viewBox", "0 0 46 40");
+
+    // Crea el primer elemento `path` y establece sus atributos
+    const path1 = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "path"
+    );
+    path1.setAttribute(
+      "d",
+      "M46 20.038c0-.7-.3-1.5-.8-2.1l-16-17c-1.1-1-3.2-1.4-4.4-.3-1.2 1.1-1.2 3.3 0 4.4l11.3 11.9H3c-1.7 0-3 1.3-3 3s1.3 3 3 3h33.1l-11.3 11.9c-1 1-1.2 3.3 0 4.4 1.2 1.1 3.3.8 4.4-.3l16-17c.5-.5.8-1.1.8-1.9"
+    );
+
+    // Agrega el elemento `path` al primer `svg`
+    svg1.appendChild(path1);
+
+    // Agrega el primer `svg` al primer elemento span
+    buttonElem1.appendChild(svg1);
+
+    // Segundo elemento span con el segundo svg (repite el proceso similar al primero)
+    const buttonElem2 = document.createElement("span");
+    buttonElem2.classList.add("buttonBack-elem");
+
+    const svg2 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg2.setAttribute("viewBox", "0 0 46 40");
+
+    const path2 = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "path"
+    );
+    path2.setAttribute(
+      "d",
+      "M46 20.038c0-.7-.3-1.5-.8-2.1l-16-17c-1.1-1-3.2-1.4-4.4-.3-1.2 1.1-1.2 3.3 0 4.4l11.3 11.9H3c-1.7 0-3 1.3-3 3s1.3 3 3 3h33.1l-11.3 11.9c-1 1-1.2 3.3 0 4.4 1.2 1.1 3.3.8 4.4-.3l16-17c.5-.5.8-1.1.8-1.9"
+    );
+
+    svg2.appendChild(path2);
+    buttonElem2.appendChild(svg2);
+
+    // Agrega ambos elementos span al elemento contenedor div
+    buttonBox.appendChild(buttonElem1);
+    buttonBox.appendChild(buttonElem2);
+
+    // Agrega el elemento contenedor div al botón
+    this.backButton.appendChild(buttonBox);
+
     this.downloadBtn = document.createElement("button");
     this.downloadBtn.textContent = "Download";
     this.downloadBtn.id = "downloadBtn";
-    this.downloadBtn.addEventListener("click", () => this.downloadSelected());
 
     this.moveBtn = document.createElement("button");
     this.moveBtn.textContent = "Move";
     this.moveBtn.id = "moveBtn";
-    this.moveBtn.addEventListener("click", () => this.moveSelected());
 
     this.renameBtn = document.createElement("button");
     this.renameBtn.textContent = "Rename";
     this.renameBtn.id = "renameBtn";
-    this.renameBtn.addEventListener("click", () => this.renameSelected());
 
     this.deleteBtn = document.createElement("button");
     this.deleteBtn.textContent = "Delete";
     this.deleteBtn.classList.add("deleteBtn");
     this.deleteBtn.id = "deleteBtn";
-    this.deleteBtn.addEventListener("click", () => this.deleteSelected());
 
     this.newFolderBtn = document.createElement("button");
     this.newFolderBtn.textContent = "New Folder";
     this.newFolderBtn.id = "newFolderBtn";
-    this.newFolderBtn.addEventListener("click", () => this.createFolder());
 
     this.uploadBtn = document.createElement("button");
     this.uploadBtn.textContent = "Upload file";
     this.uploadBtn.id = "uploadBtn";
-    this.uploadBtn.addEventListener("click", () => this.uploadFile());
 
+    this.actionButtons.appendChild(this.backButton);
     this.actionButtons.appendChild(this.downloadBtn);
     this.actionButtons.appendChild(this.moveBtn);
     this.actionButtons.appendChild(this.renameBtn);
@@ -87,6 +147,8 @@ class ViewFSExplorer extends HTMLElement {
     /* --------------------------------------------------- */
 
     this.extensionIcons = {
+      default:
+        "./web-components/x-fileSystem-Explorer/style/icon-png/icons8-file-50.png",
       txt: "./web-components/x-fileSystem-Explorer/style/icon-png/icons8-txt-50.png",
       doc: "./web-components/x-fileSystem-Explorer/style/icon-png/icons8-doc-48.png",
       jpg: "./web-components/x-fileSystem-Explorer/style/icon-png/icons8-jpg-48.png",
@@ -101,149 +163,319 @@ class ViewFSExplorer extends HTMLElement {
       png: "./web-components/x-fileSystem-Explorer/style/icon-png/icons8-png-64.png",
     };
 
+    this.basePath = "/";
     /* ------------------------------------------------------ */
 
-    this.fileSystemTree;
-
     this.selectPath = [];
+
+    /* ------------------------------------------------------ */
+
+    this.currentPath = "";
+
+    /* ------------------------------------------------------ */
+
+    this.backButton.addEventListener("click", this.onButtnBack.bind(this));
+    this.uploadBtn.addEventListener("click", this.uploadFile.bind(this));
+    this.newFolderBtn.addEventListener("click", this.createFolder.bind(this));
+
+    /* ------------------------------------------------------ */
+    this.downloadSelectedHandler = this.downloadSelected.bind(this);
+    this.moveSelectedHandler = this.moveSelected.bind(this);
+    this.renameSelectedHandler = this.renameSelected.bind(this);
+    this.deleteSelectedHandler = this.deleteSelected.bind(this);
+
+    /* ------------------------------------------------------ */
   }
 
   connectedCallback() {}
 
-  renderFileSystem(data, basePath = "/") {
+  renderFileSystem(data) {
     this.tbody.innerHTML = "";
+    this.selectPath = [];
 
-    for (const [name, fileInfo] of Object.entries(data)) {
-      if (fileInfo.type) {
-        const row = document.createElement("tr");
-        const checkBox = document.createElement("td");
-        const inputCheckbox = document.createElement("input");
-        inputCheckbox.setAttribute("type", "checkbox");
-        checkBox.appendChild(inputCheckbox);
+    data.forEach((fileInfo) => {
+      const name = fileInfo.name;
+      const type = fileInfo.type;
 
-        const typeCell = document.createElement("td");
-        const nameCell = document.createElement("td");
-        const sizeCell = document.createElement("td");
-        const timeCell = document.createElement("td");
-        const pathCell = document.createElement("td");
+      const row = document.createElement("tr");
+      const checkBox = document.createElement("td");
+      const inputCheckbox = document.createElement("input");
+      inputCheckbox.setAttribute("type", "checkbox");
+      checkBox.appendChild(inputCheckbox);
 
-        const extension = name.split(".").pop();
-        const icon =
-          this.extensionIcons[extension] ||
+      const typeCell = document.createElement("td");
+      const nameCell = document.createElement("td");
+      const sizeCell = document.createElement("td");
+      const timeCell = document.createElement("td");
+
+      let icon;
+
+      if (fileInfo.type === "folder") {
+        icon =
           "./web-components/x-fileSystem-Explorer/style/icon-png/icon-folder.png";
+      } else {
+        const extension = name.split(".").pop();
+        icon = this.extensionIcons[extension] || this.extensionIcons.default;
+      }
 
-        const iconImage = document.createElement("img");
-        iconImage.src = icon;
-        iconImage.style.width = "25px";
-        iconImage.style.height = "25px";
-        iconImage.style.marginRight = "auto";
+      const iconImage = document.createElement("img");
+      iconImage.src = icon;
+      iconImage.style.width = "25px";
+      iconImage.style.height = "25px";
+      iconImage.style.marginRight = "auto";
 
-        typeCell.appendChild(iconImage);
+      typeCell.appendChild(iconImage);
 
-        const nameLink = document.createElement("a");
-        nameLink.textContent = name;
-        nameLink.setAttribute("x-type", fileInfo.type);
-        nameLink.href = "#";
+      const nameLink = document.createElement("a");
+      nameLink.textContent = name;
+      nameLink.setAttribute("x-type", type);
+      nameLink.href = "#";
 
-        inputCheckbox.setAttribute("x-type", fileInfo.type);
+      inputCheckbox.setAttribute("x-type", type);
 
-        const path = basePath + name + "/";
+      const path = this.basePath + name;
 
-        inputCheckbox.setAttribute("x-path", path);
+      inputCheckbox.setAttribute("x-path", path);
+      if (this.selectPath.includes(path)) {
+        console.log(" fund");
+        inputCheckbox.checked = true;
+      }
+      nameLink.setAttribute("x-path", path);
 
-        inputCheckbox.addEventListener("change", (event) => {
-          const path = event.target.getAttribute("x-path");
+      nameCell.appendChild(nameLink);
+      sizeCell.textContent = fileInfo.size ? fileInfo.size + " KB" : "";
+      timeCell.textContent = fileInfo.date || "";
+
+      row.appendChild(checkBox);
+      row.appendChild(typeCell);
+      row.appendChild(nameCell);
+      row.appendChild(sizeCell);
+      row.appendChild(timeCell);
+
+      this.tbody.appendChild(row);
+
+      if (this.selectPath.length <= 0) {
+        this.__removeEventListeners();
+      }
+      inputCheckbox.addEventListener("change", (event) => {
+        const filename = event.target.getAttribute("x-path");
+        let path = this.currentPath + filename;
+        if (!this.selectPath.includes(path)) {
           this.selectPath.push(path);
           console.log(this.selectPath);
+        } else {
+          const index = this.selectPath.indexOf(path);
+          if (index !== -1) {
+            this.selectPath.splice(index, 1);
+          }
+          console.log(this.selectPath);
+        }
+
+        if (this.selectPath.length > 0) {
+          this.__setEventListeners();
+        } else {
+          this.__removeEventListeners();
+        }
+      });
+
+      if (fileInfo.type == "folder") {
+        nameCell.style.cursor = "pointer";
+        nameLink.addEventListener("click", (event) => {
+          event.preventDefault();
+          const path = event.target.getAttribute("x-path");
+          this.addPathToCurrentPath(path);
+          this.openFolder(this.currentPath + this.basePath);
         });
-
-        nameCell.appendChild(nameLink);
-        sizeCell.textContent = fileInfo.size ? fileInfo.size + " KB" : "";
-        timeCell.textContent = fileInfo.date || "";
-
-        // ... (otros detalles como el enlace al directorio padre)
-
-        row.appendChild(checkBox);
-        row.appendChild(typeCell);
-        row.appendChild(nameCell);
-        row.appendChild(sizeCell);
-        row.appendChild(timeCell);
-        row.appendChild(pathCell);
-
-        this.tbody.appendChild(row);
-      }
-    }
-
-    this.tbody.querySelectorAll("tr").forEach((row) => {
-      const name = row.querySelector("td:nth-child(3) a").textContent;
-      if (data[name] && typeof data[name] === "object") {
-        row
-          .querySelector("td:nth-child(3) a")
-          .addEventListener("click", (event) => {
-            const attribute = event.target.getAttribute("x-type");
-
-            if (attribute == "directory") {
-              const path = event.target.getAttribute("x-path");
-              event.preventDefault();
-
-              this.openFolder(name, path);
-            }
-          });
       }
     });
   }
 
-  openFolder(name, basePath) {
-    if (
-      this.fileSystemTree[name] &&
-      typeof this.fileSystemTree[name] === "object"
-    ) {
-      this.fileSystemTree = this.fileSystemTree[name];
-      this.renderFileSystem(this.fileSystemTree, basePath);
+  openFolder(Path) {
+    this.dispatchEvent(new CustomEvent("click-folder", { detail: Path }));
+  }
+
+  getCurrentPath() {
+    return this.currentPath;
+  }
+
+  addPathToCurrentPath(addedPath) {
+    this.currentPath += addedPath;
+  }
+
+  removeLastPath() {
+    const segments = this.currentPath.split("/");
+    if (segments.length > 1) {
+      this.currentPath = segments.slice(0, segments.length - 1).join("/");
     }
   }
 
-  __setFileSystemTree(FStree) {
-    this.fileSystemTree = FStree;
+  onButtnBack() {
+    this.removeLastPath();
+
+    this.openFolder(this.currentPath + this.basePath);
   }
 
-  downloadSelected() {
-    // Implementa la lógica para descargar los elementos seleccionados
-    alert("Descargando elementos seleccionados");
+  async downloadSelected() {
+    this.questionDialog = new QuestionDialog();
+    this.questionDialog.options = {
+      titleText: "Alert",
+      questionText: "Do you want to download  files?",
+      confirmText: "Confirm",
+      cancelText: "Cancel",
+    };
+
+    this.modal.content = this.questionDialog;
+
+    this.modal.open();
+    const response = await this.questionDialog.response;
+
+    if (response == true) {
+      this.dispatchEvent(
+        new CustomEvent("click-download-button", { detail: this.selectPath })
+      );
+      this.modal.close();
+    } else {
+      this.modal.close();
+    }
   }
 
-  moveSelected() {
-    // Implementa la lógica para mover los elementos seleccionados
-    alert("Moviendo elementos seleccionados");
+  async moveSelected() {
+    let input = document.createElement("input");
+    this.questionDialog = new QuestionDialog([input]);
+
+    this.questionDialog.options = {
+      titleText: "Alert",
+      questionText: "Do you want to move these files?",
+      confirmText: "Confirm",
+      cancelText: "Cancel",
+    };
+    this.modal.content = this.questionDialog;
+
+    this.modal.open();
+    const response = await this.questionDialog.response;
+
+    if (response == true) {
+      this.dispatchEvent(
+        new CustomEvent("click-move-button", { detail: this.selectPath })
+      );
+      this.modal.close();
+    } else {
+      this.modal.close();
+    }
   }
 
-  renameSelected() {
-    // Implementa la lógica para renombrar los elementos seleccionados
-    alert("Renombrando elementos seleccionados");
+  async renameSelected() {
+    let input = document.createElement("input");
+    this.questionDialog = new QuestionDialog([input]);
+
+    this.questionDialog.options = {
+      titleText: "Alert",
+      questionText: "Do you want to rename ?",
+      confirmText: "Confirm",
+      cancelText: "Cancel",
+    };
+
+    this.modal.content = this.questionDialog;
+
+    this.modal.open();
+    const response = await this.questionDialog.response;
+
+    if (response == true) {
+      this.dispatchEvent(
+        new CustomEvent("click-rename-button", { detail: this.selectPath })
+      );
+      this.modal.close();
+    } else {
+      this.modal.close();
+    }
   }
 
-  deleteSelected() {
-    console.log(this.selectPath);
-    this.dispatchEvent(
-      new CustomEvent("click-delete-button", { detail: this.selectPath })
-    );
-    // Implementa la lógica para borrar los elementos seleccionados
-    alert("Borrando elementos seleccionados");
+  async deleteSelected() {
+    this.questionDialog = new QuestionDialog();
+    this.questionDialog.options = {
+      titleText: "Alert",
+      questionText: "Do you want to delete these files?",
+      confirmText: "Confirm",
+      cancelText: "Cancel",
+    };
+    this.modal.content = this.questionDialog;
+
+    this.modal.open();
+    const response = await this.questionDialog.response;
+
+    if (response == true) {
+      this.dispatchEvent(
+        new CustomEvent("click-delete-button", { detail: this.selectPath })
+      );
+      this.modal.close();
+    } else {
+      this.modal.close();
+    }
   }
 
-  showFiles() {
-    // Implementa la lógica para mostrar los archivos
-    alert("Mostrando archivos");
+  async createFolder() {
+    let input = document.createElement("input");
+    this.questionDialog = new QuestionDialog([input]);
+
+    this.questionDialog.options = {
+      titleText: "Create Folder",
+      questionText: "Write the name of the folder",
+      confirmText: "Confirm",
+      cancelText: "Cancel",
+    };
+
+    this.modal.content = this.questionDialog;
+
+    this.modal.open();
+    const response = await this.questionDialog.response;
+
+    if (response == true) {
+      this.dispatchEvent(
+        new CustomEvent("click-createFolder-button", {
+          detail: this.currentPath + "/" + input.value,
+        })
+      );
+      this.modal.close();
+    } else {
+      this.modal.close();
+    }
   }
 
-  createFolder() {
-    // Implementa la lógica para crear una nueva carpeta
-    alert("Creando una nueva carpeta");
+  async uploadFile() {
+    this.questionDialog = new QuestionDialog([this.fileUploader]);
+
+    this.questionDialog.options = {
+      confirmText: "Confirm",
+      cancelText: "Cancel",
+    };
+
+    this.modal.content = this.questionDialog;
+
+    this.modal.open();
+    const response = await this.questionDialog.response;
+
+    if (response == true) {
+      this.dispatchEvent(
+        new CustomEvent("click-create-button", { detail: this.selectPath })
+      );
+      this.modal.close();
+    } else {
+      this.modal.close();
+    }
   }
 
-  uploadFile() {
-    // Implementa la lógica para subir un archivo
-    alert("Subiendo un archivo");
+  __setEventListeners() {
+    this.downloadBtn.addEventListener("click", this.downloadSelectedHandler);
+    this.moveBtn.addEventListener("click", this.moveSelectedHandler);
+    this.renameBtn.addEventListener("click", this.renameSelectedHandler);
+    this.deleteBtn.addEventListener("click", this.deleteSelectedHandler);
+  }
+
+  __removeEventListeners() {
+    this.downloadBtn.removeEventListener("click", this.downloadSelectedHandler);
+    this.moveBtn.removeEventListener("click", this.moveSelectedHandler);
+    this.renameBtn.removeEventListener("click", this.renameSelectedHandler);
+    this.deleteBtn.removeEventListener("click", this.deleteSelectedHandler);
   }
 }
 

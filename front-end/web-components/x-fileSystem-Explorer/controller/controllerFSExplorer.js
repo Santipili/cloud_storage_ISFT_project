@@ -2,24 +2,43 @@ class ControllerFSExplorer {
   constructor(innerView, innerModel) {
     this.view = innerView;
     this.model = innerModel;
-    this.view.addEventListener("click-delete-button", async (d) => {
-      await this.deleteFile(d.detail);
-    });
   }
 
   enable() {
     this.setContent();
+
+    this.view.addEventListener("click-delete-button", async (d) => {
+      await this.deleteFile(d.detail);
+    });
+    this.view.addEventListener("click-folder", async (d) => {
+      const res = await this.model.getServerDirectoris(d.detail);
+      this.view.renderFileSystem(res.files);
+    });
+
+    this.view.addEventListener("click-download-button", async (d) => {
+      await this.onDownloadButonClick();
+    });
+
+    this.view.addEventListener("click-createFolder-button", async (d) => {
+      await this.model.createFolder(d.detail);
+    });
   }
+
   disable() {}
 
   async setContent() {
     const res = await this.model.getServerDirectoris("/");
-    this.view.__setFileSystemTree(res.files);
+
     this.view.renderFileSystem(res.files);
-    console.log(res);
   }
-  async deleteFile(path) {
-    this.model.deleteFile(path);
+  async deleteFile(paths) {
+    paths.forEach((Element) => {
+      this.model.deleteFile(Element);
+    });
+  }
+
+  async onDownloadButonClick() {
+    const res = await this.model.downloadFile();
   }
 }
 

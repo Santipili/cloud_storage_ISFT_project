@@ -1,13 +1,8 @@
-import { FileUploader } from "./web-components/x-File-Uploader/FileUploader.js";
-
-import { FSexplorer } from "./web-components/x-fileSystem-Explorer/x-fileSystemExplorer.js";
+import { Application } from "./x-app/aplication.js";
 
 function main() {
-  let fileUploader = new FileUploader();
-  const FSExplorer = new FSexplorer();
-
-  document.body.appendChild(fileUploader);
-  document.body.appendChild(FSExplorer);
+  let app = new Application();
+  document.body.appendChild(app);
 }
 
 window.addEventListener("load", main);

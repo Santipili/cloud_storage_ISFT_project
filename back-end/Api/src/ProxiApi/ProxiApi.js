@@ -9,7 +9,13 @@ class ProxiApi {
 
   uploadFiles = async (req, res) => {
     try {
-      const response = await this.fileHandler.upload(req, this.uploadDir);
+      const sessionUserId = req.headers["user-id"];
+
+      console.log(sessionUserId);
+      const response = await this.fileHandler.upload(
+        req,
+        this.uploadDir + "/" + sessionUserId
+      );
       return res.end(JSON.stringify({ status: true, message: response }));
     } catch (e) {
       console.log(e);
@@ -76,7 +82,7 @@ class ProxiApi {
     req.on("data", async (chunk) => {
       body += chunk.toString();
       const requestData = body ? JSON.parse(body) : {};
-      const newDirPath = path.join(userDirPath, requestData.newDir);
+      const newDirPath = path.join(userDirPath, requestData);
       try {
         const response = await this.directoryHandler.create(newDirPath);
         console.log(response);
@@ -150,6 +156,30 @@ class ProxiApi {
       const toListDirPath = path.join(userDirPath, requestData.toListDir);
       try {
         const response = await this.directoryHandler.listContent(toListDirPath);
+        console.log(response);
+        return res.end(JSON.stringify({ status: true, files: response }));
+      } catch (e) {
+        res.statusCode = 500;
+        return res.end(JSON.stringify({ status: false, message: e.message }));
+      }
+    });
+  };
+
+  listContentTree = async (req, res) => {
+    const sessionUserId = req.headers["user-id"];
+    const startPath = path.resolve(__dirname, "../..");
+    const userDirPath = path.join(startPath, this.uploadDir, sessionUserId);
+
+    let body = "";
+    req.on("data", async (chunk) => {
+      body += chunk.toString();
+      const requestData = body ? JSON.parse(body) : {};
+
+      const toListDirPath = path.join(userDirPath, requestData);
+      try {
+        const response = await this.directoryHandler.listContentTree(
+          toListDirPath
+        );
 
         return res.end(JSON.stringify({ status: true, files: response }));
       } catch (e) {
