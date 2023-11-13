@@ -71,6 +71,37 @@ class ModelFSExplorer {
       console.log(error);
     }
   }
+  async renameFile(paths) {
+    const userId = this.localStorageH.getOfLocalStorage("userId");
+    try {
+      let response = await this.apiClient.makeApiCall(
+        "directoryHandler/rename",
+        "POST",
+        paths,
+        "hsavhavdhavdha",
+        userId
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async moveFile(paths) {
+    const userId = this.localStorageH.getOfLocalStorage("userId");
+    try {
+      let response = await this.apiClient.makeApiCall(
+        "directoryHandler/move",
+        "POST",
+        paths,
+        "hsavhavdhavdha",
+        userId
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 export { ModelFSExplorer };
