@@ -31,8 +31,6 @@ class DirectoryHandler {
   }
 
   rename(renamePath, newPath) {
-    console.log(renamePath);
-    console.log(newPath);
     return new Promise((resolve, reject) => {
       if (fs.existsSync(renamePath)) {
         fs.renameSync(renamePath, newPath);
@@ -78,7 +76,7 @@ class DirectoryHandler {
 
           filesList.forEach((file) => {
             filepath = toListDir + file;
-            console.log(filepath);
+
             if (fs.lstatSync(filepath).isDirectory()) {
               listDocuments.push({
                 name: file,
@@ -148,12 +146,14 @@ class DirectoryHandler {
         fsx.move(pathOrigin, pathDestiny, { overwrite: true }, (err) => {
           if (err) {
             console.error("Error al mover la carpeta:", err);
-            reject({ status: false, message: "Error al mover el directorio" });
+            reject({
+              status: false,
+              message: "Error al mover el directorio",
+            });
           } else {
-            console.log("Carpeta movida con éxito");
             resolve({
               status: true,
-              message: "Directorio creado correctamente",
+              message: "Directorio movido correctamente",
             });
           }
         });

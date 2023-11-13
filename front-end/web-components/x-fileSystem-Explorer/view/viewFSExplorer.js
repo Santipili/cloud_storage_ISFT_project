@@ -407,16 +407,22 @@ class ViewFSExplorer extends HTMLElement {
     const response = await this.questionDialog.response;
 
     if (response == true) {
-      const destinationPath = pathSelector.view.getSelectedPath();
+      const destinationPath =
+        pathSelector.view.getSelectedPath() + this.selectPath[0];
+
       console.log("destinationPath", destinationPath);
+
       const originPath = this.selectPath[0];
+
       console.log("originPath", originPath);
+
       this.dispatchEvent(
         new CustomEvent("click-move-button", {
           detail: { originPath, destinationPath },
         })
       );
       this.modal.close();
+      this.__refreshCurrentPath();
     } else {
       this.modal.close();
     }
