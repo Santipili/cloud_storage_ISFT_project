@@ -31,7 +31,7 @@ class FileUploaderView extends HTMLElement {
     this.BtnSendFile = document.createElement("button");
     this.BtnSendFile.setAttribute("role", "button");
     this.BtnSendFile.classList.add("button-name");
-    this.BtnSendFile.textContent = "Upload All";
+    this.BtnSendFile.textContent = "Upload";
     this.BtnSendFile.setAttribute("style", "display: none;");
     this.BtnSendFile.disabled = true;
     this.DivBtn.appendChild(this.BtnSendFile);
@@ -87,14 +87,15 @@ class FileUploaderView extends HTMLElement {
       const fileName = document.createElement("span");
       fileName.textContent = file.name;
 
-      const deleteButton = document.createElement("button");
-      deleteButton.textContent = "Delete";
-      deleteButton.onclick = () => {
+      const unselectButon = document.createElement("button");
+      unselectButon.classList.add("unselect-button");
+      unselectButon.textContent = "unselect";
+      unselectButon.onclick = () => {
         this.removeFile(file);
       };
 
       fileItem.appendChild(fileName);
-      fileItem.appendChild(deleteButton);
+      fileItem.appendChild(unselectButon);
       this.fileListContainer.appendChild(fileItem);
     }
 

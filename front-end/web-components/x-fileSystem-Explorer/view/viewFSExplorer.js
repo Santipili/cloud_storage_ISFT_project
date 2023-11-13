@@ -1,13 +1,13 @@
 import { ModalWindowView } from "../WCs/modalwindow/x-modalWindow.js";
 import { QuestionDialog } from "../WCs/questionDialog/x-questionDialog.js";
 import { FileUploader } from "../WCs/x-File-Uploader/FileUploader.js";
+import { PathSelector } from "../WCs/selectPath/x-PathSelector.js";
 
 class ViewFSExplorer extends HTMLElement {
   constructor() {
     super();
 
     this.fileUploader = new FileUploader();
-    this.modal = new ModalWindowView();
 
     // Crear un shadow DOM
     const shadowRoot = this.attachShadow({ mode: "open" });
@@ -20,6 +20,7 @@ class ViewFSExplorer extends HTMLElement {
     this.h1.textContent = "Explorador de Archivos";
 
     this.table = document.createElement("table");
+    this.table.classList.add("table");
     this.thead = document.createElement("thead");
     this.tbody = document.createElement("tbody");
 
@@ -35,30 +36,24 @@ class ViewFSExplorer extends HTMLElement {
     });
     this.thead.appendChild(this.headerRow);
 
-    // Agregar la tabla al shadow DOM
     this.table.appendChild(this.thead);
     this.table.appendChild(this.tbody);
 
-    // Botones para realizar acciones
     this.actionButtons = document.createElement("div");
     this.actionButtons.classList.add("actionButtons");
 
     this.backButton = document.createElement("button");
     this.backButton.classList.add("buttonBack");
 
-    // Crea el elemento contenedor div
     const buttonBox = document.createElement("div");
     buttonBox.classList.add("buttonBack-box");
 
-    // Primer elemento span con el primer svg
     const buttonElem1 = document.createElement("span");
     buttonElem1.classList.add("buttonBack-elem");
 
-    // Crea el primer elemento `svg`
     const svg1 = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg1.setAttribute("viewBox", "0 0 46 40");
 
-    // Crea el primer elemento `path` y establece sus atributos
     const path1 = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "path"
@@ -68,13 +63,10 @@ class ViewFSExplorer extends HTMLElement {
       "M46 20.038c0-.7-.3-1.5-.8-2.1l-16-17c-1.1-1-3.2-1.4-4.4-.3-1.2 1.1-1.2 3.3 0 4.4l11.3 11.9H3c-1.7 0-3 1.3-3 3s1.3 3 3 3h33.1l-11.3 11.9c-1 1-1.2 3.3 0 4.4 1.2 1.1 3.3.8 4.4-.3l16-17c.5-.5.8-1.1.8-1.9"
     );
 
-    // Agrega el elemento `path` al primer `svg`
     svg1.appendChild(path1);
 
-    // Agrega el primer `svg` al primer elemento span
     buttonElem1.appendChild(svg1);
 
-    // Segundo elemento span con el segundo svg (repite el proceso similar al primero)
     const buttonElem2 = document.createElement("span");
     buttonElem2.classList.add("buttonBack-elem");
 
@@ -93,45 +85,101 @@ class ViewFSExplorer extends HTMLElement {
     svg2.appendChild(path2);
     buttonElem2.appendChild(svg2);
 
-    // Agrega ambos elementos span al elemento contenedor div
     buttonBox.appendChild(buttonElem1);
     buttonBox.appendChild(buttonElem2);
 
-    // Agrega el elemento contenedor div al botón
     this.backButton.appendChild(buttonBox);
+    /* ----------------------------------------------------------------------------------  */
+    this.customDownloadBtn = document.createElement("button");
+    this.customDownloadBtn.classList.add("botao");
 
-    this.downloadBtn = document.createElement("button");
-    this.downloadBtn.textContent = "Download";
-    this.downloadBtn.id = "downloadBtn";
+    const svgIcon = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "svg"
+    );
+    svgIcon.setAttribute("width", "24px");
+    svgIcon.setAttribute("height", "24px");
+    svgIcon.setAttribute("viewBox", "0 0 24 24");
+    svgIcon.setAttribute("fill", "none");
+    svgIcon.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    svgIcon.classList.add("mysvg");
+
+    const pathIcon = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "path"
+    );
+    pathIcon.setAttribute("id", "Vector");
+    pathIcon.setAttribute("d", "M6 21H18M12 3V17M12 17L17 12M12 17L7 12");
+    pathIcon.setAttribute("stroke", "#f1f1f1");
+    pathIcon.setAttribute("stroke-width", "2");
+    pathIcon.setAttribute("stroke-linecap", "round");
+    pathIcon.setAttribute("stroke-linejoin", "round");
+
+    svgIcon.appendChild(pathIcon);
+
+    const spanTexto = document.createElement("span");
+    spanTexto.classList.add("texto");
+    spanTexto.textContent = "Download";
+
+    this.customDownloadBtn.appendChild(svgIcon);
+    this.customDownloadBtn.appendChild(spanTexto);
 
     this.moveBtn = document.createElement("button");
+    this.moveBtn.classList.add("move-btn");
     this.moveBtn.textContent = "Move";
     this.moveBtn.id = "moveBtn";
 
     this.renameBtn = document.createElement("button");
+    this.renameBtn.classList.add("move-btn");
     this.renameBtn.textContent = "Rename";
     this.renameBtn.id = "renameBtn";
 
     this.deleteBtn = document.createElement("button");
+    this.deleteBtn.classList.add("move-btn");
     this.deleteBtn.textContent = "Delete";
     this.deleteBtn.classList.add("deleteBtn");
     this.deleteBtn.id = "deleteBtn";
 
     this.newFolderBtn = document.createElement("button");
+    this.newFolderBtn.classList.add("newFolder-buton");
     this.newFolderBtn.textContent = "New Folder";
     this.newFolderBtn.id = "newFolderBtn";
+    /* ------------------------------------------------------------------------------------- */
+    this.customUploadBtn = document.createElement("button");
+    this.customUploadBtn.classList.add("cssbuttons-io-button");
 
-    this.uploadBtn = document.createElement("button");
-    this.uploadBtn.textContent = "Upload file";
-    this.uploadBtn.id = "uploadBtn";
+    const svgUpload = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "svg"
+    );
+    svgUpload.setAttribute("viewBox", "0 0 640 512");
+    svgUpload.setAttribute("fill", "white");
+    svgUpload.setAttribute("height", "1em");
+
+    const pathUpload = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "path"
+    );
+    pathUpload.setAttribute(
+      "d",
+      "M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"
+    );
+
+    svgUpload.appendChild(pathUpload);
+
+    const spanUpload = document.createElement("span");
+    spanUpload.textContent = "Upload";
+
+    this.customUploadBtn.appendChild(svgUpload);
+    this.customUploadBtn.appendChild(spanUpload);
 
     this.actionButtons.appendChild(this.backButton);
-    this.actionButtons.appendChild(this.downloadBtn);
+    this.actionButtons.appendChild(this.customDownloadBtn);
     this.actionButtons.appendChild(this.moveBtn);
     this.actionButtons.appendChild(this.renameBtn);
     this.actionButtons.appendChild(this.deleteBtn);
     this.actionButtons.appendChild(this.newFolderBtn);
-    this.actionButtons.appendChild(this.uploadBtn);
+    this.actionButtons.appendChild(this.customUploadBtn);
 
     this.mainContainer.appendChild(this.h1);
     this.mainContainer.appendChild(this.actionButtons);
@@ -175,7 +223,7 @@ class ViewFSExplorer extends HTMLElement {
     /* ------------------------------------------------------ */
 
     this.backButton.addEventListener("click", this.onButtnBack.bind(this));
-    this.uploadBtn.addEventListener("click", this.uploadFile.bind(this));
+    this.customUploadBtn.addEventListener("click", this.uploadFile.bind(this));
     this.newFolderBtn.addEventListener("click", this.createFolder.bind(this));
 
     /* ------------------------------------------------------ */
@@ -262,13 +310,11 @@ class ViewFSExplorer extends HTMLElement {
         let path = this.currentPath + filename;
         if (!this.selectPath.includes(path)) {
           this.selectPath.push(path);
-          console.log(this.selectPath);
         } else {
           const index = this.selectPath.indexOf(path);
           if (index !== -1) {
             this.selectPath.splice(index, 1);
           }
-          console.log(this.selectPath);
         }
 
         if (this.selectPath.length > 0) {
@@ -302,7 +348,7 @@ class ViewFSExplorer extends HTMLElement {
     this.currentPath += addedPath;
   }
 
-  removeLastPath() {
+  __removeLastPath() {
     const segments = this.currentPath.split("/");
     if (segments.length > 1) {
       this.currentPath = segments.slice(0, segments.length - 1).join("/");
@@ -310,12 +356,17 @@ class ViewFSExplorer extends HTMLElement {
   }
 
   onButtnBack() {
-    this.removeLastPath();
+    this.__removeLastPath();
 
     this.openFolder(this.currentPath + this.basePath);
   }
 
+  __refreshCurrentPath() {
+    this.openFolder(this.currentPath + this.basePath);
+  }
+
   async downloadSelected() {
+    this.modal = new ModalWindowView();
     this.questionDialog = new QuestionDialog();
     this.questionDialog.options = {
       titleText: "Alert",
@@ -340,23 +391,30 @@ class ViewFSExplorer extends HTMLElement {
   }
 
   async moveSelected() {
-    let input = document.createElement("input");
-    this.questionDialog = new QuestionDialog([input]);
+    this.modal = new ModalWindowView();
+    const pathSelector = new PathSelector();
+    this.questionDialog = new QuestionDialog(true, [pathSelector]);
 
     this.questionDialog.options = {
-      titleText: "Alert",
-      questionText: "Do you want to move these files?",
+      questionText: "chose where to move",
       confirmText: "Confirm",
       cancelText: "Cancel",
     };
     this.modal.content = this.questionDialog;
 
     this.modal.open();
+
     const response = await this.questionDialog.response;
 
     if (response == true) {
+      const destinationPath = pathSelector.view.getSelectedPath();
+      console.log("destinationPath", destinationPath);
+      const originPath = this.selectPath[0];
+      console.log("originPath", originPath);
       this.dispatchEvent(
-        new CustomEvent("click-move-button", { detail: this.selectPath })
+        new CustomEvent("click-move-button", {
+          detail: { originPath, destinationPath },
+        })
       );
       this.modal.close();
     } else {
@@ -366,31 +424,53 @@ class ViewFSExplorer extends HTMLElement {
 
   async renameSelected() {
     let input = document.createElement("input");
-    this.questionDialog = new QuestionDialog([input]);
 
-    this.questionDialog.options = {
-      titleText: "Alert",
-      questionText: "Do you want to rename ?",
-      confirmText: "Confirm",
-      cancelText: "Cancel",
-    };
+    if (this.selectPath.length == 1) {
+      const modal = new ModalWindowView(true);
 
-    this.modal.content = this.questionDialog;
+      this.questionDialog = new QuestionDialog(true, [input]);
 
-    this.modal.open();
-    const response = await this.questionDialog.response;
+      this.questionDialog.options = {
+        titleText: "Alert",
+        questionText: "Do you want to rename ?",
+        confirmText: "Confirm",
+        cancelText: "Cancel",
+      };
 
-    if (response == true) {
-      this.dispatchEvent(
-        new CustomEvent("click-rename-button", { detail: this.selectPath })
-      );
-      this.modal.close();
-    } else {
-      this.modal.close();
+      modal.content = this.questionDialog;
+      modal.open();
+
+      const response = await this.questionDialog.response;
+
+      if (response == true) {
+        const newName = this.currentPath + this.basePath + input.value;
+        const oldName = this.selectPath[0];
+        console.log(oldName);
+        console.log(newName);
+        this.dispatchEvent(
+          new CustomEvent("click-rename-button", {
+            detail: { oldName, newName },
+          })
+        );
+        modal.close();
+      } else {
+        modal.close();
+      }
+    } else if (this.selectPath.length > 1) {
+      const modal2 = new ModalWindowView();
+      this.questionDialog = new QuestionDialog(false);
+
+      this.questionDialog.options = {
+        titleText: "Alert",
+        questionText: "no se puede seleccionar varios elementos a renombrar",
+      };
+      modal2.content = this.questionDialog;
+      modal2.open();
     }
   }
 
   async deleteSelected() {
+    this.modal = new ModalWindowView();
     this.questionDialog = new QuestionDialog();
     this.questionDialog.options = {
       titleText: "Alert",
@@ -407,15 +487,18 @@ class ViewFSExplorer extends HTMLElement {
       this.dispatchEvent(
         new CustomEvent("click-delete-button", { detail: this.selectPath })
       );
+
       this.modal.close();
     } else {
       this.modal.close();
     }
+    this.__refreshCurrentPath();
   }
 
   async createFolder() {
     let input = document.createElement("input");
-    this.questionDialog = new QuestionDialog([input]);
+    this.modal = new ModalWindowView();
+    this.questionDialog = new QuestionDialog(true, [input]);
 
     this.questionDialog.options = {
       titleText: "Create Folder",
@@ -435,6 +518,7 @@ class ViewFSExplorer extends HTMLElement {
           detail: this.currentPath + "/" + input.value,
         })
       );
+      this.__refreshCurrentPath();
       this.modal.close();
     } else {
       this.modal.close();
@@ -442,37 +526,29 @@ class ViewFSExplorer extends HTMLElement {
   }
 
   async uploadFile() {
-    this.questionDialog = new QuestionDialog([this.fileUploader]);
-
-    this.questionDialog.options = {
-      confirmText: "Confirm",
-      cancelText: "Cancel",
-    };
+    this.modal = new ModalWindowView();
+    this.questionDialog = new QuestionDialog(false, [this.fileUploader]);
 
     this.modal.content = this.questionDialog;
 
     this.modal.open();
-    const response = await this.questionDialog.response;
-
-    if (response == true) {
-      this.dispatchEvent(
-        new CustomEvent("click-create-button", { detail: this.selectPath })
-      );
-      this.modal.close();
-    } else {
-      this.modal.close();
-    }
   }
 
   __setEventListeners() {
-    this.downloadBtn.addEventListener("click", this.downloadSelectedHandler);
+    this.customDownloadBtn.addEventListener(
+      "click",
+      this.downloadSelectedHandler
+    );
     this.moveBtn.addEventListener("click", this.moveSelectedHandler);
     this.renameBtn.addEventListener("click", this.renameSelectedHandler);
     this.deleteBtn.addEventListener("click", this.deleteSelectedHandler);
   }
 
   __removeEventListeners() {
-    this.downloadBtn.removeEventListener("click", this.downloadSelectedHandler);
+    this.customDownloadBtn.removeEventListener(
+      "click",
+      this.downloadSelectedHandler
+    );
     this.moveBtn.removeEventListener("click", this.moveSelectedHandler);
     this.renameBtn.removeEventListener("click", this.renameSelectedHandler);
     this.deleteBtn.removeEventListener("click", this.deleteSelectedHandler);

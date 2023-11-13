@@ -1,20 +1,16 @@
 .main-container {
 
-  min-height: auto;
-  width: 600px;
-  border: none;
+  min-height: 400px;
+  min-width: 800px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: xx-small;
-  padding: 10px;
-  margin: 10px;
   background-color: rgba(96, 223, 243, 0.701);
   box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
   color: rgb(235, 235, 235);
-  display: flex;
 
 
 }
@@ -22,9 +18,12 @@
 
 
 table {
-  width: 500px;
-  border-collapse: collapse;
-  border-spacing: 0;
+  width: 600px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
 
 }
 
@@ -38,12 +37,22 @@ td {
 
 }
 
-.actionButtons {
-  display: flex;
+h1 {
+  text-align: center;
+  margin: 20px;
+  padding: 10px;
+  font-size: 20px;
+  color: whitesmoke;
 
-  justify-content: space-between 5px;
+}
+
+.actionButtons {
+
+  display: flex;
+  justify-content: space-between 20px;
   align-items: center;
-  margin: 10px;
+  margin: 20px;
+  position: static;
 
 }
 
@@ -116,4 +125,140 @@ td {
 .buttonBack:focus .buttonBack-box {
   transition: .4s;
   transform: translateX(-56px);
+}
+
+.move-btn {
+  width: 95px;
+  height: 35px;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 1px 1px rgba(107, 221, 215, 0.37);
+  padding: 5px 10px;
+  background: rgb(47, 93, 197);
+  background: linear-gradient(160deg, rgba(47, 93, 197, 1) 0%, rgba(46, 86, 194, 1) 5%, rgba(47, 93, 197, 1) 11%, rgba(59, 190, 230, 1) 57%, rgba(0, 212, 255, 1) 71%);
+  color: #fff;
+  font-family: Roboto, sans-serif;
+  font-weight: 505;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  filter: drop-shadow(0 0 10px rgba(59, 190, 230, 0.568));
+}
+
+.move-btn:hover {
+  background: linear-gradient(160deg, rgb(37, 70, 146) 0%, rgb(24, 49, 117) 5%, rgb(30, 60, 129) 11%, rgb(30, 103, 126) 57%, rgb(2, 135, 162) 71%);
+
+}
+
+.newFolder-buton {
+  width: 105px;
+  height: 35px;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 1px 1px rgba(107, 221, 215, 0.37);
+  padding: 5px 10px;
+  background: rgb(47, 93, 197);
+  background: linear-gradient(160deg, rgba(47, 93, 197, 1) 0%, rgba(46, 86, 194, 1) 5%, rgba(47, 93, 197, 1) 11%, rgba(59, 190, 230, 1) 57%, rgba(0, 212, 255, 1) 71%);
+  color: #fff;
+  font-family: Roboto, sans-serif;
+  font-weight: 505;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  filter: drop-shadow(0 0 10px rgba(59, 190, 230, 0.568));
+}
+
+.newFolder-buton:hover {
+  background: linear-gradient(160deg, rgb(37, 70, 146) 0%, rgb(24, 49, 117) 5%, rgb(30, 60, 129) 11%, rgb(30, 103, 126) 57%, rgb(2, 135, 162) 71%);
+}
+
+.botao {
+  width: 95px;
+  height: 35px;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 1px 1px rgba(107, 221, 215, 0.37);
+  padding: 5px 10px;
+  background: rgb(47, 93, 197);
+  background: linear-gradient(160deg, rgba(47, 93, 197, 1) 0%, rgba(46, 86, 194, 1) 5%, rgba(47, 93, 197, 1) 11%, rgba(59, 190, 230, 1) 57%, rgba(0, 212, 255, 1) 71%);
+  color: #fff;
+  font-family: Roboto, sans-serif;
+  font-weight: 505;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  filter: drop-shadow(0 0 10px rgba(59, 190, 230, 0.568));
+  transition: .5s linear;
+}
+
+.botao .mysvg {
+  display: none;
+}
+
+.botao:hover {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  transition: .5s linear;
+}
+
+.botao:hover .texto {
+  display: none;
+}
+
+.botao:hover .mysvg {
+  display: inline;
+}
+
+.botao:hover::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  width: 100%;
+  height: 100%;
+  border: 3.5px solid transparent;
+  border-top: 3.5px solid #fff;
+  border-right: 3.5px solid #fff;
+  border-radius: 50%;
+  animation: animateC 2s linear infinite;
+}
+
+@keyframes animateC {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.cssbuttons-io-button {
+
+  display: flex;
+  align-items: center;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 17px;
+  padding: 0.8em 1.5em 0.8em 1.2em;
+  color: white;
+  background: #ad5389;
+  background: linear-gradient(0deg, rgb(120, 47, 255) 0%, rgb(185, 132, 255) 100%);
+  border: none;
+  box-shadow: 0 0.7em 1.5em -0.5em rgb(184, 146, 255);
+  letter-spacing: 0.05em;
+  border-radius: 20em;
+}
+
+.cssbuttons-io-button svg {
+  margin-right: 8px;
+}
+
+.cssbuttons-io-button:hover {
+  box-shadow: 0 0.5em 1.5em -0.5em rgb(149, 91, 255);
+}
+
+.cssbuttons-io-button:active {
+  box-shadow: 0 0.3em 1em -0.5em rgb(160, 109, 255);
 }

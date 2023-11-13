@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  box-shadow: 0 10px 60px rgb(218, 229, 255);
+  box-shadow: 0 2px 20px rgb(218, 229, 255);
   border: 1px solid rgb(159, 159, 160);
   border-radius: 20px;
   padding: 2rem .7rem .7rem .7rem;
@@ -37,7 +37,7 @@
   border-radius: 10px;
   border: 2px dashed rgb(171, 202, 255);
   color: #444;
-  cursor: pointer; 
+  cursor: pointer;
 
 }
 
@@ -88,6 +88,46 @@
   align-items: center;
   justify-content: center;
 
+}
+
+.unselect-button {
+
+  appearance: none;
+  background-color: #FCFCFD;
+  border-radius: 4px;
+  border-width: 0;
+  box-shadow: rgba(45, 35, 66, 0.2) 0 2px 4px, rgba(45, 35, 66, 0.15) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+  box-sizing: border-box;
+  color: #36395A;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: inherit;
+  height: 28px;
+  width: 56px;
+  justify-content: center;
+  line-height: 1;
+  list-style: none;
+  overflow: hidden;
+  padding-left: 16px;
+  padding-right: 16px;
+  position: relative;
+  text-align: left;
+}
+
+
+
+.unselect-button:focus {
+  box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+}
+
+.unselect-button:hover {
+  box-shadow: rgba(45, 35, 66, 0.3) 0 4px 8px, rgba(45, 35, 66, 0.2) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+  transform: translateY(-2px);
+}
+
+.unselect-button:active {
+  box-shadow: #D6D6E7 0 3px 7px inset;
+  transform: translateY(2px);
 }
 
 .button-name {
@@ -166,7 +206,8 @@ progress::-webkit-progress-value {
   height: 200px;
   transition-duration: 1s;
 }
-.drag-over #file-input{
+
+.drag-over #file-input {
   width: 300px;
   height: 300px;
 }
@@ -177,12 +218,15 @@ progress::-webkit-progress-value {
   font-weight: bold;
   text-align: center;
 
-}.drop-container.drag-over {
+}
+
+.drop-container.drag-over {
   width: 300px;
   height: 200px;
   transition-duration: 1s;
 }
-.drag-over #file-input .file-input{
+
+.drag-over #file-input .file-input {
   display: none;
   width: 300px;
   height: 300px;
@@ -197,5 +241,5 @@ progress::-webkit-progress-value {
 }
 
 .file-item {
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
