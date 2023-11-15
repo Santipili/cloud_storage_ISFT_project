@@ -22,6 +22,23 @@ class DataBase {
       return user.userName;
     }
   }
+  insertUser(data) {
+    return new Promise((resolve, reject) => {
+      try {
+        const user = {
+          userId: this.UsersAndPasswords.length + 1,
+          userName: data.userName,
+          password: data.password,
+        };
+
+        this.UsersAndPasswords.push(user);
+        resolve(true);
+      } catch (error) {
+        console.log(error);
+        reject(false);
+      }
+    });
+  }
 }
 
 module.exports = { DataBase };

@@ -33,11 +33,24 @@ class DirectoryHandler {
   rename(renamePath, newPath) {
     return new Promise((resolve, reject) => {
       if (fs.existsSync(renamePath)) {
-        fs.renameSync(renamePath, newPath);
-        resolve({
-          status: true,
-          message: "Directorio renombrado correctamente ",
-        });
+        let stats = fs.statSync(renamePath);
+        if (stats.isFile()){
+          const newFilePath = newPath + path.extname(renamePath);
+          fs.renameSync(renamePath, newFilePath);
+          resolve({
+            status: true,
+            message: "Directorio renombrado correctamente ",
+          });
+        }
+        else {
+          this.create(newPath);
+          this.__renameDir(renamePath, newPath);
+          this.delete(renamePath);
+          resolve({
+            status: true,
+            message: "Directorio renombrado correctamente ",
+          });
+        }
       } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }
@@ -202,6 +215,30 @@ class DirectoryHandler {
         };
       }
     }
+  }
+
+  __renameDir(origen, destino) {
+    // Obtener la lista de archivos y carpetas en el directorio de origen
+    const archivos = fs.readdirSync(origen);
+    console.log(origen);
+  
+    // Iterar sobre cada archivo/carpeta
+    archivos.forEach((archivo) => {
+      const origenPath = path.join(origen, archivo);
+      const destinoPath = path.join(destino, archivo);
+  
+      // Verificar si el elemento es un archivo o una carpeta
+      const esDirectorio = fs.statSync(origenPath).isDirectory();
+  
+      if (esDirectorio) {
+        // Si es una carpeta, crear la carpeta en el destino y llamar recursivamente a la función
+        fs.mkdirSync(destinoPath, { recursive: true });
+        this.__renameDir(origenPath, destinoPath);
+      } else {
+        // Si es un archivo, simplemente copiarlo al destino
+        fs.copyFileSync(origenPath, destinoPath);
+      }
+    });
   }
 }
 

@@ -7,12 +7,21 @@ const {
 
 const { ProxiAccounting } = require("./src/ProxiApi/ProxiAccounting.js");
 
+const fs = require("fs");
+
+const configRaw = fs.readFileSync("config.json");
+const config = JSON.parse(configRaw);
+
 const app = new Server();
-const port = process.env.PORT || 3000;
+const port = config.api.port;
 const directoryHandler = new DirectoryHandler();
 const fileHandler = new FilesHandler();
 
-const proxiApi = new ProxiApi("uploads", fileHandler, directoryHandler);
+const proxiApi = new ProxiApi(
+  config.api.basePath,
+  fileHandler,
+  directoryHandler
+);
 const proxiAccounting = new ProxiAccounting();
 
 app.get("/", (req, res) => {
@@ -24,6 +33,7 @@ app.get("/", (req, res) => {
 
 app.post("/sessionhandler/login", proxiAccounting.login);
 app.post("/sessionhandler/logout", proxiAccounting.logout);
+app.post("/sessionhandler/signup", proxiAccounting.signUp);
 
 app.post("/filesHandler/upload", proxiApi.uploadFiles);
 app.post("/filesHandler/download", proxiApi.downloadFile);

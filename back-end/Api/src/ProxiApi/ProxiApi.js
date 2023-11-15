@@ -11,11 +11,11 @@ class ProxiApi {
     try {
       const sessionUserId = req.headers["user-id"];
 
-      console.log(sessionUserId);
       const response = await this.fileHandler.upload(
         req,
         this.uploadDir + "/" + sessionUserId
       );
+      console.log("here");
       return res.end(JSON.stringify({ status: true, message: response }));
     } catch (e) {
       console.log(e);
@@ -83,7 +83,7 @@ class ProxiApi {
       const newDirPath = path.join(userDirPath, requestData);
       try {
         const response = await this.directoryHandler.create(newDirPath);
-        console.log(response);
+
         return res.end(JSON.stringify({ status: true, message: response }));
       } catch (e) {
         res.statusCode = 500;
@@ -101,11 +101,11 @@ class ProxiApi {
     req.on("data", async (chunk) => {
       body += chunk.toString();
       const requestData = body ? JSON.parse(body) : {};
-      console.log(requestData);
+
       const toDeleteDirPath = path.join(userDirPath, requestData);
       try {
         const response = await this.directoryHandler.delete(toDeleteDirPath);
-        console.log(response);
+
         return res.end(JSON.stringify({ status: true, message: response }));
       } catch (e) {
         res.statusCode = 500;
@@ -250,7 +250,11 @@ class ProxiApi {
       body += chunk.toString();
       const requestData = body ? JSON.parse(body) : {};
       console.log(requestData);
+<<<<<<< HEAD
       const originDirPath = path.join(userDirPath, requestData.originPath);
+=======
+      const originDirPath = path.join(userDirPath, requestData.path);
+>>>>>>> main
       const newDirPath = path.join(userDirPath, requestData.destinationPath);
 
       try {

@@ -1,5 +1,6 @@
-class FileUploaderController {
-  constructor(viewReference, modelReference, modalReference) {
+class FileUploaderController extends EventTarget {
+  constructor(viewReference, modelReference) {
+    super();
     this.view = viewReference;
     this.model = modelReference;
 
@@ -17,7 +18,7 @@ class FileUploaderController {
     this.view.BtnSendFile.onclick = null;
   }
 
-  onUploadProgress(event) { 
+  onUploadProgress(event) {
     this.view.updateProgressBar(event.detail);
   }
 
@@ -30,26 +31,15 @@ class FileUploaderController {
       this.view.progreesBar();
       this.view.show();
 
-      // const cleanfiles = this.__cleanFiles(responseView.data);  Tira un error en el servidor del back.
-    
       let res = await this.model.FileUploaderToServer(responseView.data);
 
       if (res.status) {
         this.view.hide();
-
-        //TODO: check after merge
+        this.dispatchEvent(new CustomEvent("file-uploaded"));
       }
     } else {
-
+      alert(responseView.message);
     }
-  }
-
-  __cleanFiles(formData) {
-    const fileInput = formData.getAll("file");
-
-    return [...fileInput].filter((file) => {
-      return file instanceof File && file.type !== "";
-    });
   }
 }
 
