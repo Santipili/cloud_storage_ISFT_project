@@ -39,18 +39,3 @@ app.post("/directoryHandler/move", proxiApi.moveDirectory);
 
 app.start(port);
 
-async function main() {
-  try {
-    const response = await fileHandler.download(
-      "uploads/1/TP U8 Grafos.docx"
-    );
-    console.log(response);
-    const blob = new Blob([response], { type: 'application/octet-stream' });
-    const url = URL.createObjectURL(blob)
-    console.log(url);
-  } catch (error) {
-    console.error("Ocurrió un error al descargar el contenido:", error);
-  }
-}
-
-main();
