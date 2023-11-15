@@ -25,16 +25,25 @@ class ControllerFSExplorer {
 
     this.view.addEventListener("click-rename-button", async (d) => {
       const res = await this.model.renameFile(d.detail);
-      console.log(res);
+
       if (res.status == true) {
         this.view.__refreshCurrentPath();
       }
     });
 
-    this.view.addEventListener("click-move-button", async (d) => {
-      const res = await this.model.moveFile(d.detail);
-      if (res.status == true) {
-        this.view.__refreshCurrentPath();
+    this.view.addEventListener("click-move-button", async (e) => {
+      const pathsToMove = e.detail.originPaths;
+
+      const destinationPaths = e.detail.destinationPaths;
+
+      for (let i = 0; i < pathsToMove.length; i++) {
+        const res = await this.model.moveFile({
+          path: pathsToMove[i],
+          destinationPath: destinationPaths[i],
+        });
+        if (res.status == true) {
+          this.view.__refreshCurrentPath();
+        }
       }
     });
   }
