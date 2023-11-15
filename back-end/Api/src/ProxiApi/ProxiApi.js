@@ -213,7 +213,7 @@ class ProxiApi {
       body += chunk.toString();
       const requestData = body ? JSON.parse(body) : {};
       console.log(requestData);
-      const originDirPath = path.join(userDirPath, requestData.originPath);
+      const originDirPath = path.join(userDirPath, requestData.path);
       const newDirPath = path.join(userDirPath, requestData.destinationPath);
 
       try {

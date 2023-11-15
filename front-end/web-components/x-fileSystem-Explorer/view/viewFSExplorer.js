@@ -6,9 +6,6 @@ import { PathSelector } from "../WCs/selectPath/x-PathSelector.js";
 class ViewFSExplorer extends HTMLElement {
   constructor() {
     super();
-
-    this.fileUploader = new FileUploader();
-
     // Crear un shadow DOM
     const shadowRoot = this.attachShadow({ mode: "open" });
 
@@ -416,16 +413,26 @@ class ViewFSExplorer extends HTMLElement {
     const response = await this.questionDialog.response;
 
     if (response == true) {
-      const selectedPathClipped = this.__keepAfterLastSlash(this.selectPath[0]);
+      let selectedPathClippeds = [];
+      let destinationPaths = [];
 
-      const destinationPath =
-        pathSelector.view.getSelectedPath() + "/" + selectedPathClipped;
+      this.selectPath.forEach((path) => {
+        selectedPathClippeds.push(this.__keepAfterLastSlash(path));
+      });
 
-      const originPath = this.selectPath[0];
+      if (selectedPathClippeds.length > 0) {
+        selectedPathClippeds.forEach((path) => {
+          destinationPaths.push(
+            pathSelector.view.getSelectedPath() + "/" + path
+          );
+        });
+      }
+
+      const originPaths = this.selectPath;
 
       this.dispatchEvent(
         new CustomEvent("click-move-button", {
-          detail: { originPath, destinationPath },
+          detail: { originPaths, destinationPaths },
         })
       );
       this.modal.close();
@@ -539,11 +546,17 @@ class ViewFSExplorer extends HTMLElement {
   }
 
   async uploadFile() {
+    this.fileUploader = new FileUploader();
     this.modal = new ModalWindowView();
     this.questionDialog = new QuestionDialog(false, [this.fileUploader]);
 
+    this.fileUploader.controller.addEventListener(
+      "file-uploaded",
+      this.__refreshCurrentPath.bind(this)
+    );
+
     this.modal.content = this.questionDialog;
-    this.__refreshCurrentPath();
+
     this.modal.open();
   }
 
