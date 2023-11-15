@@ -33,11 +33,24 @@ class DirectoryHandler {
   rename(renamePath, newPath) {
     return new Promise((resolve, reject) => {
       if (fs.existsSync(renamePath)) {
-        fs.renameSync(renamePath, newPath);
-        resolve({
-          status: true,
-          message: "Directorio renombrado correctamente ",
-        });
+        let stats = fs.statSync(renamePath);
+        if (stats.isFile()){
+          const newFilePath = newPath + path.extname(renamePath);
+          fs.renameSync(renamePath, newFilePath);
+          resolve({
+            status: true,
+            message: "Directorio renombrado correctamente ",
+          });
+
+        }
+        else {
+
+          fs.renameSync(renamePath, newPath);
+          resolve({
+            status: true,
+            message: "Directorio renombrado correctamente ",
+          });
+        }
       } else {
         reject({ status: false, message: "La ruta del directorio no existe!" });
       }
