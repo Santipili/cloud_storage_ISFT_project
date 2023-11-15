@@ -1,6 +1,9 @@
 class QuestionDialog extends HTMLElement {
-  constructor(elements = []) {
+  constructor(innerconfirmCancelBtnStatus = true, elements = []) {
     super();
+
+    this.confirmCancelBtnStatus = innerconfirmCancelBtnStatus;
+
     this.classList.add("Maincontainer");
 
     this.header = document.createElement("header");
@@ -19,14 +22,19 @@ class QuestionDialog extends HTMLElement {
 
     this.footer.classList.add("footer");
 
-    this.confirmButton = document.createElement("button");
-    this.confirmButton.innerText = "";
-    this.confirmButton.classList.add("confirm-btn");
+    if (this.confirmCancelBtnStatus == true) {
+      this.confirmButton = document.createElement("button");
+      this.confirmButton.innerText = "";
+      this.confirmButton.classList.add("confirm-btn");
 
-    this.cancelButton = document.createElement("button");
-    this.cancelButton.classList.add("cancel-btn");
+      this.cancelButton = document.createElement("button");
+      this.cancelButton.classList.add("cancel-btn");
 
-    this.cancelButton.innerText = "";
+      this.cancelButton.innerText = "";
+
+      this.footer.appendChild(this.confirmButton);
+      this.footer.appendChild(this.cancelButton);
+    }
 
     const style = document.createElement("style");
     style.innerHTML = `@import 'web-components/x-fileSystem-Explorer/WCs/questionDialog/style/style.css';`;
@@ -34,8 +42,6 @@ class QuestionDialog extends HTMLElement {
     this.header.appendChild(this.dialogTitle);
     this.bodyContent.appendChild(this.question);
 
-    this.footer.appendChild(this.confirmButton);
-    this.footer.appendChild(this.cancelButton);
     if (elements.length > 0) {
       this.bodyContent.appendChild(elements[0]);
     }
@@ -50,8 +56,10 @@ class QuestionDialog extends HTMLElement {
   set options(options) {
     this.dialogTitle.innerText = options.titleText ?? "";
     this.question.innerText = options.questionText ?? "";
-    this.confirmButton.innerText = options.confirmText ?? "";
-    this.cancelButton.innerText = options.cancelText ?? "";
+    if (this.confirmCancelBtnStatus == true) {
+      this.confirmButton.innerText = options.confirmText ?? "";
+      this.cancelButton.innerText = options.cancelText ?? "";
+    }
   }
 
   get response() {

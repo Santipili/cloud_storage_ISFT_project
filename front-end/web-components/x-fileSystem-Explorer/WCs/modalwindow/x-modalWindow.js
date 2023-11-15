@@ -1,22 +1,21 @@
 class ModalWindowView extends HTMLElement {
-  /*  #onouterclick(event) {
+  #onouterclick(event) {
     if (event.target == this) {
       this.close();
     }
-  } */
+  }
 
   #_innerContent = undefined;
+  #clickBlockedStatus = false;
 
-  constructor(elements = []) {
+  constructor(innerclickedblockStatus = false) {
     super();
+    this.#clickBlockedStatus = innerclickedblockStatus;
 
     this.classList.add("mainContainer");
     const style = document.createElement("style");
     style.innerHTML = `@import 'web-components/x-fileSystem-Explorer/WCs/modalwindow/style/style.css';`;
     this.contentChild = document.createElement("div");
-    if (elements.length > 0) {
-      this.appendChild(elements[0]);
-    }
     this.contentChild.classList.add("constentChill");
     this.appendChild(style);
 
@@ -24,11 +23,15 @@ class ModalWindowView extends HTMLElement {
   }
 
   connectedCallback() {
-    /* this.addEventListener("click", this.#onouterclick.bind(this)); */
+    if (this.clickBlockedStatus == false) {
+      this.addEventListener("click", this.#onouterclick.bind(this));
+    }
   }
 
   disconnectedCallback() {
-    /*   this.removeEventListener("click", this.#onouterclick); */
+    if (this.clickBlockedStatus == true) {
+      this.removeEventListener("click", this.#onouterclick);
+    }
   }
 
   set content(innerContentElement) {
@@ -37,6 +40,16 @@ class ModalWindowView extends HTMLElement {
       this.contentChild.innerHTML = "";
       this.contentChild.appendChild(innerContentElement);
     }
+  }
+
+  set clickBlockedStatus(status) {
+    if (typeof status === "boolean") {
+      this.#clickBlockedStatus = status;
+    }
+  }
+
+  get clickBlockedStatus() {
+    return this.#clickBlockedStatus;
   }
 
   get content() {

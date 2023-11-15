@@ -12,9 +12,8 @@ class Server {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
       "Access-Control-Allow-Headers": 
-       "content-type, session-token, user-id, file-name, Content-disposition",
-      "Content-Type": "application/json, application/octet-stream",
-      "Content-disposition": "attachment; filename=${file-name}",
+       "content-type, session-token, user-id",
+      "Content-Type": "application/json",
     };
   }
 

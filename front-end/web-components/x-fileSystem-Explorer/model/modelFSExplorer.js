@@ -43,13 +43,15 @@ class ModelFSExplorer {
   async downloadFile(path) {
     const userId = this.localStorageH.getOfLocalStorage("userId");
     try {
-      let response = await this.apiClient.makeApiCall(
-        "filehandler/download",
+      let stream = await this.apiClient.makeApiCall(
+        "fileshandler/download",
         "POST",
         path,
         "hsavhavdhavdha",
         userId
       );
+      const blob = new Blob([stream], { type: 'application/octet-stream' });
+      let response = URL.createObjectURL(blob)
       return response;
     } catch (error) {
       console.log(error);
@@ -63,6 +65,37 @@ class ModelFSExplorer {
         "directoryHandler/create",
         "POST",
         path,
+        "hsavhavdhavdha",
+        userId
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async renameFile(paths) {
+    const userId = this.localStorageH.getOfLocalStorage("userId");
+    try {
+      let response = await this.apiClient.makeApiCall(
+        "directoryHandler/rename",
+        "POST",
+        paths,
+        "hsavhavdhavdha",
+        userId
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async moveFile(paths) {
+    const userId = this.localStorageH.getOfLocalStorage("userId");
+    try {
+      let response = await this.apiClient.makeApiCall(
+        "directoryHandler/move",
+        "POST",
+        paths,
         "hsavhavdhavdha",
         userId
       );

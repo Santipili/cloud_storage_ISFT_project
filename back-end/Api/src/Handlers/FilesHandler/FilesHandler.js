@@ -64,12 +64,8 @@ class FilesHandler {
         });
       }
     }) 
-      
 
-    
-
-
-  }
+  };
 
   __writeFilePath(currentPath, uploadedPath) {
     fs.readFile(currentPath, (readErr, data) => {

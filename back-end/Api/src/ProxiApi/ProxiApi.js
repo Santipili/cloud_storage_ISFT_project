@@ -38,15 +38,6 @@ class ProxiApi {
       try {
         let response = await this.fileHandler.download(filePath);
   
-        let headers = {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
-          "Access-Control-Allow-Headers": 
-           "content-type, session-token, user-id, Content-disposition",
-          "Content-Type": "application/octet-stream",
-          "Content-disposition": "attachment; filename="+response.fileName  
-        };
-  
         if (response.status){    
             res.writeHead(200, headers);
             console.log(response.data);
@@ -60,7 +51,6 @@ class ProxiApi {
       }
     })
 
-   
   }
 
   deleteFile(uploadDir, fileName) {
@@ -125,8 +115,8 @@ class ProxiApi {
     req.on("data", async (chunk) => {
       body += chunk.toString();
       const requestData = body ? JSON.parse(body) : {};
-      const renamePath = path.join(userDirPath, requestData.renameDir);
-      const newNamePath = path.join(userDirPath, requestData.newNameDir);
+      const renamePath = path.join(userDirPath, requestData.oldName);
+      const newNamePath = path.join(userDirPath, requestData.newName);
       try {
         const response = await this.directoryHandler.rename(
           renamePath,
@@ -153,10 +143,10 @@ class ProxiApi {
       body += chunk.toString();
       const requestData = body ? JSON.parse(body) : {};
 
-      const toListDirPath = path.join(userDirPath, requestData.toListDir);
+      const toListDirPath = path.join(userDirPath, requestData);
       try {
         const response = await this.directoryHandler.listContent(toListDirPath);
-        console.log(response);
+
         return res.end(JSON.stringify({ status: true, files: response }));
       } catch (e) {
         res.statusCode = 500;
@@ -251,8 +241,9 @@ class ProxiApi {
     req.on("data", async (chunk) => {
       body += chunk.toString();
       const requestData = body ? JSON.parse(body) : {};
-      const originDirPath = path.join(userDirPath, requestData.originDir);
-      const newDirPath = path.join(userDirPath, requestData.newDir);
+      console.log(requestData);
+      const originDirPath = path.join(userDirPath, requestData.originPath);
+      const newDirPath = path.join(userDirPath, requestData.destinationPath);
 
       try {
         const response = await this.directoryHandler.move(

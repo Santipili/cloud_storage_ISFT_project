@@ -26,6 +26,7 @@ app.post("/sessionhandler/login", proxiAccounting.login);
 app.post("/sessionhandler/logout", proxiAccounting.logout);
 
 app.post("/filesHandler/upload", proxiApi.uploadFiles);
+app.post("/filesHandler/download", proxiApi.downloadFile);
 
 app.post("/directoryHandler/rename", proxiApi.renameDirectory);
 app.post("/directoryHandler/create", proxiApi.createDirectory);
@@ -35,19 +36,21 @@ app.post("/directoryHandler/listcontenttree", proxiApi.listContentTree);
 app.post("/directoryHandler/properties", proxiApi.getDirProperties);
 app.post("/directoryHandler/copy", proxiApi.copyDirectory);
 app.post("/directoryHandler/move", proxiApi.moveDirectory);
-app.post("/filesHandler/download", proxiApi.downloadFile);
 
 app.start(port);
 
-/* async function main() {
+async function main() {
   try {
-    const response = await directoryHandler.listContent(
-      "../../../../../../REDES-Y-COMUNICACIONES"
+    const response = await fileHandler.download(
+      "uploads/1/TP U8 Grafos.docx"
     );
     console.log(response);
+    const blob = new Blob([response], { type: 'application/octet-stream' });
+    const url = URL.createObjectURL(blob)
+    console.log(url);
   } catch (error) {
-    console.error("Ocurrió un error al listar el contenido:", error);
+    console.error("Ocurrió un error al descargar el contenido:", error);
   }
 }
 
-main(); */
+main();
