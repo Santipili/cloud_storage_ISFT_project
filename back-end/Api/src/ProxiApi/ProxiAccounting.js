@@ -32,6 +32,24 @@ class ProxiAccounting {
     });
   };
 
+  signUp = async (req, res) => {
+    let body = "";
+    req.on("data", async (chunk) => {
+      body += chunk.toString();
+
+      const requestData = body ? JSON.parse(body) : {};
+
+      const response = await this.sessionHandler.signUp(requestData);
+
+      if (response.state) {
+        return res.end(JSON.stringify(response));
+      } else {
+        res.statusCode = 500;
+        return res.end(JSON.stringify(response));
+      }
+    });
+  };
+
   logout = async (req, res) => {
     const sessionUserId = req.headers["user-id"];
     console.log(sessionUserId);

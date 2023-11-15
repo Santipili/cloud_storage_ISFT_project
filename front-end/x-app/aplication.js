@@ -7,6 +7,7 @@ import { navBarController2 } from "../web-components/x-nav-bar/controller/nabBar
 import { Alert } from "../web-components/x-alert/x-alert.js";
 import { ServerErrors } from "../web-components/ServerErrors/x-serverErrors.js";
 import { FSexplorer } from "../web-components/x-fileSystem-Explorer/x-fileSystemExplorer.js";
+import { SignUp } from "../web-components/x-SignUP/signup.js";
 
 class Application extends HTMLElement {
   constructor() {
@@ -18,6 +19,7 @@ class Application extends HTMLElement {
     this.nv2 = new navBar(navBarView2, navBarController2, navBarModel2);
 
     this.loginForm = new LoginForm();
+    this.signUp = new SignUp();
 
     this.fsExplorer = new FSexplorer();
 
@@ -57,6 +59,10 @@ class Application extends HTMLElement {
 
     window.addEventListener("trigger-login-instance", () => {
       this.changeState(this.loginForm);
+    });
+
+    window.addEventListener("trigger-signup-instance", () => {
+      this.changeState(this.signUp);
     });
 
     window.addEventListener("trigger-loggedIn-instance", () => {
