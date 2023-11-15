@@ -41,11 +41,11 @@ class DirectoryHandler {
             status: true,
             message: "Directorio renombrado correctamente ",
           });
-
         }
         else {
-
-          fs.renameSync(renamePath, newPath);
+          this.create(newPath);
+          this.__renameDir(renamePath, newPath);
+          this.delete(renamePath);
           resolve({
             status: true,
             message: "Directorio renombrado correctamente ",
@@ -215,6 +215,30 @@ class DirectoryHandler {
         };
       }
     }
+  }
+
+  __renameDir(origen, destino) {
+    // Obtener la lista de archivos y carpetas en el directorio de origen
+    const archivos = fs.readdirSync(origen);
+    console.log(origen);
+  
+    // Iterar sobre cada archivo/carpeta
+    archivos.forEach((archivo) => {
+      const origenPath = path.join(origen, archivo);
+      const destinoPath = path.join(destino, archivo);
+  
+      // Verificar si el elemento es un archivo o una carpeta
+      const esDirectorio = fs.statSync(origenPath).isDirectory();
+  
+      if (esDirectorio) {
+        // Si es una carpeta, crear la carpeta en el destino y llamar recursivamente a la función
+        fs.mkdirSync(destinoPath, { recursive: true });
+        this.__renameDir(origenPath, destinoPath);
+      } else {
+        // Si es un archivo, simplemente copiarlo al destino
+        fs.copyFileSync(origenPath, destinoPath);
+      }
+    });
   }
 }
 
