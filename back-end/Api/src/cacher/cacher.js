@@ -33,7 +33,7 @@ class Catcher {
       this.setUserNameAndPass(userName, password);
     });
     users.forEach(async ({ userId }) => {
-      const startPath = path.resolve(__dirname, "../../..");
+      const startPath = path.resolve(__dirname, "../..");
       const userDirPath = path.join(
         startPath,
         config.api.basePath,

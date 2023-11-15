@@ -536,7 +536,7 @@ class ViewFSExplorer extends HTMLElement {
     this.questionDialog = new QuestionDialog(false, [this.fileUploader]);
 
     this.modal.content = this.questionDialog;
-
+    this.__refreshCurrentPath();
     this.modal.open();
   }
 
