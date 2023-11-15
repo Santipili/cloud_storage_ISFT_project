@@ -355,6 +355,15 @@ class ViewFSExplorer extends HTMLElement {
     }
   }
 
+  __keepAfterLastSlash(inputPath) {
+    const segments = inputPath.split("/");
+    if (segments.length > 1) {
+      return segments[segments.length - 1];
+    } else {
+      return inputPath;
+    }
+  }
+
   onButtnBack() {
     this.__removeLastPath();
 
@@ -407,14 +416,12 @@ class ViewFSExplorer extends HTMLElement {
     const response = await this.questionDialog.response;
 
     if (response == true) {
-      const destinationPath =
-        pathSelector.view.getSelectedPath() + this.selectPath[0];
+      const selectedPathClipped = this.__keepAfterLastSlash(this.selectPath[0]);
 
-      console.log("destinationPath", destinationPath);
+      const destinationPath =
+        pathSelector.view.getSelectedPath() + "/" + selectedPathClipped;
 
       const originPath = this.selectPath[0];
-
-      console.log("originPath", originPath);
 
       this.dispatchEvent(
         new CustomEvent("click-move-button", {
