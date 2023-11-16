@@ -1,11 +1,11 @@
 import { LocalStorageHandler } from "../../../common/LocalStorageHandler.js";
 import { ApiClient } from "../../../common/ApiClient.js";
-import { JsonParsed } from "../../../common/parseJson.js";
+import { configApiFileSystem } from "../../../config.js";
 
 class LoginFormModel {
   constructor() {
     this.localStorageH = new LocalStorageHandler();
-    this.apiClient = new ApiClient(JsonParsed.apiFileSystem.url);
+    this.apiClient = new ApiClient(configApiFileSystem.url);
   }
   async login(data) {
     try {
