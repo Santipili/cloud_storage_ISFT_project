@@ -1,5 +1,5 @@
 import { LocalStorageHandler } from "../../../../../common/LocalStorageHandler.js";
-import { JsonParsed } from "../../../../../common/parseJson.js";
+import { configApiFileSystem } from "../../../../../config.js";
 
 class FileUploaderModel extends EventTarget {
   constructor() {
@@ -10,7 +10,7 @@ class FileUploaderModel extends EventTarget {
   async FileUploaderToServer(formData) {
     const userId = this.localStorageHandler.getOfLocalStorage("userId");
 
-    const url = `${JsonParsed.apiFileSystem.url}filesHandler/upload`;
+    const url = `${configApiFileSystem.url}filesHandler/upload`;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();

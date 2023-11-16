@@ -1,10 +1,10 @@
 import { ApiClient } from "../../../common/ApiClient.js";
 import { LocalStorageHandler } from "../../../common/LocalStorageHandler.js";
-import { JsonParsed } from "../../../common/parseJson.js";
+import { configApiFileSystem } from "../../../config.js";
 
 class ModelFSExplorer {
   constructor() {
-    this.apiClient = new ApiClient(JsonParsed.apiFileSystem.url);
+    this.apiClient = new ApiClient(configApiFileSystem.url);
     this.localStorageH = new LocalStorageHandler();
   }
 
