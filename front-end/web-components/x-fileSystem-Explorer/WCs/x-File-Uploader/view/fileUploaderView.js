@@ -34,7 +34,16 @@ class FileUploaderView extends HTMLElement {
     this.BtnSendFile.textContent = "Upload";
     this.BtnSendFile.setAttribute("style", "display: none;");
     this.BtnSendFile.disabled = true;
+
+    this.BtnCancelFile = document.createElement("button");
+    this.BtnCancelFile.setAttribute("role", "button");
+    this.BtnCancelFile.classList.add("button-name");
+    this.BtnCancelFile.textContent = "Cancel";
+    this.BtnCancelFile.setAttribute("style", "display: none;");
+    this.BtnCancelFile.disabled = true;
+
     this.DivBtn.appendChild(this.BtnSendFile);
+    this.DivBtn.appendChild(this.BtnCancelFile);
 
     this.label.appendChild(this.dropTitle);
     this.label.appendChild(this.fileInput);
@@ -58,6 +67,8 @@ class FileUploaderView extends HTMLElement {
       this.updateFileList();
       this.BtnSendFile.disabled = false;
       this.BtnSendFile.setAttribute("style", "display: inline-flex;");
+      this.BtnCancelFile.disabled = false;
+      this.BtnCancelFile.setAttribute("style", "display: inline-flex;");
     });
 
     this.label.addEventListener("dragover", (event) => {
@@ -74,6 +85,10 @@ class FileUploaderView extends HTMLElement {
 
     this.label.addEventListener("drop", (event) => {
       this.label.classList.remove("drag-over");
+    });
+
+    this.BtnCancelFile.addEventListener("click", () => {
+      this.dispatchEvent(new CustomEvent("cancel-upload"));
     });
   }
 
@@ -101,6 +116,7 @@ class FileUploaderView extends HTMLElement {
 
     if (this.selectedFiles.size === 0) {
       this.BtnSendFile.style.display = "none";
+      this.BtnCancelFile.style.display = "none";
       this.fileInput.value = "";
     } else {
       this.BtnSendFile.style.display = "inline-flex";
@@ -200,6 +216,7 @@ class FileUploaderView extends HTMLElement {
   hide() {
     this.fileListContainer.setAttribute("style", "display: none;");
     this.BtnSendFile.style.display = "none";
+    this.BtnCancelFile.style.display = "none";
     this.fileInput.value = "";
     this.form.setAttribute("style", "display: none;");
     this.DivProgressBar.setAttribute("style", "display: none;");

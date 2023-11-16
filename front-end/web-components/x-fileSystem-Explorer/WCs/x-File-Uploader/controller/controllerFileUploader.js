@@ -8,6 +8,10 @@ class FileUploaderController extends EventTarget {
     this.model.addEventListener("progressbar", (event) => {
       this.onUploadProgress(event);
     });
+
+    this.view.addEventListener("cancel-upload", () => {
+      this.onUploadCancelClick();
+    });
   }
 
   enable() {
@@ -40,6 +44,10 @@ class FileUploaderController extends EventTarget {
     } else {
       alert(responseView.message);
     }
+  }
+
+  onUploadCancelClick() {
+    this.model.cancelUpload();
   }
 }
 
