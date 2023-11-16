@@ -12,6 +12,19 @@
   max-height: 1500px;
 }
 
+.btnDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.btnDiv button {
+  margin-right: 5px;
+  padding: 8px;
+
+}
+
 .form-title {
   color: #000000;
   font-size: 1.8rem;
