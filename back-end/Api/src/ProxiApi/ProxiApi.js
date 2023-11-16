@@ -34,7 +34,7 @@ class ProxiApi {
     req.on("data", async (chunk) => {
       body += chunk.toString();
       const requestData = body ? JSON.parse(body) : {};
-      const filePath = path.join(userDirPath, requestData.file);
+      const filePath = path.join(userDirPath, requestData);
       try {
         let response = await this.fileHandler.download(filePath);
   
@@ -44,12 +44,9 @@ class ProxiApi {
           res.setHeader('Access-Control-Allow-Headers', 'content-type, session-token, user-id, file-name, Content-disposition');
           res.setHeader('Content-Type', 'application/json');
           res.setHeader('Content-Disposition', `attachment; filename=${response.fileName}`);
-          
-            
+
           res.statusCode = 200;
-            // res.writeHead(200, headers);
-            console.log(response.data);
-            res.end(JSON.stringify(response));
+          res.end(JSON.stringify(response));
         }
   
       } catch (e) {

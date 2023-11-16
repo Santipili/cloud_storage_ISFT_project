@@ -43,16 +43,31 @@ class ModelFSExplorer {
   async downloadFile(path) {
     const userId = this.localStorageH.getOfLocalStorage("userId");
     try {
-      let stream = await this.apiClient.makeApiCall(
-        "fileshandler/download",
+      let result = await this.apiClient.makeApiCall(
+        "filesHandler/download",
         "POST",
         path,
         "hsavhavdhavdha",
         userId
       );
-      const blob = new Blob([stream], { type: 'application/octet-stream' });
-      let response = URL.createObjectURL(blob)
-      return response;
+
+      const uint8Array = new Uint8Array(result.data.data);
+      const blob = new Blob([uint8Array], { type: 'application/octet-stream' });
+      
+                    // Verifica si es Internet Explorer
+      if (navigator.msSaveBlob) {
+                    // Para Internet Explorer
+        navigator.msSaveBlob(blob, result.fileName);
+      } else {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = result.fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }
+      
+      return result;
     } catch (error) {
       console.log(error);
     }

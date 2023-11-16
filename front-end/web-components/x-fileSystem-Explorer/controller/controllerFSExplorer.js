@@ -15,8 +15,12 @@ class ControllerFSExplorer {
       this.view.renderFileSystem(res.files);
     });
 
-    this.view.addEventListener("click-download-button", async (d) => {
-      await this.onDownloadButonClick();
+    this.view.addEventListener("click-download-button", async (e) => {
+      let downloadPaths = e.detail;
+      downloadPaths.forEach(async (Element) => {
+        await this.onDownloadButonClick(Element);
+      })
+      // await this.onDownloadButonClick();
     });
 
     this.view.addEventListener("click-createFolder-button", async (d) => {
@@ -59,8 +63,9 @@ class ControllerFSExplorer {
     });
   }
 
-  async onDownloadButonClick() {
-    const res = await this.model.downloadFile();
+  async onDownloadButonClick(path) {
+    const res = await this.model.downloadFile(path);
+    return res;
   }
 }
 
