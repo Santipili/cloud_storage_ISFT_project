@@ -25,12 +25,11 @@ class SignupController {
 
       let res = await this.model.signUp(DATA);
 
-      console.log(res);
-
       if (res) {
         window.dispatchEvent(
           new CustomEvent("trigger-alert-instance", { detail: res.message })
         );
+        window.dispatchEvent(new CustomEvent("trigger-login-instance"));
       }
     } else {
       alert("error the password must be the same");

@@ -1,10 +1,11 @@
 import { LocalStorageHandler } from "../../../common/LocalStorageHandler.js";
 import { ApiClient } from "../../../common/ApiClient.js";
+import { JsonParsed } from "../../../common/parseJson.js";
 
 class SignUpModel {
   constructor() {
     this.localStorageH = new LocalStorageHandler();
-    this.apiClient = new ApiClient("http://localhost:3000/");
+    this.apiClient = new ApiClient(JsonParsed.apiFileSystem.url);
   }
   async signUp(data) {
     try {
