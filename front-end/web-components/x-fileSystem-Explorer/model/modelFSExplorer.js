@@ -1,9 +1,10 @@
 import { ApiClient } from "../../../common/ApiClient.js";
 import { LocalStorageHandler } from "../../../common/LocalStorageHandler.js";
+import { JsonParsed } from "../../../common/parseJson.js";
 
 class ModelFSExplorer {
   constructor() {
-    this.apiClient = new ApiClient("http://localhost:3000/");
+    this.apiClient = new ApiClient(JsonParsed.apiFileSystem.url);
     this.localStorageH = new LocalStorageHandler();
   }
 
@@ -52,21 +53,21 @@ class ModelFSExplorer {
       );
 
       const uint8Array = new Uint8Array(result.data.data);
-      const blob = new Blob([uint8Array], { type: 'application/octet-stream' });
-      
-                    // Verifica si es Internet Explorer
+      const blob = new Blob([uint8Array], { type: "application/octet-stream" });
+
+      // Verifica si es Internet Explorer
       if (navigator.msSaveBlob) {
-                    // Para Internet Explorer
+        // Para Internet Explorer
         navigator.msSaveBlob(blob, result.fileName);
       } else {
         const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
         a.download = result.fileName;
         a.click();
         window.URL.revokeObjectURL(url);
       }
-      
+
       return result;
     } catch (error) {
       console.log(error);

@@ -1,0 +1,9 @@
+{
+
+  "apiFileSystem": {
+    "key": "miClaveSecreta",
+    "url": "http://localhost:3000/"
+   
+  }
+
+}
