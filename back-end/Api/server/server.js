@@ -26,15 +26,24 @@ class Server {
   }
 
   async handleRequest(req, res) {
-    res.writeHead(200, this.headers);
     const { pathname } = url.parse(req.url, true);
     const method = req.method;
-
+    
     if (method === "OPTIONS") {
       res.writeHead(204, this.headers);
       res.end();
       return;
     }
+    if (pathname == "/filesHandler/download"){
+        
+
+    }
+    else{
+
+      res.writeHead(200, this.headers);
+    }
+
+
 
     const handler = this.routes[method][pathname] || this.routes[method]["*"];
 

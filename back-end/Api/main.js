@@ -36,6 +36,7 @@ app.post("/sessionhandler/logout", proxiAccounting.logout);
 app.post("/sessionhandler/signup", proxiAccounting.signUp);
 
 app.post("/filesHandler/upload", proxiApi.uploadFiles);
+app.post("/filesHandler/download", proxiApi.downloadFile);
 
 app.post("/directoryHandler/rename", proxiApi.renameDirectory);
 app.post("/directoryHandler/create", proxiApi.createDirectory);
@@ -48,15 +49,3 @@ app.post("/directoryHandler/move", proxiApi.moveDirectory);
 
 app.start(port);
 
-/* async function main() {
-  try {
-    const response = await directoryHandler.listContent(
-      "../../../../../../REDES-Y-COMUNICACIONES"
-    );
-    console.log(response);
-  } catch (error) {
-    console.error("Ocurrió un error al listar el contenido:", error);
-  }
-}
-
-main(); */

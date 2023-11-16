@@ -37,6 +37,25 @@ class FilesHandler {
     });
   };
 
+  download = async (filePath) => {    
+    return new Promise((resolve, reject) => {
+      if (!fs.existsSync(filePath)) {
+        reject({ status: false, message: "Error al encontrar el archivo" });
+      }
+      else {
+        let FileName = path.basename(filePath);
+        fs.readFile(filePath, (readErr, Data) => {
+          if (readErr) {
+            reject({ status: false, message: "File not found" });
+          } else {   
+            resolve({ status: true, data: Data, fileName: FileName });
+          }
+        });
+      }
+    }) 
+
+  };
+
   __writeFilePath(currentPath, uploadedPath) {
     fs.readFile(currentPath, (readErr, data) => {
       if (readErr) {

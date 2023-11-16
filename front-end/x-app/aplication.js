@@ -49,7 +49,7 @@ class Application extends HTMLElement {
 
   render() {
     this.view.headerSlot.appendChild(this.nv);
-    this.changeState(this.loginForm);
+    this.changeState(this.loginForm ); 
   }
 
   setupEventListeners() {
