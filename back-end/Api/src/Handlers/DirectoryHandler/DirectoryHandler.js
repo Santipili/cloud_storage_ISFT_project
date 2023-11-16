@@ -97,11 +97,31 @@ class DirectoryHandler {
                 path: filepath,
               });
             } else {
+              let fileSize = fs.lstatSync(filepath).size;
+              let count = 0;
+              let sizeType = "bytes";
+              while (fileSize > 1024) {
+                fileSize = (fileSize / 1024);
+                count++;
+              }
+              switch (count) {
+                case 1: {
+                  sizeType = "KB";
+                }
+                break;
+                case 2: {
+                  sizeType = "MB";
+                }
+                break;
+                case 3: {
+                  sizeType = "GB";
+                }
+              }
               listDocuments.push({
                 name: file,
                 type: "file",
                 path: filepath,
-                size: fs.lstatSync(filepath).size,
+                size: fileSize.toFixed(2) + " " + sizeType,
                 date: fs.lstatSync(filepath).mtime.toLocaleString(),
               });
             }

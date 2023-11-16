@@ -288,7 +288,7 @@ class ViewFSExplorer extends HTMLElement {
       nameLink.setAttribute("x-path", path);
 
       nameCell.appendChild(nameLink);
-      sizeCell.textContent = fileInfo.size ? fileInfo.size + " KB" : "";
+      sizeCell.textContent = fileInfo.size ? fileInfo.size : "";
       timeCell.textContent = fileInfo.date || "";
 
       row.appendChild(checkBox);
